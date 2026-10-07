@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 description = "Validator for CMS Hospital Price Transparency machine-readable files, a port of @cmsgov/hpt-validator"
 license = "CC0-1.0"
-exclude = ["/oracle", "/tests"]
+repository = "https://github.com/digitalashes/hpt-validator-rs"
+keywords = ["cms", "price-transparency", "healthcare", "hospital", "validator"]
+categories = ["parser-implementations"]
+include = ["/src", "/schemas", "/README.md", "/LICENSE", "/UPSTREAM.lock"]
 
 [dev-dependencies]
 serde_json = { version = "1", features = ["preserve_order"] }

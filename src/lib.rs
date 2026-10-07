@@ -1,5 +1,4 @@
-//! Validator for CMS Hospital Price Transparency machine-readable files, a port of
-//! [`@cmsgov/hpt-validator`](https://github.com/CMSgov/hpt-validator).
+#![doc = include_str!("../README.md")]
 
 use std::fmt::{self, Write as _};
 use std::io::{self, Read};
@@ -50,12 +49,16 @@ pub fn validate(
     Ok(report)
 }
 
+/// The format to read the input as. Upstream's CLI takes it from the file extension.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Format {
+    /// CSV, tall or wide.
     Csv,
+    /// JSON.
     Json,
 }
 
+/// Whether to return upstream's result alone or with the Extended additions.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub enum Mode {
     /// Exactly what upstream returns.
@@ -65,20 +68,26 @@ pub enum Mode {
     Extended,
 }
 
+/// How to validate. The default is unlimited findings in Default mode.
 #[derive(Clone, Debug, Default)]
 pub struct Options {
-    /// `0` means unlimited.
+    /// The most errors to collect before stopping, as upstream's `maxErrors`; alerts and
+    /// Extended findings are capped at the same number separately. `0` means unlimited.
     pub max_errors: usize,
+    /// Default or Extended.
     pub mode: Mode,
 }
 
+/// The result of a validation: upstream's errors and alerts, then the Extended additions.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Report {
+    /// Errors in upstream's order. Any error makes the file invalid.
     pub errors: Vec<Finding>,
+    /// Alerts in upstream's order: warnings that leave the file valid.
     pub alerts: Vec<Finding>,
-    /// Extended only.
+    /// Extended only: the shape the file was read as.
     pub file_type: Option<FileType>,
-    /// Extended only.
+    /// Extended only: findings upstream drops or never makes.
     pub extended: Vec<Finding>,
 }
 
@@ -89,17 +98,23 @@ impl Report {
     }
 }
 
+/// The shape of a validated file.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum FileType {
+    /// A JSON file.
     Json,
+    /// A CSV file in the tall format: one row per payer and plan.
     Tall,
+    /// A CSV file in the wide format: one column group per payer and plan.
     Wide,
     /// CSV whose shape could not be determined.
     Unknown,
 }
 
+/// Why no report could be produced. Problems with the file itself are findings, not errors.
 #[derive(Debug)]
 pub enum Error {
+    /// Reading the input failed.
     Io(io::Error),
     /// Upstream throws for a JSON file validated against a version it has no schema for.
     UnknownJsonVersion(String),
@@ -128,19 +143,27 @@ impl From<io::Error> for Error {
 /// `line` are added for consumers that should not parse messages.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Finding {
+    /// What was found, as a stable code.
     pub code: Code,
     /// `"C4"`, `"row 4"`, or a JSON pointer.
     pub path: String,
+    /// Upstream's message.
     pub message: String,
+    /// JSON findings: the last segment of the path within the item.
     pub field: Option<String>,
+    /// The CSV column or header the finding is about, as upstream names it.
     pub column_name: Option<String>,
+    /// The offending CSV value.
     pub value: Option<String>,
+    /// The values the CSV cell may take.
     pub allowed_values: Option<&'static [&'static str]>,
+    /// The versions that may be validated against, for an invalid CSV version.
     pub versions: Option<&'static [&'static str]>,
+    /// The zero-based column of a placeholder in a CSV header.
     pub column: Option<i64>,
     /// The Ajv keyword of a JSON schema finding.
     pub keyword: Option<&'static str>,
-    /// Extended only: the physical line where the CSV row starts.
+    /// Extended only: the physical line, from 1, where the CSV row it was found on starts.
     pub line: Option<u64>,
 }
 
@@ -288,7 +311,8 @@ fn push_json_str(out: &mut String, s: &str) {
 
 macro_rules! codes {
     ($($variant:ident = $code:literal,)*) => {
-        /// Stable finding codes. Renaming one is a breaking change; rewording a message is not.
+        /// Stable finding codes, listed with their upstream classes in the crate
+        /// documentation. Renaming one is a breaking change; rewording a message is not.
         #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
         #[non_exhaustive]
         pub enum Code {
@@ -296,6 +320,7 @@ macro_rules! codes {
         }
 
         impl Code {
+            /// The code as written in output, such as `HPT_CSV_REQUIRED_VALUE`.
             pub fn as_str(self) -> &'static str {
                 match self {
                     $(Code::$variant => $code,)*
