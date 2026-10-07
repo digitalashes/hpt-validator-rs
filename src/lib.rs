@@ -18,6 +18,9 @@ enum Version {
 
 const VERSIONS: &[&str] = &["2.0.0", "2.1.0", "2.2.0", "3.0.0"];
 
+/// This crate's version.
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 impl Version {
     /// `semver.coerce(version)`, then exactly one of `VERSIONS`.
     fn parse(version: &str) -> Option<Version> {
