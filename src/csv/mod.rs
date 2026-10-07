@@ -498,8 +498,8 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
         }
     }
 
-    // No error, so every slot matched.
-    let columns: Vec<usize> = matched.into_iter().map(Option::unwrap).collect();
+    let columns: Vec<usize> =
+        (matched.into_iter().collect::<Option<_>>()).expect("no error, so every slot matched");
     let layout = Layout {
         v,
         names: columns.iter().map(|&i| row[i].to_string()).collect(),
