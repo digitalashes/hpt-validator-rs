@@ -50,12 +50,6 @@ const CHARGES: [&str; 4] = [
 
 pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Result<Report> {
     let max = options.max_errors;
-    let done = |errors, alerts, file_type| Report {
-        errors,
-        alerts,
-        file_type: Some(file_type),
-        extended: Vec::new(),
-    };
     let Some(v) = Version::parse(version) else {
         let message = format!(
             "Invalid version supplied. Allowed versions are: {}",
@@ -65,78 +59,128 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             versions: Some(VERSIONS),
             ..at(Code::CsvInvalidVersion, 0, Some(0), message)
         };
-        return Ok(done(vec![error], Vec::new(), FileType::Unknown));
+        return Ok(Report {
+            errors: vec![error],
+            alerts: Vec::new(),
+            file_type: Some(FileType::Unknown),
+            extended: Vec::new(),
+        });
     };
 
     let mut reader = Reader::new(input);
-    let (mut errors, mut alerts) = (Vec::new(), Vec::new());
+    let (mut alerts, mut extended) = (Vec::new(), Vec::new());
     let mut names = Vec::new();
     let mut file_type = FileType::Unknown;
     let mut layout = None;
     let mut index = 0;
-    while let Some(row) = reader.next_row()? {
-        let row: Vec<&str> = row.fields().map(js::trim).collect();
-        let blank = row.iter().all(|f| f.is_empty());
-        if blank && (index == 0 || index == 2) {
-            // The errors found so far are dropped, the alerts kept (F-15).
-            let message = format!(
-                "Required headers must be defined on rows 1 and 3. Row {} is blank",
-                index + 1
-            );
-            let error = at(Code::CsvHeaderBlank, index, Some(0), message);
-            return Ok(done(vec![error], alerts, file_type));
-        }
-        if blank && index != 1 {
+    let errors = 'rows: {
+        let mut errors = Vec::new();
+        while let Some(row) = reader.next_row()? {
+            let line = row.line;
+            // Every finding gets the physical line of the row it was found on.
+            let lined = move |found: Vec<Finding>| {
+                found.into_iter().map(move |f| Finding {
+                    line: Some(line),
+                    ..f
+                })
+            };
+            // Upstream never reads papaparse's quote errors (F-28).
+            for &(code, column) in &row.quotes {
+                let message = if code == Code::XCsvMissingQuotes {
+                    "A quoted field is never closed, so the rest of the file was read as this one field."
+                } else {
+                    "A quote in a quoted field is neither doubled nor followed by a comma or a line end, so the field runs on to the next closing quote and may have taken in the fields and lines after it."
+                };
+                let finding = at(code, index, Some(column), message.into());
+                add(&mut extended, lined(vec![finding]), max);
+            }
+            let row: Vec<&str> = row.fields().map(js::trim).collect();
+            let blank = row.iter().all(|f| f.is_empty());
+            if blank && (index == 0 || index == 2) {
+                // The errors found so far are dropped, the alerts kept (F-15).
+                add(&mut extended, errors, max);
+                let message = format!(
+                    "Required headers must be defined on rows 1 and 3. Row {} is blank",
+                    index + 1
+                );
+                let error = at(Code::CsvHeaderBlank, index, Some(0), message);
+                break 'rows lined(vec![error]).collect();
+            }
+            if blank && index != 1 {
+                index += 1;
+                continue;
+            }
+            match index {
+                0 => names = row.iter().map(|f| f.to_string()).collect(),
+                1 => {
+                    let (found, header_errors) = header(v, &names, &row);
+                    // A header error suppresses every header alert (F-16).
+                    if header_errors.is_empty() {
+                        add(&mut alerts, lined(header_alerts(v, &found, &row)), max);
+                    }
+                    add(&mut errors, lined(header_errors), max);
+                }
+                2 => {
+                    let (shape, result) = columns(v, &row);
+                    file_type = shape;
+                    match result {
+                        Ok((resolved, column_alerts)) => {
+                            add(&mut alerts, lined(column_alerts), max);
+                            layout = Some(resolved);
+                        }
+                        Err(column_errors) => {
+                            add(&mut errors, lined(column_errors), max);
+                            // Added after the limit is applied (F-14).
+                            let message = "Errors were found in the headers in row 3, so the remaining rows were not evaluated.";
+                            let error = at(Code::CsvProblemsInHeader, 0, Some(0), message.into());
+                            errors.extend(lined(vec![error]));
+                            break 'rows errors;
+                        }
+                    }
+                }
+                _ => {
+                    let layout = layout.as_ref().expect("data rows follow a valid row 3");
+                    add(&mut errors, lined(rules::errors(layout, index, &row)), max);
+                    if !full(&alerts, max) {
+                        add(&mut alerts, lined(rules::alerts(layout, index, &row)), max);
+                    }
+                }
+            }
+            if full(&errors, max) {
+                break 'rows errors;
+            }
             index += 1;
-            continue;
         }
-        match index {
-            0 => names = row.iter().map(|f| f.to_string()).collect(),
-            1 => {
-                let (found, header_errors) = header(v, &names, &row);
-                // A header error suppresses every header alert (F-16).
-                if header_errors.is_empty() {
-                    add(&mut alerts, header_alerts(v, &found, &row), max);
-                }
-                add(&mut errors, header_errors, max);
-            }
-            2 => {
-                let (shape, result) = columns(v, &row);
-                file_type = shape;
-                match result {
-                    Ok((resolved, column_alerts)) => {
-                        add(&mut alerts, column_alerts, max);
-                        layout = Some(resolved);
-                    }
-                    Err(column_errors) => {
-                        add(&mut errors, column_errors, max);
-                        // Added after the limit is applied (F-14).
-                        let message = "Errors were found in the headers in row 3, so the remaining rows were not evaluated.";
-                        errors.push(at(Code::CsvProblemsInHeader, 0, Some(0), message.into()));
-                        return Ok(done(errors, alerts, file_type));
-                    }
-                }
-            }
-            _ => {
-                let layout = layout.as_ref().expect("data rows follow a valid row 3");
-                add(&mut errors, rules::errors(layout, index, &row), max);
-                if !full(&alerts, max) {
-                    add(&mut alerts, rules::alerts(layout, index, &row), max);
-                }
-            }
+        if index < 4 {
+            // The errors found so far are dropped, the alerts kept (F-20).
+            add(&mut extended, errors, max);
+            let message = "At least one row must be present".into();
+            break 'rows vec![at(Code::CsvMinRows, 0, Some(0), message)];
         }
-        if full(&errors, max) {
-            return Ok(done(errors, alerts, file_type));
+        errors
+    };
+    // Found first, reported first.
+    if reader.bom_lines > 0 {
+        let n = reader.bom_lines;
+        let message = format!(
+            "The byte order mark was removed together with the {n} blank line{} after it, so row numbers are {n} lower than physical line numbers.",
+            if n == 1 { "" } else { "s" }
+        );
+        let finding = Finding {
+            line: Some(1),
+            ..at(Code::XCsvBomSwallowedLines, 0, Some(0), message)
+        };
+        extended.insert(0, finding);
+        if max > 0 {
+            extended.truncate(max);
         }
-        index += 1;
     }
-    if index < 4 {
-        // The errors found so far are dropped, the alerts kept (F-20).
-        let message = "At least one row must be present".into();
-        let error = at(Code::CsvMinRows, 0, Some(0), message);
-        return Ok(done(vec![error], alerts, file_type));
-    }
-    Ok(done(errors, alerts, file_type))
+    Ok(Report {
+        errors,
+        alerts,
+        file_type: Some(file_type),
+        extended,
+    })
 }
 
 /// Rows 1 and 2, upstream's `validateHeaderColumns` then `validateHeaderRow`: the recognised

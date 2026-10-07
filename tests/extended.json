@@ -1,0 +1,220 @@
+{
+  "findings/f11-bom-blank-row1.csv v2.2.0 maxErrors=2": {
+    "file_type": "Tall",
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Column drug_unit_of_measurement is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "drug_unit_of_measurement",
+        "code": "HPT_CSV_COLUMN_MISSING",
+        "line": 4
+      },
+      {
+        "path": "row 3",
+        "message": "Column drug_type_of_measurement is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "drug_type_of_measurement",
+        "code": "HPT_CSV_COLUMN_MISSING",
+        "line": 4
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated.",
+        "code": "HPT_CSV_PROBLEMS_IN_HEADER",
+        "line": 4
+      }
+    ],
+    "alerts": [],
+    "extended": [
+      {
+        "path": "A1",
+        "message": "The byte order mark was removed together with the 1 blank line after it, so row numbers are 1 lower than physical line numbers.",
+        "code": "HPT_X_CSV_BOM_SWALLOWED_LINES",
+        "line": 1
+      }
+    ]
+  },
+  "findings/f15-blank-row3.csv v2.0.0 maxErrors=0": {
+    "file_type": "Unknown",
+    "errors": [
+      {
+        "path": "A3",
+        "message": "Required headers must be defined on rows 1 and 3. Row 3 is blank",
+        "code": "HPT_CSV_HEADER_BLANK",
+        "line": 3
+      }
+    ],
+    "alerts": [],
+    "extended": [
+      {
+        "path": "B2",
+        "message": "\"last_updated_on\" value \"July 1 2024\" is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY",
+        "columnName": "last_updated_on",
+        "value": "July 1 2024",
+        "code": "HPT_CSV_INVALID_DATE",
+        "line": 2
+      }
+    ]
+  },
+  "findings/f20-min-rows.csv v2.0.0 maxErrors=0": {
+    "file_type": "Tall",
+    "errors": [
+      {
+        "path": "A1",
+        "message": "At least one row must be present",
+        "code": "HPT_CSV_MIN_ROWS"
+      }
+    ],
+    "alerts": [],
+    "extended": [
+      {
+        "path": "B2",
+        "message": "\"last_updated_on\" value \"July 1 2024\" is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY",
+        "columnName": "last_updated_on",
+        "value": "July 1 2024",
+        "code": "HPT_CSV_INVALID_DATE",
+        "line": 2
+      }
+    ]
+  },
+  "findings/f21-syntax-error-after-errors.json v2.0.0 maxErrors=0": {
+    "file_type": "Json",
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Unexpected RIGHT_BRACKET (\"]\") in state COMMA. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {},
+        "code": "HPT_JSON_INVALID"
+      }
+    ],
+    "alerts": [],
+    "extended": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": "",
+        "code": "HPT_JSON_SCHEMA",
+        "keyword": "required"
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": "",
+        "code": "HPT_JSON_SCHEMA",
+        "keyword": "required"
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must have required property 'description'",
+        "field": "",
+        "code": "HPT_JSON_SCHEMA",
+        "keyword": "required"
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must have required property 'description'",
+        "field": "",
+        "code": "HPT_JSON_SCHEMA",
+        "keyword": "required"
+      }
+    ]
+  },
+  "findings/f28-invalid-quotes.csv v2.0.0 maxErrors=0": {
+    "file_type": "Tall",
+    "errors": [
+      {
+        "path": "row 5",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type).",
+        "code": "HPT_CSV_CODE_PAIR_MISSING",
+        "line": 5
+      },
+      {
+        "path": "D5",
+        "message": "A value is required for \"setting\". You must encode the missing information.",
+        "columnName": "setting",
+        "code": "HPT_CSV_REQUIRED_VALUE",
+        "line": 5
+      }
+    ],
+    "alerts": [],
+    "extended": [
+      {
+        "path": "A5",
+        "message": "A quote in a quoted field is neither doubled nor followed by a comma or a line end, so the field runs on to the next closing quote and may have taken in the fields and lines after it.",
+        "code": "HPT_X_CSV_INVALID_QUOTES",
+        "line": 5
+      },
+      {
+        "path": "A5",
+        "message": "A quoted field is never closed, so the rest of the file was read as this one field.",
+        "code": "HPT_X_CSV_MISSING_QUOTES",
+        "line": 5
+      }
+    ]
+  },
+  "findings/f28-missing-quotes.csv v2.0.0 maxErrors=0": {
+    "file_type": "Tall",
+    "errors": [
+      {
+        "path": "row 5",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type).",
+        "code": "HPT_CSV_CODE_PAIR_MISSING",
+        "line": 5
+      },
+      {
+        "path": "D5",
+        "message": "A value is required for \"setting\". You must encode the missing information.",
+        "columnName": "setting",
+        "code": "HPT_CSV_REQUIRED_VALUE",
+        "line": 5
+      }
+    ],
+    "alerts": [],
+    "extended": [
+      {
+        "path": "A5",
+        "message": "A quoted field is never closed, so the rest of the file was read as this one field.",
+        "code": "HPT_X_CSV_MISSING_QUOTES",
+        "line": 5
+      }
+    ]
+  },
+  "findings/template-wide-3.0.0.csv v3.0.0 maxErrors=0": {
+    "file_type": "Wide",
+    "errors": [],
+    "alerts": [],
+    "extended": []
+  },
+  "findings/f23-false-affirmation.csv v2.0.0 maxErrors=0": {
+    "file_type": "Tall",
+    "errors": [],
+    "alerts": [
+      {
+        "path": "G3",
+        "message": "Affirmation value is false.",
+        "code": "HPT_CSV_FALSE_AFFIRMATION",
+        "line": 2
+      }
+    ],
+    "extended": []
+  },
+  "findings/f28-invalid-quotes.csv v2.0.0 maxErrors=1": {
+    "file_type": "Tall",
+    "errors": [
+      {
+        "path": "row 5",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type).",
+        "code": "HPT_CSV_CODE_PAIR_MISSING",
+        "line": 5
+      }
+    ],
+    "alerts": [],
+    "extended": [
+      {
+        "path": "A5",
+        "message": "A quote in a quoted field is neither doubled nor followed by a comma or a line end, so the field runs on to the next closing quote and may have taken in the fields and lines after it.",
+        "code": "HPT_X_CSV_INVALID_QUOTES",
+        "line": 5
+      }
+    ]
+  }
+}

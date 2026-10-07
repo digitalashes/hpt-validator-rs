@@ -43,6 +43,9 @@ pub fn validate(
     if options.mode == Mode::Default {
         report.file_type = None;
         report.extended.clear();
+        for f in report.errors.iter_mut().chain(&mut report.alerts) {
+            f.line = None;
+        }
     }
     Ok(report)
 }
@@ -58,7 +61,7 @@ pub enum Mode {
     /// Exactly what upstream returns.
     #[default]
     Default,
-    /// The default result plus `file_type` and `extended` findings.
+    /// The default result plus `file_type`, `extended` findings and each CSV finding's `line`.
     Extended,
 }
 

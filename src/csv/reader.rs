@@ -14,8 +14,9 @@ pub struct Row {
     ends: Vec<usize>,
     /// Physical line where the row starts, 1-based, counting lines removed with the BOM.
     pub line: u64,
-    /// Quote problems papaparse reports for this row, in its order.
-    pub quotes: Vec<Code>,
+    /// Quote problems papaparse reports for this row, in its order, with the field each
+    /// quoted field starts at.
+    pub quotes: Vec<(Code, usize)>,
 }
 
 impl Row {
@@ -139,7 +140,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                         return None;
                     }
                     // No closing quote: the rest of the input is the field, quotes as written.
-                    row.quotes.push(Code::XCsvMissingQuotes);
+                    row.quotes.push((Code::XCsvMissingQuotes, row.ends.len()));
                     row.push(&s[start..]);
                     return Some(s.len());
                 };
@@ -170,7 +171,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                         cursor = end + 1;
                         break;
                     }
-                    _ => row.quotes.push(Code::XCsvInvalidQuotes),
+                    _ => row.quotes.push((Code::XCsvInvalidQuotes, row.ends.len())),
                 }
             }
             continue;
@@ -227,7 +228,7 @@ mod tests {
             for chunk in [1, 1024, 65536] {
                 let (rows, _) = read(&bytes, chunk);
                 let errors: Vec<Value> = (rows.iter().enumerate())
-                    .flat_map(|(i, r)| r.quotes.iter().map(move |c| (i, c)))
+                    .flat_map(|(i, r)| r.quotes.iter().map(move |(c, _)| (i, c)))
                     .map(|(i, c)| {
                         json!([
                             i,

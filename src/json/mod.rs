@@ -110,7 +110,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
         }
         ControlFlow::Continue(())
     })?;
-    match end {
+    let extended = match end {
         End::Done => {
             let metadata = Value::Object(metadata);
             // With no charge items the full schema reports them missing.
@@ -122,21 +122,23 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
             let found = ajv::validate(&schemas.full, schema, &metadata);
             add(&mut errors, found.into_iter().map(|e| error(e, None)), max);
             add(&mut alerts, file_alerts(v, &metadata), max);
+            Vec::new()
         }
-        End::Stopped => {}
+        End::Stopped => Vec::new(),
         // The errors found so far are dropped, the alerts kept (F-21).
         End::Invalid(e) => {
             let message = format!(
                 "JSON parsing error: {e}. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON."
             );
-            errors = vec![Finding::new(Code::JsonInvalid, String::new(), message)];
+            let error = Finding::new(Code::JsonInvalid, String::new(), message);
+            std::mem::replace(&mut errors, vec![error])
         }
-    }
+    };
     Ok(Report {
         errors,
         alerts,
         file_type: Some(FileType::Json),
-        extended: Vec::new(),
+        extended,
     })
 }
 
