@@ -120,6 +120,19 @@ pub enum FileType {
     Unknown,
 }
 
+impl FileType {
+    /// The type as written in output: `json`, `tall`, `wide` or `unknown`.
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        match self {
+            FileType::Json => "json",
+            FileType::Tall => "tall",
+            FileType::Wide => "wide",
+            FileType::Unknown => "unknown",
+        }
+    }
+}
+
 /// Why no report could be produced. Problems with the file itself are findings, not errors.
 #[derive(Debug)]
 pub enum Error {

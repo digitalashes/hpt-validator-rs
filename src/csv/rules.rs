@@ -86,12 +86,7 @@ pub enum Amounts {
     /// 2.2: `estimated_amount`.
     Estimated(usize),
     /// 3.0: `median_amount`, `10th_percentile`, `90th_percentile`, `count`.
-    Allowed {
-        median: usize,
-        p10: usize,
-        p90: usize,
-        count: usize,
-    },
+    Allowed([usize; 4]),
 }
 
 /// One data row being checked.
@@ -130,12 +125,7 @@ pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
         match g.amounts {
             Amounts::None => {}
             Amounts::Estimated(estimated) => c.positive(estimated),
-            Amounts::Allowed {
-                median,
-                p10,
-                p90,
-                count,
-            } => {
+            Amounts::Allowed([median, p10, p90, count]) => {
                 c.positive(median);
                 c.positive(p10);
                 c.positive(p90);
@@ -178,12 +168,7 @@ pub fn alerts(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
         let amounts: &[_] = match g.amounts {
             Amounts::None => &[],
             Amounts::Estimated(estimated) => &[(estimated, "estimated amount")],
-            Amounts::Allowed {
-                median,
-                p10,
-                p90,
-                count,
-            } => &[
+            Amounts::Allowed([median, p10, p90, count]) => &[
                 (count, "count"),
                 (median, "median amount"),
                 (p10, "10th percentile"),
@@ -338,12 +323,7 @@ impl<'a> Check<'a> {
                         );
                     }
                 }
-                Amounts::Allowed {
-                    median,
-                    p10,
-                    p90,
-                    count,
-                } => {
+                Amounts::Allowed([median, p10, p90, count]) => {
                     if ratio && !self.has(count) {
                         let message = "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, then a corresponding \"Count of Allowed Amounts\" must also be encoded.";
                         self.error(Code::CsvPercentageAlgorithmCount, Some(count), message);

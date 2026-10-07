@@ -428,12 +428,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
         let amount_slots: Vec<usize> = amounts(v).iter().map(|a| want(format!("{a}{g}"))).collect();
         group.amounts = match amount_slots[..] {
             [estimated] => Amounts::Estimated(estimated),
-            [median, p10, p90, count] => Amounts::Allowed {
-                median,
-                p10,
-                p90,
-                count,
-            },
+            [median, p10, p90, count] => Amounts::Allowed([median, p10, p90, count]),
             _ => Amounts::None,
         };
     }
