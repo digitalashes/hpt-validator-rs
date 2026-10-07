@@ -1,0 +1,871 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code|1|type\" value \"MS-DRG A\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG A",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S4",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T4",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N4",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C5",
+        "message": "\"code|1|type\" value \"MS-DRG B\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG B",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "N5",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C6",
+        "message": "\"code|1|type\" value \"MS-DRG C\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG C",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "N6",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C7",
+        "message": "\"code|1|type\" value \"MS-DRG D\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG D",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S7",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T7",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "S10",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T10",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "S11",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T11",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N11",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "S12",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T12",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N12",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "S13",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T13",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N13",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code|1|type\" value \"MS-DRG A\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG A",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S4",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code|1|type\" value \"MS-DRG A\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG A",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S4",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T4",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N4",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C5",
+        "message": "\"code|1|type\" value \"MS-DRG B\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG B",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "N5",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C6",
+        "message": "\"code|1|type\" value \"MS-DRG C\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG C",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "N6",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C7",
+        "message": "\"code|1|type\" value \"MS-DRG D\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG D",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S7",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T7",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "S10",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T10",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "S11",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T11",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N11",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "S12",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T12",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N12",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "S13",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T13",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N13",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code|1|type\" value \"MS-DRG A\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG A",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S4",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code|1|type\" value \"MS-DRG A\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG A",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S4",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T4",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N4",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C5",
+        "message": "\"code|1|type\" value \"MS-DRG B\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG B",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "N5",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C6",
+        "message": "\"code|1|type\" value \"MS-DRG C\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG C",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "N6",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "C7",
+        "message": "\"code|1|type\" value \"MS-DRG D\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG D",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S7",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T7",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "S10",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T10",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "S11",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T11",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N11",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "S12",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T12",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N12",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      },
+      {
+        "path": "S13",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      },
+      {
+        "path": "T13",
+        "message": "\"standard_charge|max\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|max",
+        "value": "0"
+      },
+      {
+        "path": "N13",
+        "message": "\"standard_charge|negotiated_dollar\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|negotiated_dollar",
+        "value": "0"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code|1|type\" value \"MS-DRG A\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code|1|type",
+        "value": "MS-DRG A",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "S4",
+        "message": "\"standard_charge|min\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge|min",
+        "value": "0"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"location_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "location_name"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"type_2_npi\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "type_2_npi"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula."
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"attester_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "attester_name"
+      },
+      {
+        "path": "row 3",
+        "message": "Column median_amount is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "median_amount"
+      },
+      {
+        "path": "row 3",
+        "message": "Column 10th_percentile is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "10th_percentile"
+      },
+      {
+        "path": "row 3",
+        "message": "Column 90th_percentile is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "90th_percentile"
+      },
+      {
+        "path": "row 3",
+        "message": "Column count is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "count"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"location_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "location_name"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"type_2_npi\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "type_2_npi"
+      }
+    ],
+    "alerts": []
+  }
+}

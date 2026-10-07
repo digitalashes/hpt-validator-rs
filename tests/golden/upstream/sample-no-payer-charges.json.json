@@ -1,0 +1,79 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'location_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'type_2_npi'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'attestation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"2.0.0\" does not match the expected template version \"3.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'location_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'type_2_npi'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"2.0.0\" does not match the expected template version \"3.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  }
+}

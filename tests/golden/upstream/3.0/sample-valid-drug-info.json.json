@@ -1,0 +1,133 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/drug_information/unit",
+        "message": "must be string",
+        "field": "unit"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/drug_information/unit",
+        "message": "must be string",
+        "field": "unit"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  }
+}

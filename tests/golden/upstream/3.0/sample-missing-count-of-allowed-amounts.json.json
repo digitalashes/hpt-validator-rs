@@ -1,0 +1,180 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'estimated_amount'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'count'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'count'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      }
+    ],
+    "alerts": []
+  }
+}
