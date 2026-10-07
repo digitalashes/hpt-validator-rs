@@ -1,5 +1,5 @@
 #!/bin/sh
-# Regenerates tests/golden from upstream at the commit in UPSTREAM.lock.
+# Regenerates tests/golden, tests/js.json and tests/reader from upstream at the commit in UPSTREAM.lock.
 # Needs Node 20.19.4, upstream's .tool-versions (fnm exec --using 20.19.4 oracle/run.sh).
 set -eu
 cd "$(dirname "$0")/.."
@@ -12,7 +12,8 @@ if [ "$(cat $up/.built 2>/dev/null)" != "$sha" ]; then
   (cd $up && npm ci --silent && npm run build --silent)
   echo "$sha" > $up/.built
 fi
-rm -rf tests/cases/upstream tests/golden
+rm -rf tests/cases/upstream tests/golden tests/js.json tests/reader
 mkdir -p tests/cases
 cp -R $up/test/fixtures tests/cases/upstream
 node oracle/oracle.mjs $up
+node oracle/tables.mjs $up
