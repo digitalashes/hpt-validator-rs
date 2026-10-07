@@ -1,0 +1,82 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A1",
+        "message": "Required headers must be defined on rows 1 and 3. Row 1 is blank"
+      }
+    ],
+    "alerts": []
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      },
+      {
+        "path": "row 3",
+        "message": "Column estimated_amount is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "estimated_amount"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "P6",
+        "message": "\"median_amount\" value \"9.99999999e8\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount",
+        "value": "9.99999999e8"
+      },
+      {
+        "path": "P7",
+        "message": "\"median_amount\" value \"+999999999\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount",
+        "value": "+999999999"
+      },
+      {
+        "path": "P8",
+        "message": "\"median_amount\" value \"0x3B9AC9FF\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount",
+        "value": "0x3B9AC9FF"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "P4",
+        "message": "Nine 9s used for median amount."
+      },
+      {
+        "path": "P5",
+        "message": "Nine 9s used for median amount."
+      },
+      {
+        "path": "P6",
+        "message": "Nine 9s used for median amount."
+      },
+      {
+        "path": "P7",
+        "message": "Nine 9s used for median amount."
+      },
+      {
+        "path": "P8",
+        "message": "Nine 9s used for median amount."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "P6",
+        "message": "\"median_amount\" value \"9.99999999e8\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount",
+        "value": "9.99999999e8"
+      },
+      {
+        "path": "P7",
+        "message": "\"median_amount\" value \"+999999999\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount",
+        "value": "+999999999"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "P4",
+        "message": "Nine 9s used for median amount."
+      },
+      {
+        "path": "P5",
+        "message": "Nine 9s used for median amount."
+      }
+    ]
+  }
+}

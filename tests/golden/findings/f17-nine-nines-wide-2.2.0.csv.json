@@ -1,0 +1,174 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "O6",
+        "message": "\"estimated_amount | Payer A | PPO\" value \"9.99999999e8\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "estimated_amount | Payer A | PPO",
+        "value": "9.99999999e8"
+      },
+      {
+        "path": "O7",
+        "message": "\"estimated_amount | Payer A | PPO\" value \"+999999999\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "estimated_amount | Payer A | PPO",
+        "value": "+999999999"
+      },
+      {
+        "path": "O8",
+        "message": "\"estimated_amount | Payer A | PPO\" value \"0x3B9AC9FF\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "estimated_amount | Payer A | PPO",
+        "value": "0x3B9AC9FF"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      },
+      {
+        "path": "O4",
+        "message": "Nine 9s used for estimated amount."
+      },
+      {
+        "path": "O5",
+        "message": "Nine 9s used for estimated amount."
+      },
+      {
+        "path": "O6",
+        "message": "Nine 9s used for estimated amount."
+      },
+      {
+        "path": "O7",
+        "message": "Nine 9s used for estimated amount."
+      },
+      {
+        "path": "O8",
+        "message": "Nine 9s used for estimated amount."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "O6",
+        "message": "\"estimated_amount | Payer A | PPO\" value \"9.99999999e8\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "estimated_amount | Payer A | PPO",
+        "value": "9.99999999e8"
+      },
+      {
+        "path": "O7",
+        "message": "\"estimated_amount | Payer A | PPO\" value \"+999999999\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "estimated_amount | Payer A | PPO",
+        "value": "+999999999"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "C3",
+        "message": "The value in this MRF's version data element \"2.2.0\" does not match the expected template version \"2.0.0\" for the data dictionary requirements selected for validation."
+      },
+      {
+        "path": "O4",
+        "message": "Nine 9s used for estimated amount."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"location_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "location_name"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"type_2_npi\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "type_2_npi"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula."
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"attester_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "attester_name"
+      },
+      {
+        "path": "row 3",
+        "message": "Column median_amount | payer a | ppo is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "median_amount | payer a | ppo"
+      },
+      {
+        "path": "row 3",
+        "message": "Column 10th_percentile | payer a | ppo is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "10th_percentile | payer a | ppo"
+      },
+      {
+        "path": "row 3",
+        "message": "Column 90th_percentile | payer a | ppo is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "90th_percentile | payer a | ppo"
+      },
+      {
+        "path": "row 3",
+        "message": "Column count | payer a | ppo is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "count | payer a | ppo"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"location_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "location_name"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"type_2_npi\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "type_2_npi"
+      }
+    ],
+    "alerts": []
+  }
+}

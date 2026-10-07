@@ -1,0 +1,139 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      },
+      {
+        "path": "row 5",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      },
+      {
+        "path": "row 5",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "H5",
+        "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      },
+      {
+        "path": "row 3",
+        "message": "Column estimated_amount is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "estimated_amount"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "V5",
+        "message": "If a modifier is encoded without an item or service, then a description and one of the following is the minimum information required: additional_payer_notes, standard_charge | negotiated_dollar, standard_charge | negotiated_percentage, or standard_charge | negotiated_algorithm."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "V5",
+        "message": "If a modifier is encoded without an item or service, then a description and one of the following is the minimum information required: additional_payer_notes, standard_charge | negotiated_dollar, standard_charge | negotiated_percentage, or standard_charge | negotiated_algorithm."
+      }
+    ],
+    "alerts": []
+  }
+}

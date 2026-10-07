@@ -1,0 +1,90 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Parser ended in mid-parsing (state: KEY). Either not all the data was received or the data was invalid.. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  }
+}

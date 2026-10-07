@@ -1,0 +1,419 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/affirmation/confirm_affirmation",
+        "message": "Affirmation value is false."
+      }
+    ]
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/affirmation/confirm_affirmation",
+        "message": "Affirmation value is false."
+      },
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"1.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/affirmation/confirm_affirmation",
+        "message": "Affirmation value is false."
+      },
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"1.0.0\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property 'count'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property 'median_amount'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property '10th_percentile'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property '90th_percentile'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property 'count'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property 'median_amount'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property '10th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property '90th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property 'count'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must match \"then\" schema",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property 'median_amount'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property '10th_percentile'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property '90th_percentile'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must match \"then\" schema",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property 'count'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property 'median_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property '10th_percentile'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property '90th_percentile'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'count'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'median_amount'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property '10th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property '90th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'location_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'type_2_npi'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'attestation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "1"
+      },
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"1.0.0\" does not match the expected template version \"3.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property 'count'",
+        "field": "0"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "1"
+      }
+    ]
+  }
+}

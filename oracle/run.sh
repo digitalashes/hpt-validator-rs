@@ -12,8 +12,9 @@ if [ "$(cat $up/.built 2>/dev/null)" != "$sha" ]; then
   (cd $up && npm ci --silent && npm run build --silent)
   echo "$sha" > $up/.built
 fi
-rm -rf tests/cases/upstream tests/golden tests/js.json tests/reader
+rm -rf tests/cases tests/golden tests/js.json tests/reader
 mkdir -p tests/cases
 cp -R $up/test/fixtures tests/cases/upstream
+node oracle/cases.mjs $up
 node oracle/oracle.mjs $up
 node oracle/tables.mjs $up
