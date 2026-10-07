@@ -143,13 +143,27 @@ impl<R: Read> Reader<R> {
 /// Node's streaming UTF-8 decoder: complete sequences go to `out`, each maximal invalid
 /// subpart becomes U+FFFD, and an incomplete sequence at the end stays in `bytes`.
 fn decode(bytes: &mut Vec<u8>, out: &mut String) {
-    let incomplete = bytes.utf8_chunks().last().map_or(0, |c| {
-        let bad = c.invalid();
-        let cut_short = std::str::from_utf8(bad).is_err_and(|e| e.error_len().is_none());
-        if cut_short { bad.len() } else { 0 }
-    });
-    let done = bytes.len() - incomplete;
-    out.push_str(&String::from_utf8_lossy(&bytes[..done]));
+    let done = match std::str::from_utf8(bytes) {
+        Ok(text) => {
+            out.push_str(text);
+            bytes.len()
+        }
+        // Valid but for a sequence cut short at the end: no lossy pass needed.
+        Err(e) if e.error_len().is_none() => {
+            out.push_str(std::str::from_utf8(&bytes[..e.valid_up_to()]).unwrap());
+            e.valid_up_to()
+        }
+        Err(_) => {
+            let incomplete = bytes.utf8_chunks().last().map_or(0, |c| {
+                let bad = c.invalid();
+                let cut_short = std::str::from_utf8(bad).is_err_and(|e| e.error_len().is_none());
+                if cut_short { bad.len() } else { 0 }
+            });
+            let done = bytes.len() - incomplete;
+            out.push_str(&String::from_utf8_lossy(&bytes[..done]));
+            done
+        }
+    };
     bytes.drain(..done);
 }
 

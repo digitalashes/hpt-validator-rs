@@ -217,7 +217,7 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
       ["wide", wide(version, PAYERS, ROWS.map((r) => values(r, PAYERS)))],
     ]) {
       // A blank line consumes a row number; missing cells read as empty, extra ones are ignored.
-      const [first] = rows.slice(3);
+      const first = rows[3];
       rows.push([""], first.slice(0, 3), [...first, "extra"]);
       write(`rules/${shape}-${version}.csv`, csv(rows));
     }

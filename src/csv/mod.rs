@@ -8,7 +8,7 @@ mod wide;
 
 use crate::{Code, FileType, Finding, Mode, Options, Report, VERSIONS, Version, js};
 use reader::Reader;
-use rules::{Group, Layout};
+use rules::{Amounts, Group, Layout};
 use std::collections::{HashMap, VecDeque};
 use std::io::{self, Read};
 
@@ -118,12 +118,12 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             _ => {
                 let layout = layout.as_ref().expect("data rows follow a valid row 3");
                 add(&mut errors, rules::errors(layout, index, &row), max);
-                if max == 0 || alerts.len() < max {
+                if !full(&alerts, max) {
                     add(&mut alerts, rules::alerts(layout, index, &row), max);
                 }
             }
         }
-        if max > 0 && errors.len() >= max {
+        if full(&errors, max) {
             return Ok(done(errors, alerts, file_type));
         }
         index += 1;
@@ -135,6 +135,11 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
         return Ok(done(vec![error], alerts, file_type));
     }
     Ok(done(errors, alerts, file_type))
+}
+
+/// Whether `list` has reached the limit; `max` 0 is unlimited.
+fn full(list: &[Finding], max: usize) -> bool {
+    max > 0 && list.len() >= max
 }
 
 /// Upstream's `addItemsWithLimit`: `max` 0 is unlimited.
@@ -224,14 +229,15 @@ fn header<'a>(
         if value.is_empty() {
             errors.push(required_value(1, i, name, ""));
         } else if sep_eq(name, "last_updated_on") && !js::is_valid_date(value) {
-            let message = format!(
-                "\"{name}\" value \"{value}\" is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY"
-            );
-            errors.push(Finding {
-                column_name: Some(name.into()),
-                value: Some(value.into()),
-                ..at(Code::CsvInvalidDate, 1, Some(i), message)
-            });
+            let problem = "is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY";
+            errors.push(invalid_value(
+                Code::CsvInvalidDate,
+                1,
+                i,
+                name,
+                value,
+                problem,
+            ));
         } else if (sep_eq(name, AFFIRMATION) || sep_eq(name, ATTESTATION))
             && !TRUE_FALSE.iter().any(|t| same(value, t))
         {
@@ -326,41 +332,66 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
     }
     // Group column names end in the group's suffix: none for tall's one group, the
     // payer/plan for each wide one.
-    let (file_type, groups) = if tall {
+    let (file_type, suffixes) = if tall {
         (FileType::Tall, vec![String::new()])
     } else {
-        let groups = payers_plans.iter().map(|pp| format!(" | {pp}"));
-        (FileType::Wide, groups.collect())
+        let suffixes = payers_plans.iter().map(|pp| format!(" | {pp}"));
+        (FileType::Wide, suffixes.collect())
     };
 
-    // upstream's getExpectedDataColumns
-    let mut expected: Vec<String> = SHARED_COLUMNS.map(String::from).into();
-    for i in 1..=codes.max(1) {
-        expected.push(format!("code | {i}"));
-        expected.push(format!("code | {i} | type"));
-    }
-    if tall {
-        expected.extend(tall::COLUMNS.map(String::from));
-    }
-    for g in &groups {
-        expected.extend(CHARGES.map(|c| format!("standard_charge{g} | {c}")));
-        // Tall's notes are the shared additional_generic_notes.
-        if !tall {
-            expected.push(format!("additional_payer_notes{g}"));
-        }
-    }
-    if v >= Version::V2_2 {
-        expected.extend(
-            [
-                "drug_unit_of_measurement",
-                "drug_type_of_measurement",
-                "modifiers",
-            ]
-            .map(String::from),
-        );
-    }
-    for g in &groups {
-        expected.extend(amounts(v).iter().map(|a| format!("{a}{g}")));
+    // upstream's getExpectedDataColumns, each column's slot kept for the data rows
+    let mut expected = Vec::new();
+    let mut want = |name: String| {
+        expected.push(name);
+        expected.len() - 1
+    };
+    let [description, setting, gross, discounted, min, max, notes] =
+        SHARED_COLUMNS.map(|c| want(c.into()));
+    let code_pairs = (1..=codes.max(1))
+        .map(|i| {
+            (
+                want(format!("code | {i}")),
+                want(format!("code | {i} | type")),
+            )
+        })
+        .collect();
+    let payer_plan = tall.then(|| tall::COLUMNS.map(|c| want(c.into())));
+    let mut groups: Vec<Group> = (suffixes.iter())
+        .map(|g| {
+            let [dollar, percentage, algorithm, methodology] =
+                CHARGES.map(|c| want(format!("standard_charge{g} | {c}")));
+            Group {
+                dollar,
+                percentage,
+                algorithm,
+                methodology,
+                // Tall's notes are the shared additional_generic_notes.
+                notes: if tall {
+                    notes
+                } else {
+                    want(format!("additional_payer_notes{g}"))
+                },
+                payer_plan,
+                amounts: Amounts::None,
+            }
+        })
+        .collect();
+    let v2_2 = v >= Version::V2_2;
+    let drug = v2_2
+        .then(|| ["drug_unit_of_measurement", "drug_type_of_measurement"].map(|c| want(c.into())));
+    let modifiers = v2_2.then(|| want("modifiers".into()));
+    for (group, g) in groups.iter_mut().zip(&suffixes) {
+        let amount_slots: Vec<usize> = amounts(v).iter().map(|a| want(format!("{a}{g}"))).collect();
+        group.amounts = match amount_slots[..] {
+            [estimated] => Amounts::Estimated(estimated),
+            [median, p10, p90, count] => Amounts::Allowed {
+                median,
+                p10,
+                p90,
+                count,
+            },
+            _ => Amounts::None,
+        };
     }
 
     // Each key's expected positions, earliest first: names can share a key (F-27).
@@ -393,10 +424,8 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
         }
         seen.entry(k).or_insert(i);
     }
-    let mut found = HashMap::new();
-    for (name, matched) in expected.into_iter().zip(matched) {
-        if let Some(i) = matched {
-            found.insert(name, i);
+    for (name, matched) in expected.into_iter().zip(&matched) {
+        if matched.is_some() {
             continue;
         }
         let message = format!(
@@ -413,7 +442,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
 
     let mut alerts = Vec::new();
     if v == Version::V3_0 {
-        for g in &groups {
+        for g in &suffixes {
             if let Some(&i) = seen.get(key(&format!("estimated_amount{g}")).as_str()) {
                 let message = format!(
                     "Column {} found in column headers. The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
@@ -424,44 +453,20 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
         }
     }
 
-    // Every expected column was found, so each name resolves.
-    let col = |name: &str| found[name];
+    // No error, so every slot matched.
+    let columns: Vec<usize> = matched.into_iter().map(Option::unwrap).collect();
     let layout = Layout {
         v,
-        names: row.iter().map(|c| c.to_string()).collect(),
-        description: col("description"),
-        setting: col("setting"),
-        codes: (1..=codes)
-            .map(|i| {
-                (
-                    col(&format!("code | {i}")),
-                    col(&format!("code | {i} | type")),
-                )
-            })
-            .collect(),
-        standard: ["gross", "discounted_cash", "min", "max"]
-            .map(|c| col(&format!("standard_charge | {c}"))),
-        notes: col("additional_generic_notes"),
-        payer_plan: tall.then(|| (col("payer_name"), col("plan_name"))),
-        groups: (groups.iter())
-            .map(|g| Group {
-                charges: CHARGES.map(|c| col(&format!("standard_charge{g} | {c}"))),
-                notes: if tall {
-                    col("additional_generic_notes")
-                } else {
-                    col(&format!("additional_payer_notes{g}"))
-                },
-                amounts: amounts(v).iter().map(|a| col(&format!("{a}{g}"))).collect(),
-            })
-            .collect(),
-        drug: (v >= Version::V2_2).then(|| {
-            [
-                "drug_unit_of_measurement",
-                "drug_type_of_measurement",
-                "modifiers",
-            ]
-            .map(col)
-        }),
+        names: columns.iter().map(|&i| row[i].to_string()).collect(),
+        columns,
+        description,
+        setting,
+        codes: code_pairs,
+        standard: [gross, discounted, min, max],
+        notes,
+        groups,
+        drug,
+        modifiers,
     };
     (file_type, Ok((layout, alerts)))
 }
@@ -544,6 +549,23 @@ fn required_value(row: u64, column: usize, name: &str, suffix: &str) -> Finding 
     }
 }
 
+/// A finding about a cell's value: `"name" value "value" {problem}`.
+fn invalid_value(
+    code: Code,
+    row: u64,
+    column: usize,
+    name: &str,
+    value: &str,
+    problem: &str,
+) -> Finding {
+    let message = format!("\"{name}\" value \"{value}\" {problem}");
+    Finding {
+        column_name: Some(name.into()),
+        value: Some(value.into()),
+        ..at(code, row, Some(column), message)
+    }
+}
+
 fn allowed_values(
     row: u64,
     column: usize,
@@ -551,15 +573,13 @@ fn allowed_values(
     value: &str,
     allowed: &'static [&'static str],
 ) -> Finding {
-    let message = format!(
-        "\"{name}\" value \"{value}\" is not one of the allowed valid values. You must encode one of these valid values: {}",
+    let problem = format!(
+        "is not one of the allowed valid values. You must encode one of these valid values: {}",
         allowed.join(", ")
     );
     Finding {
-        column_name: Some(name.into()),
-        value: Some(value.into()),
         allowed_values: Some(allowed),
-        ..at(Code::CsvAllowedValues, row, Some(column), message)
+        ..invalid_value(Code::CsvAllowedValues, row, column, name, value, &problem)
     }
 }
 

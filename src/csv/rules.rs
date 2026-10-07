@@ -1,7 +1,7 @@
 //! Data rows: upstream's row validators and alerters in the order upstream builds them
 //! (design §2.2), reading the columns row 3 resolved.
 
-use super::{allowed_values, amounts, at, required_value, same};
+use super::{allowed_values, at, invalid_value, required_value, same};
 use crate::{Code, Finding, Version, js};
 
 /// Upstream's `BILLING_CODE_TYPES`, then the two 3.0 adds.
@@ -43,11 +43,13 @@ const DRUG_UNITS: &[&str] = &["GR", "ME", "ML", "UN", "F2", "EA", "GM"];
 
 const PAYER_SPECIFIC: &str = " when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm";
 
-/// Row 3's columns as the rules read them, by index. Once row 3 passes, every column a rule
-/// reads is present.
+/// Row 3's columns as the rules read them. Every other `usize` here is a slot in upstream's
+/// expected column list, which `columns` maps to its row-3 column; once row 3 passes, each
+/// slot has one.
 pub struct Layout {
     pub v: Version,
-    /// Row 3 as written, which messages quote.
+    pub columns: Vec<usize>,
+    /// Each slot's column as written in row 3, which messages quote.
     pub names: Vec<String>,
     pub description: usize,
     pub setting: usize,
@@ -57,22 +59,39 @@ pub struct Layout {
     pub standard: [usize; 4],
     /// `additional_generic_notes`.
     pub notes: usize,
-    /// Tall only: `payer_name`, `plan_name`.
-    pub payer_plan: Option<(usize, usize)>,
     pub groups: Vec<Group>,
-    /// 2.2 and later: `drug_unit_of_measurement`, `drug_type_of_measurement`, `modifiers`.
-    pub drug: Option<[usize; 3]>,
+    /// 2.2 and later: `drug_unit_of_measurement`, `drug_type_of_measurement`.
+    pub drug: Option<[usize; 2]>,
+    /// 2.2 and later.
+    pub modifiers: Option<usize>,
 }
 
 /// One payer/plan's charge columns: tall's only group, or one per wide payer/plan.
 pub struct Group {
-    /// `negotiated_dollar`, `negotiated_percentage`, `negotiated_algorithm`, `methodology`.
-    pub charges: [usize; 4],
+    pub dollar: usize,
+    pub percentage: usize,
+    pub algorithm: usize,
+    pub methodology: usize,
     /// `additional_generic_notes` (tall) or `additional_payer_notes | payer | plan` (wide).
     pub notes: usize,
-    /// The columns of `amounts(v)`: `estimated_amount` (2.2), or median, 10th, 90th and
-    /// count (3.0).
-    pub amounts: Vec<usize>,
+    /// Tall only: `payer_name`, `plan_name`.
+    pub payer_plan: Option<[usize; 2]>,
+    pub amounts: Amounts,
+}
+
+/// A group's allowed-amount columns, which the version decides.
+#[derive(Clone, Copy)]
+pub enum Amounts {
+    None,
+    /// 2.2: `estimated_amount`.
+    Estimated(usize),
+    /// 3.0: `median_amount`, `10th_percentile`, `90th_percentile`, `count`.
+    Allowed {
+        median: usize,
+        p10: usize,
+        p90: usize,
+        count: usize,
+    },
 }
 
 /// One data row being checked.
@@ -86,9 +105,8 @@ struct Check<'a> {
 /// Upstream's `rowValidators` on one data row.
 pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
     let mut c = Check::new(l, row, values);
-    let v = l.v;
     c.required(l.description, "");
-    let billing_codes = if v == Version::V3_0 {
+    let billing_codes = if l.v == Version::V3_0 {
         BILLING_CODES
     } else {
         &BILLING_CODES[..BILLING_CODES.len() - 2]
@@ -106,19 +124,26 @@ pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
         c.positive(i);
     }
     for g in &l.groups {
-        let [dollar, percentage, _, methodology] = g.charges;
-        c.positive(dollar);
-        c.positive(percentage);
-        c.one_of(methodology, METHODOLOGIES);
-        for (&amount, &i) in amounts(v).iter().zip(&g.amounts) {
-            if amount == "count" {
-                c.count(i);
-            } else {
-                c.positive(i);
+        c.positive(g.dollar);
+        c.positive(g.percentage);
+        c.one_of(g.methodology, METHODOLOGIES);
+        match g.amounts {
+            Amounts::None => {}
+            Amounts::Estimated(estimated) => c.positive(estimated),
+            Amounts::Allowed {
+                median,
+                p10,
+                p90,
+                count,
+            } => {
+                c.positive(median);
+                c.positive(p10);
+                c.positive(p90);
+                c.count(count);
             }
         }
     }
-    if let Some([unit, ty, _]) = l.drug {
+    if let Some([unit, ty]) = l.drug {
         if c.has(unit) || c.has(ty) {
             c.required(unit, " when \"drug_type_of_measurement\" is present");
             c.positive(unit);
@@ -134,15 +159,14 @@ pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
     }
     // Before 2.2 a row without codes is an error; from 2.2 it may be a modifier row.
     let coded = l.codes.iter().any(|&(code, ty)| c.has(code) || c.has(ty));
-    match l.drug {
-        Some([.., modifiers]) if !coded && c.has(modifiers) => c.modifier(),
-        _ => {
-            if !coded {
-                let message = "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type).";
-                c.error(Code::CsvCodePairMissing, None, message);
-            }
-            c.non_modifier();
+    if !coded && l.modifiers.is_some_and(|m| c.has(m)) {
+        c.modifier();
+    } else {
+        if !coded {
+            let message = "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type).";
+            c.error(Code::CsvCodePairMissing, None, message);
         }
+        c.non_modifier();
     }
     c.found
 }
@@ -151,15 +175,20 @@ pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
 pub fn alerts(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
     let mut c = Check::new(l, row, values);
     for g in &l.groups {
-        let amounts: &[_] = match g.amounts[..] {
-            [estimated] => &[(estimated, "estimated amount")],
-            [median, p10, p90, count] => &[
+        let amounts: &[_] = match g.amounts {
+            Amounts::None => &[],
+            Amounts::Estimated(estimated) => &[(estimated, "estimated amount")],
+            Amounts::Allowed {
+                median,
+                p10,
+                p90,
+                count,
+            } => &[
                 (count, "count"),
                 (median, "median amount"),
                 (p10, "10th percentile"),
                 (p90, "90th percentile"),
             ],
-            _ => &[],
         };
         for &(i, name) in amounts {
             if js::number(c.value(i)) == 999999999.0 {
@@ -184,63 +213,63 @@ impl<'a> Check<'a> {
         }
     }
 
-    /// Missing cells read as empty.
-    fn value(&self, i: usize) -> &'a str {
+    /// The slot's cell; missing cells read as empty.
+    fn value(&self, slot: usize) -> &'a str {
+        let i = self.l.columns[slot];
         self.values.get(i).copied().unwrap_or("")
     }
 
-    fn has(&self, i: usize) -> bool {
-        !self.value(i).is_empty()
+    fn has(&self, slot: usize) -> bool {
+        !self.value(slot).is_empty()
     }
 
-    fn name(&self, i: usize) -> &'a str {
-        &self.l.names[i]
+    /// The slot's row-3 column and its name there.
+    fn column(&self, slot: usize) -> (usize, &'a str) {
+        (self.l.columns[slot], &self.l.names[slot])
     }
 
-    fn error(&mut self, code: Code, column: Option<usize>, message: &str) {
+    fn error(&mut self, code: Code, slot: Option<usize>, message: &str) {
+        let column = slot.map(|slot| self.l.columns[slot]);
         let finding = at(code, self.row, column, message.into());
         self.found.push(finding);
     }
 
     /// A `RequiredValueError` for a missing value. The other checks pass a missing value,
     /// so upstream's required variants are this plus the optional one.
-    fn required(&mut self, i: usize, suffix: &str) {
-        if !self.has(i) {
-            let finding = required_value(self.row, i, self.name(i), suffix);
-            self.found.push(finding);
+    fn required(&mut self, slot: usize, suffix: &str) {
+        if !self.has(slot) {
+            let (i, name) = self.column(slot);
+            self.found.push(required_value(self.row, i, name, suffix));
         }
     }
 
     /// An `AllowedValuesError` for a present value outside `allowed`.
-    fn one_of(&mut self, i: usize, allowed: &'static [&'static str]) {
-        let value = self.value(i);
+    fn one_of(&mut self, slot: usize, allowed: &'static [&'static str]) {
+        let value = self.value(slot);
         if !value.is_empty() && !allowed.iter().any(|a| same(value, a)) {
-            let finding = allowed_values(self.row, i, self.name(i), value, allowed);
-            self.found.push(finding);
+            let (i, name) = self.column(slot);
+            self.found
+                .push(allowed_values(self.row, i, name, value, allowed));
         }
     }
 
     /// An `InvalidPositiveNumberError` for a present value that is not a positive number.
-    fn positive(&mut self, i: usize) {
-        let value = self.value(i);
-        if value.is_empty() || js::is_positive_number(value) {
-            return;
+    fn positive(&mut self, slot: usize) {
+        let value = self.value(slot);
+        if !value.is_empty() && !js::is_positive_number(value) {
+            let (i, name) = self.column(slot);
+            let problem =
+                "is not a positive number. You must encode a positive, non-zero, numeric value.";
+            let code = Code::CsvInvalidPositiveNumber;
+            self.found
+                .push(invalid_value(code, self.row, i, name, value, problem));
         }
-        let message = format!(
-            "\"{}\" value \"{value}\" is not a positive number. You must encode a positive, non-zero, numeric value.",
-            self.name(i)
-        );
-        self.found.push(Finding {
-            column_name: Some(self.name(i).into()),
-            value: Some(value.into()),
-            ..at(Code::CsvInvalidPositiveNumber, self.row, Some(i), message)
-        });
     }
 
     /// A count of allowed amounts: `0`, `1 through 10`, or
     /// `/^(1[1-9]|[2-9]\d+|[1-9]\d{2,})$/`, an integer from 11 without leading zeros.
-    fn count(&mut self, i: usize) {
-        let value = self.value(i);
+    fn count(&mut self, slot: usize) {
+        let value = self.value(slot);
         let integer = value.len() >= 2
             && value.bytes().all(|b| b.is_ascii_digit())
             && !value.starts_with('0')
@@ -248,20 +277,18 @@ impl<'a> Check<'a> {
         if value.is_empty() || same(value, "0") || same(value, "1 through 10") || integer {
             return;
         }
-        let message = format!(
-            "\"{}\" value \"{value}\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
-            self.name(i)
-        );
-        self.found.push(Finding {
-            column_name: Some(self.name(i).into()),
-            value: Some(value.into()),
-            ..at(Code::CsvInvalidCountNumber, self.row, Some(i), message)
-        });
+        let (i, name) = self.column(slot);
+        let problem = "is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".";
+        let code = Code::CsvInvalidCountNumber;
+        self.found
+            .push(invalid_value(code, self.row, i, name, value, problem));
     }
 
     /// Whether the group has a payer-specific charge: dollar, percentage or algorithm.
     fn charged(&self, g: &Group) -> bool {
-        g.charges[..3].iter().any(|&i| self.has(i))
+        [g.dollar, g.percentage, g.algorithm]
+            .into_iter()
+            .any(|i| self.has(i))
     }
 
     /// Upstream's `nonModifierChecks`.
@@ -273,15 +300,14 @@ impl<'a> Check<'a> {
             return;
         }
         for g in &l.groups {
-            let methodology = g.charges[3];
             if self.charged(g) {
-                if let Some((payer, plan)) = l.payer_plan {
+                if let Some([payer, plan]) = g.payer_plan {
                     self.required(payer, PAYER_SPECIFIC);
                     self.required(plan, PAYER_SPECIFIC);
                 }
-                self.required(methodology, PAYER_SPECIFIC);
+                self.required(g.methodology, PAYER_SPECIFIC);
             }
-            if same(self.value(methodology), "other") && !self.has(g.notes) {
+            if same(self.value(g.methodology), "other") && !self.has(g.notes) {
                 let message = notes_required("standard charge methodology", "other");
                 self.error(Code::CsvOtherMethodologyNotes, Some(g.notes), &message);
             }
@@ -291,18 +317,18 @@ impl<'a> Check<'a> {
             let message = "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\".";
             self.error(Code::CsvItemRequiresCharge, Some(gross), message);
         }
-        if l.groups.iter().any(|g| self.has(g.charges[0]))
+        if l.groups.iter().any(|g| self.has(g.dollar))
             && let Some(i) = [min, max].into_iter().find(|&i| !self.has(i))
         {
             let message = "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data.";
             self.error(Code::CsvDollarNeedsMinMax, Some(i), message);
         }
         for g in &l.groups {
-            let [dollar, percentage, algorithm, _] = g.charges;
-            let ratio = self.has(percentage) || self.has(algorithm);
-            match g.amounts[..] {
-                [estimated] => {
-                    if !self.has(dollar) && ratio && !self.has(estimated) {
+            let ratio = self.has(g.percentage) || self.has(g.algorithm);
+            match g.amounts {
+                Amounts::None => {}
+                Amounts::Estimated(estimated) => {
+                    if !self.has(g.dollar) && ratio && !self.has(estimated) {
                         let message = "If a \"payer specific negotiated charge\" can only be expressed as a percentage or algorithm, then a corresponding \"Estimated Allowed Amount\" must also be encoded.";
                         self.error(
                             Code::CsvPercentageAlgorithmEstimate,
@@ -311,7 +337,12 @@ impl<'a> Check<'a> {
                         );
                     }
                 }
-                [median, p10, p90, count] => {
+                Amounts::Allowed {
+                    median,
+                    p10,
+                    p90,
+                    count,
+                } => {
                     if ratio && !self.has(count) {
                         let message = "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, then a corresponding \"Count of Allowed Amounts\" must also be encoded.";
                         self.error(Code::CsvPercentageAlgorithmCount, Some(count), message);
@@ -336,17 +367,16 @@ impl<'a> Check<'a> {
                         self.error(Code::CsvAllowedCountZeroNotes, Some(g.notes), &message);
                     }
                 }
-                _ => {}
             }
-        }
-        if l.v == Version::V3_0
-            && let Some((payer, plan)) = l.payer_plan
-            && self.has(payer)
-            && self.has(plan)
-            && !self.charged(&l.groups[0])
-        {
-            let message = "If a payer name and plan name are encoded, a payer-specific charge must also be encoded.";
-            self.error(Code::CsvChargeWithPayerPlan, Some(payer), message);
+            if l.v == Version::V3_0
+                && let Some([payer, plan]) = g.payer_plan
+                && self.has(payer)
+                && self.has(plan)
+                && !self.charged(g)
+            {
+                let message = "If a payer name and plan name are encoded, a payer-specific charge must also be encoded.";
+                self.error(Code::CsvChargeWithPayerPlan, Some(payer), message);
+            }
         }
     }
 
