@@ -1,0 +1,562 @@
+{
+  "hospital_name": "West Mercy Hospital",
+  "last_updated_on": "2024-07-01",
+  "version": "3.0.0",
+  "location_name": [
+    "West Mercy Hospital",
+    "West Mercy Surgical Center"
+  ],
+  "hospital_address": [
+    "12 Main Street, Fullerton, CA  92832",
+    "23 Ocean Ave, San Jose, CA 94088"
+  ],
+  "license_information": {
+    "license_number": "50056",
+    "state": "CA"
+  },
+  "type_2_npi": [
+    "1122334455",
+    "6677889900"
+  ],
+  "attestation": {
+    "attestation": "To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula.",
+    "attester_name": "Malcom Attester",
+    "confirm_attestation": true
+  },
+  "standard_charge_information": [
+    5,
+    "x",
+    null,
+    [],
+    true,
+    {},
+    {
+      "description": 5,
+      "code_information": [],
+      "standard_charges": []
+    },
+    {
+      "description": "x",
+      "code_information": [
+        {
+          "code": "",
+          "type": "BAD"
+        },
+        {
+          "type": "NDC",
+          "code": "1"
+        },
+        5
+      ],
+      "standard_charges": [
+        5,
+        {}
+      ]
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "minimum": 20000,
+          "maximum": 20000,
+          "setting": "inpatient",
+          "payers_information": [
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "MS-DRG",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "123",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "https://www.cms.gov/Outreach-and-Education/Medicare-Learning-Network-MLN/MLNProducts/html/images/OP.jpg",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "234",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "The adjusted base payment rate indicated in the standard_charge|negotiated_dollar data element may be further adjusted for additional factors including transfers and outliers.",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "1 through 10",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Region Health Insurance",
+              "plan_name": "HMO",
+              "standard_charge_percentage": 50,
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "456",
+              "methodology": "percent of total billed charges"
+            }
+          ]
+        }
+      ],
+      "drug_information": {
+        "unit": 0,
+        "type": "XX"
+      }
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "minimum": 20000,
+          "maximum": 20000,
+          "setting": "inpatient",
+          "payers_information": [
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "MS-DRG",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "123",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "https://www.cms.gov/Outreach-and-Education/Medicare-Learning-Network-MLN/MLNProducts/html/images/OP.jpg",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "234",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "The adjusted base payment rate indicated in the standard_charge|negotiated_dollar data element may be further adjusted for additional factors including transfers and outliers.",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "1 through 10",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Region Health Insurance",
+              "plan_name": "HMO",
+              "standard_charge_percentage": 50,
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "456",
+              "methodology": "percent of total billed charges"
+            }
+          ]
+        }
+      ],
+      "drug_information": {
+        "unit": "1"
+      }
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "minimum": 20000,
+          "maximum": 20000,
+          "setting": "inpatient",
+          "payers_information": [
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "MS-DRG",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "123",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "https://www.cms.gov/Outreach-and-Education/Medicare-Learning-Network-MLN/MLNProducts/html/images/OP.jpg",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "234",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "The adjusted base payment rate indicated in the standard_charge|negotiated_dollar data element may be further adjusted for additional factors including transfers and outliers.",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "1 through 10",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Region Health Insurance",
+              "plan_name": "HMO",
+              "standard_charge_percentage": 50,
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "456",
+              "methodology": "percent of total billed charges"
+            }
+          ]
+        }
+      ],
+      "drug_information": 5
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "1",
+          "type": "NDC"
+        }
+      ],
+      "standard_charges": [
+        {
+          "minimum": 20000,
+          "maximum": 20000,
+          "setting": "inpatient",
+          "payers_information": [
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "MS-DRG",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "123",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "https://www.cms.gov/Outreach-and-Education/Medicare-Learning-Network-MLN/MLNProducts/html/images/OP.jpg",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "234",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "The adjusted base payment rate indicated in the standard_charge|negotiated_dollar data element may be further adjusted for additional factors including transfers and outliers.",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "1 through 10",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Region Health Insurance",
+              "plan_name": "HMO",
+              "standard_charge_percentage": 50,
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "456",
+              "methodology": "percent of total billed charges"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "standard_charges": [
+        {
+          "minimum": 20000,
+          "maximum": 20000,
+          "setting": "inpatient",
+          "payers_information": [
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "MS-DRG",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "123",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "https://www.cms.gov/Outreach-and-Education/Medicare-Learning-Network-MLN/MLNProducts/html/images/OP.jpg",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "234",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "The adjusted base payment rate indicated in the standard_charge|negotiated_dollar data element may be further adjusted for additional factors including transfers and outliers.",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "1 through 10",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Region Health Insurance",
+              "plan_name": "HMO",
+              "standard_charge_percentage": 50,
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "456",
+              "methodology": "percent of total billed charges"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "minimum": 0,
+          "maximum": -5,
+          "setting": "x",
+          "payers_information": [
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "MS-DRG",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "123",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "https://www.cms.gov/Outreach-and-Education/Medicare-Learning-Network-MLN/MLNProducts/html/images/OP.jpg",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "234",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "The adjusted base payment rate indicated in the standard_charge|negotiated_dollar data element may be further adjusted for additional factors including transfers and outliers.",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "1 through 10",
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "Region Health Insurance",
+              "plan_name": "HMO",
+              "standard_charge_percentage": 50,
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "456",
+              "methodology": "percent of total billed charges"
+            }
+          ],
+          "gross_charge": "1",
+          "discounted_cash": 1e400,
+          "modifier_code": [
+            ""
+          ],
+          "additional_generic_notes": ""
+        }
+      ]
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "setting": "both",
+          "modifier_code": []
+        }
+      ]
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "setting": "both",
+          "payers_information": []
+        }
+      ]
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "setting": "both",
+          "payers_information": [
+            5,
+            {}
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Major hip and knee joint replacement or reattachment of lower extremity without mcc",
+      "code_information": [
+        {
+          "code": "470",
+          "type": "MS-DRG"
+        },
+        {
+          "code": "175869",
+          "type": "CMG"
+        }
+      ],
+      "standard_charges": [
+        {
+          "setting": "both",
+          "payers_information": [
+            {
+              "payer_name": "",
+              "plan_name": 5,
+              "standard_charge_percentage": 0,
+              "methodology": "other"
+            },
+            {
+              "payer_name": "a",
+              "plan_name": "b",
+              "standard_charge_dollar": 1,
+              "methodology": "case rate"
+            },
+            {
+              "payer_name": "a",
+              "plan_name": "b",
+              "standard_charge_algorithm": "",
+              "methodology": "per diem",
+              "count": "0",
+              "median_amount": 0,
+              "10th_percentile": -1,
+              "90th_percentile": "1",
+              "estimated_amount": 5
+            },
+            {
+              "payer_name": "Platform Health Insurance",
+              "plan_name": "PPO",
+              "standard_charge_dollar": 20000,
+              "standard_charge_algorithm": "MS-DRG",
+              "median_amount": 22243.34,
+              "10th_percentile": 18500.08,
+              "90th_percentile": 25440.9,
+              "count": "123",
+              "methodology": "fee schedule",
+              "additional_payer_notes": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,13 +1,10 @@
 //! papaparse 5.5.3's `Parser.parse` loop for upstream's configuration (`delimiter: ","`,
-//! `newline: "\n"`, quote and escape `"`), fed the way a Node file stream feeds it: fixed-size
-//! byte chunks decoded as UTF-8, a BOM `trimStart` on the first non-empty chunk only, and an
-//! unfinished row parsed again once the next chunk arrives.
+//! `newline: "\n"`, quote and escape `"`), fed the way a Node file stream feeds it
+//! (`js::Stream`): a BOM `trimStart` on the first chunk only, and an unfinished row parsed
+//! again once the next chunk arrives.
 
 use crate::{Code, js};
 use std::io::{self, Read};
-
-/// `fs.createReadStream`'s chunk size, which bounds how far the BOM trim reaches.
-pub const CHUNK: usize = 64 * 1024;
 
 /// One row, its buffers reused for the next, so reading allocates only for a longer row.
 #[derive(Clone, Debug, Default)]
@@ -47,10 +44,7 @@ impl Row {
 }
 
 pub struct Reader<R> {
-    input: R,
-    chunk: u64,
-    /// Bytes of a UTF-8 sequence split by the chunk boundary.
-    undecoded: Vec<u8>,
+    stream: js::Stream<R>,
     /// Decoded text; rows before `pos` have been returned.
     text: String,
     pos: usize,
@@ -66,14 +60,12 @@ pub struct Reader<R> {
 
 impl<R: Read> Reader<R> {
     pub fn new(input: R) -> Self {
-        Self::with_chunk(input, CHUNK)
+        Self::with_chunk(input, js::CHUNK)
     }
 
     pub fn with_chunk(input: R, chunk: usize) -> Self {
         Reader {
-            input,
-            chunk: chunk as u64,
-            undecoded: Vec::new(),
+            stream: js::Stream::new(input, chunk),
             text: String::new(),
             pos: 0,
             scanned: 0,
@@ -108,26 +100,12 @@ impl<R: Read> Reader<R> {
     }
 
     fn read_chunk(&mut self) -> io::Result<()> {
-        let n = self
-            .input
-            .by_ref()
-            .take(self.chunk)
-            .read_to_end(&mut self.undecoded)?;
         self.text.drain(..self.pos);
         self.scanned -= self.pos;
         self.pos = 0;
-        let start = self.text.len();
-        if n == 0 {
+        if !self.stream.next(&mut self.text)? {
             self.eof = true;
-            if !self.undecoded.is_empty() {
-                self.undecoded.clear();
-                self.text.push('\u{fffd}');
-            }
-        } else {
-            decode(&mut self.undecoded, &mut self.text);
-        }
-        // Node emits no empty chunks, so the first chunk is the first non-empty one.
-        if self.first && self.text.len() > start {
+        } else if self.first {
             self.first = false;
             if self.text.starts_with('\u{feff}') {
                 let cut = self.text.len() - js::trim_start(&self.text).len();
@@ -138,33 +116,6 @@ impl<R: Read> Reader<R> {
         }
         Ok(())
     }
-}
-
-/// Node's streaming UTF-8 decoder: complete sequences go to `out`, each maximal invalid
-/// subpart becomes U+FFFD, and an incomplete sequence at the end stays in `bytes`.
-fn decode(bytes: &mut Vec<u8>, out: &mut String) {
-    let done = match std::str::from_utf8(bytes) {
-        Ok(text) => {
-            out.push_str(text);
-            bytes.len()
-        }
-        // Valid but for a sequence cut short at the end: no lossy pass needed.
-        Err(e) if e.error_len().is_none() => {
-            out.push_str(std::str::from_utf8(&bytes[..e.valid_up_to()]).unwrap());
-            e.valid_up_to()
-        }
-        Err(_) => {
-            let incomplete = bytes.utf8_chunks().last().map_or(0, |c| {
-                let bad = c.invalid();
-                let cut_short = std::str::from_utf8(bad).is_err_and(|e| e.error_len().is_none());
-                if cut_short { bad.len() } else { 0 }
-            });
-            let done = bytes.len() - incomplete;
-            out.push_str(&String::from_utf8_lossy(&bytes[..done]));
-            done
-        }
-    };
-    bytes.drain(..done);
 }
 
 /// One row of papaparse's parse loop at the start of `s`, into `row`: its fields and quote

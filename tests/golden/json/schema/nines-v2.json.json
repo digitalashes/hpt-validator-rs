@@ -1,0 +1,256 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1/estimated_amount",
+        "message": "must be number",
+        "field": "estimated_amount"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1/estimated_amount",
+        "message": "must be number",
+        "field": "estimated_amount"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1/estimated_amount",
+        "message": "must be number",
+        "field": "estimated_amount"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0/estimated_amount",
+        "message": "Nine 9s used for estimated amount.",
+        "field": "estimated_amount"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2/estimated_amount",
+        "message": "Nine 9s used for estimated amount.",
+        "field": "estimated_amount"
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1/estimated_amount",
+        "message": "must be number",
+        "field": "estimated_amount"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0/estimated_amount",
+        "message": "Nine 9s used for estimated amount.",
+        "field": "estimated_amount"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2/estimated_amount",
+        "message": "Nine 9s used for estimated amount.",
+        "field": "estimated_amount"
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property '10th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property '90th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1/count",
+        "message": "must be string",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property 'count'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must match \"then\" schema",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property 'median_amount'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property '10th_percentile'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property '90th_percentile'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must match \"then\" schema",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'count'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'median_amount'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property '10th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property '90th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'location_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'type_2_npi'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'attestation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0/count",
+        "message": "Nine 9s used for count.",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0/median_amount",
+        "message": "Nine 9s used for median amount.",
+        "field": "median_amount"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0/10th_percentile",
+        "message": "Nine 9s used for 10th percentile.",
+        "field": "10th_percentile"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0/90th_percentile",
+        "message": "Nine 9s used for 90th percentile.",
+        "field": "90th_percentile"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1/median_amount",
+        "message": "Nine 9s used for median amount.",
+        "field": "median_amount"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "1"
+      },
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"2.0.0\" does not match the expected template version \"3.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property '10th_percentile'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property '90th_percentile'",
+        "field": "1"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0/count",
+        "message": "Nine 9s used for count.",
+        "field": "count"
+      }
+    ]
+  }
+}

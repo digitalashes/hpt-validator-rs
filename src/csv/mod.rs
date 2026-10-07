@@ -6,7 +6,10 @@ mod rules;
 mod tall;
 mod wide;
 
-use crate::{Code, FileType, Finding, Mode, Options, Report, VERSIONS, Version, js};
+use crate::{
+    Code, FileType, Finding, Mode, Options, Report, VERSIONS, Version, add, full, js,
+    version_mismatch,
+};
 use reader::Reader;
 use rules::{Amounts, Group, Layout};
 use std::collections::{HashMap, VecDeque};
@@ -137,21 +140,6 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
     Ok(done(errors, alerts, file_type))
 }
 
-/// Whether `list` has reached the limit; `max` 0 is unlimited.
-fn full(list: &[Finding], max: usize) -> bool {
-    max > 0 && list.len() >= max
-}
-
-/// Upstream's `addItemsWithLimit`: `max` 0 is unlimited.
-fn add(list: &mut Vec<Finding>, items: Vec<Finding>, max: usize) {
-    let room = if max > 0 {
-        max.saturating_sub(list.len())
-    } else {
-        usize::MAX
-    };
-    list.extend(items.into_iter().take(room));
-}
-
 /// Rows 1 and 2, upstream's `validateHeaderColumns` then `validateHeaderRow`: the recognised
 /// row 1 names by position, and the errors.
 fn header<'a>(
@@ -278,10 +266,7 @@ fn header_alerts(v: Version, found: &[Option<&str>], values: &[&str]) -> Vec<Fin
         && let Some(expected) = expected
         && value(i) != expected
     {
-        let message = format!(
-            "The value in this MRF's version data element \"{}\" does not match the expected template version \"{expected}\" for the data dictionary requirements selected for validation.",
-            value(i)
-        );
+        let message = version_mismatch(value(i), &[expected]);
         alerts.push(at(Code::CsvVersionMismatch, 2, Some(i), message));
     }
     let (statement, code, message) = if v == Version::V3_0 {

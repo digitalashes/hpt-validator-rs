@@ -1,0 +1,1576 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/4",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/6/description",
+        "message": "must be string",
+        "field": "description"
+      },
+      {
+        "path": "/standard_charge_information/6/code_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "code_information"
+      },
+      {
+        "path": "/standard_charge_information/6/standard_charges",
+        "message": "must NOT have fewer than 1 items",
+        "field": "standard_charges"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/code",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "code"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/2",
+        "message": "must be object",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'setting'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/8/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/9/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/10/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/12",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/13/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/minimum",
+        "message": "must be > 0",
+        "field": "minimum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/maximum",
+        "message": "must be > 0",
+        "field": "maximum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/gross_charge",
+        "message": "must be number",
+        "field": "gross_charge"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/discounted_cash",
+        "message": "must be number",
+        "field": "discounted_cash"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/setting",
+        "message": "must be equal to one of the allowed values",
+        "field": "setting"
+      },
+      {
+        "path": "/standard_charge_information/14/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/15/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0/payers_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "payers_information"
+      },
+      {
+        "path": "/standard_charge_information/16/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'payer_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'plan_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'methodology'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/17/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/payer_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "payer_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/plan_name",
+        "message": "must be string",
+        "field": "plan_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/standard_charge_percentage",
+        "message": "must be > 0",
+        "field": "standard_charge_percentage"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/4",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/6/description",
+        "message": "must be string",
+        "field": "description"
+      },
+      {
+        "path": "/standard_charge_information/6/code_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "code_information"
+      },
+      {
+        "path": "/standard_charge_information/6/standard_charges",
+        "message": "must NOT have fewer than 1 items",
+        "field": "standard_charges"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/code",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "code"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/2",
+        "message": "must be object",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'gross_charge'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'discounted_cash'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'payers_information'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must match a schema in anyOf",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'setting'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/8/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/9/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/10/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/12",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/13/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/minimum",
+        "message": "must be > 0",
+        "field": "minimum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/maximum",
+        "message": "must be > 0",
+        "field": "maximum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/gross_charge",
+        "message": "must be number",
+        "field": "gross_charge"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/discounted_cash",
+        "message": "must be number",
+        "field": "discounted_cash"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/setting",
+        "message": "must be equal to one of the allowed values",
+        "field": "setting"
+      },
+      {
+        "path": "/standard_charge_information/14/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'gross_charge'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'discounted_cash'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'payers_information'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/15/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0/payers_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "payers_information"
+      },
+      {
+        "path": "/standard_charge_information/16/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must have required property 'gross_charge'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must have required property 'discounted_cash'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_dollar'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_algorithm'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_percentage'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must match a schema in anyOf",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'payer_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'plan_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'methodology'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/17/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must have required property 'minimum'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must have required property 'maximum'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property 'additional_payer_notes'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/payer_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "payer_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/plan_name",
+        "message": "must be string",
+        "field": "plan_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/standard_charge_percentage",
+        "message": "must be > 0",
+        "field": "standard_charge_percentage"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/4",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/6/description",
+        "message": "must be string",
+        "field": "description"
+      },
+      {
+        "path": "/standard_charge_information/6/code_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "code_information"
+      },
+      {
+        "path": "/standard_charge_information/6/standard_charges",
+        "message": "must NOT have fewer than 1 items",
+        "field": "standard_charges"
+      },
+      {
+        "path": "/standard_charge_information/7",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/7",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/code",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "code"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/2",
+        "message": "must be object",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'gross_charge'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'discounted_cash'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'payers_information'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must match a schema in anyOf",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'setting'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/8/drug_information/unit",
+        "message": "must be string",
+        "field": "unit"
+      },
+      {
+        "path": "/standard_charge_information/8/drug_information/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/8/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/8/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/8/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/9/drug_information",
+        "message": "must have required property 'type'",
+        "field": "drug_information"
+      },
+      {
+        "path": "/standard_charge_information/9/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/9/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/9/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/10/drug_information",
+        "message": "must be object",
+        "field": "drug_information"
+      },
+      {
+        "path": "/standard_charge_information/10/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/10/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/10/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/11",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/11",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/11/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/11/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/12",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/12",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/12",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/12/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/12/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/13/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/minimum",
+        "message": "must be > 0",
+        "field": "minimum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/maximum",
+        "message": "must be > 0",
+        "field": "maximum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/gross_charge",
+        "message": "must be number",
+        "field": "gross_charge"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/discounted_cash",
+        "message": "must be number",
+        "field": "discounted_cash"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/setting",
+        "message": "must be equal to one of the allowed values",
+        "field": "setting"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/14/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'gross_charge'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'discounted_cash'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'payers_information'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/15/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0/payers_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "payers_information"
+      },
+      {
+        "path": "/standard_charge_information/16/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must have required property 'gross_charge'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must have required property 'discounted_cash'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_dollar'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_algorithm'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_percentage'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must match a schema in anyOf",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'payer_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'plan_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'methodology'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/17/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must have required property 'minimum'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must have required property 'maximum'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property 'additional_payer_notes'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property 'estimated_amount'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/payer_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "payer_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/plan_name",
+        "message": "must be string",
+        "field": "plan_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/standard_charge_percentage",
+        "message": "must be > 0",
+        "field": "standard_charge_percentage"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/2",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/3",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/4",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/5",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/6/description",
+        "message": "must be string",
+        "field": "description"
+      },
+      {
+        "path": "/standard_charge_information/6/code_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "code_information"
+      },
+      {
+        "path": "/standard_charge_information/6/standard_charges",
+        "message": "must NOT have fewer than 1 items",
+        "field": "standard_charges"
+      },
+      {
+        "path": "/standard_charge_information/7",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/7",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/code",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "code"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/0/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/7/code_information/2",
+        "message": "must be object",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'gross_charge'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'discounted_cash'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'payers_information'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must match a schema in anyOf",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/7/standard_charges/1",
+        "message": "must have required property 'setting'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/8/drug_information/unit",
+        "message": "must be > 0",
+        "field": "unit"
+      },
+      {
+        "path": "/standard_charge_information/8/drug_information/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/9/drug_information",
+        "message": "must have required property 'type'",
+        "field": "drug_information"
+      },
+      {
+        "path": "/standard_charge_information/9/drug_information/unit",
+        "message": "must be number",
+        "field": "unit"
+      },
+      {
+        "path": "/standard_charge_information/10/drug_information",
+        "message": "must be object",
+        "field": "drug_information"
+      },
+      {
+        "path": "/standard_charge_information/11",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/11",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/12",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/minimum",
+        "message": "must be > 0",
+        "field": "minimum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/maximum",
+        "message": "must be > 0",
+        "field": "maximum"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/gross_charge",
+        "message": "must be number",
+        "field": "gross_charge"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/discounted_cash",
+        "message": "must be number",
+        "field": "discounted_cash"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/setting",
+        "message": "must be equal to one of the allowed values",
+        "field": "setting"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/modifier_code/0",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/13/standard_charges/0/additional_generic_notes",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "additional_generic_notes"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'gross_charge'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'discounted_cash'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must have required property 'payers_information'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/14/standard_charges/0/modifier_code",
+        "message": "must NOT have fewer than 1 items",
+        "field": "modifier_code"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0",
+        "message": "must have required property 'gross_charge'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0",
+        "message": "must have required property 'discounted_cash'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0/payers_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "payers_information"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/15/standard_charges/0/payers_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "payers_information"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must have required property 'gross_charge'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must have required property 'discounted_cash'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_dollar'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_algorithm'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_percentage'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must match a schema in anyOf",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0",
+        "message": "must match a schema in anyOf",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "must be object",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_dollar'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_percentage'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'standard_charge_algorithm'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must match a schema in anyOf",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'payer_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'plan_name'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/1",
+        "message": "must have required property 'methodology'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must have required property 'minimum'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must have required property 'maximum'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property 'additional_payer_notes'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property 'count'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property 'median_amount'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property '10th_percentile'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must have required property '90th_percentile'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/payer_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "payer_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/plan_name",
+        "message": "must be string",
+        "field": "plan_name"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/0/standard_charge_percentage",
+        "message": "must be > 0",
+        "field": "standard_charge_percentage"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/2",
+        "message": "must have required property 'additional_payer_notes'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/2",
+        "message": "must match \"then\" schema",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/2/standard_charge_algorithm",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "standard_charge_algorithm"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/2/median_amount",
+        "message": "must be > 0",
+        "field": "median_amount"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/2/10th_percentile",
+        "message": "must be > 0",
+        "field": "10th_percentile"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/2/90th_percentile",
+        "message": "must be number",
+        "field": "90th_percentile"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/3/additional_payer_notes",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "additional_payer_notes"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/16/standard_charges/0/payers_information/0",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/17/standard_charges/0/payers_information/2",
+        "message": "The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+        "field": "2"
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must be object",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must be object",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  }
+}

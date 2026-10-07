@@ -1,6 +1,6 @@
 // Writes tests/cases/findings: one or more input files per visible upstream finding
-// (docs: upstream-findings F-n), tests/cases/rules for data-row rule edges, and
-// tests/cases/versions for version-string handling.
+// (docs: upstream-findings F-n), tests/cases/rules for data-row rule edges, tests/cases/json
+// for JSON parser and schema edges, and tests/cases/versions for version-string handling.
 // The oracle then records upstream's result for each, like any other case.
 import fs from "node:fs";
 import path from "node:path";
@@ -259,6 +259,178 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
   const end = big.lastIndexOf("]");
   write("findings/f30-parser-error-second-chunk.json", big.slice(0, end) + "]]" + big.slice(end + 1));
   write("findings/f30-tokenizer-error-second-chunk.json", big.slice(0, end) + "@]" + big.slice(end + 1));
+}
+
+// --- JSON parser and schema edges: what the fixtures leave out --------------------------
+{
+  // Tokenizer, token parser and end-of-input paths, each a tiny document.
+  const u = (hex) => "\\u" + hex; // a JSON \u escape, built from parts: some tools decode a literal one
+  const SYNTAX = {
+    "root-trailing-comma": String.raw`{"hospital_name": "x", "version": "1.0.0",}`,
+    "item-trailing-comma": String.raw`{"standard_charge_information": [{"description": "x",}]}`,
+    "unkept-trailing-comma": String.raw`{"other": {"a": 1, "b": [2],}, "version": "1.0.0"}`,
+    "array-trailing-comma": String.raw`{"standard_charge_information": [{"description": "x"},]}`,
+    "unkept-array-trailing-comma": String.raw`{"other": [1,], "version": "1.0.0"}`,
+    "empty-containers": String.raw`{"other": {}, "standard_charge_information": [], "version": "1.0.0"}`,
+    "bom-or-start": String.raw`{@`,
+    "bom-or-start-nested": String.raw`[[[ ]],@`,
+    "number-token": String.raw`{"a" 1.50}`,
+    "number-token-huge": String.raw`{"a" 1e400}`,
+    "number-token-negative-zero": String.raw`{"a" -0}`,
+    "number-token-exponent": String.raw`{"a" 1e21}`,
+    "number-token-small": String.raw`{"a" 0.0000001}`,
+    "true-token": String.raw`{"a" true}`,
+    "false-token": String.raw`{"a" false}`,
+    "null-token": String.raw`{"a" null}`,
+    "string-token": String.raw`{"a" "q\"\\\n` + u("0001") + u("00e9") + String.raw`\/"}`,
+    "brace-token": String.raw`{"a" {`,
+    "bracket-token": String.raw`{"a" [`,
+    "colon-token": String.raw`{:`,
+    "comma-token": String.raw`[,`,
+    "right-brace-in-value": String.raw`{"a": }`,
+    "leading-zero": String.raw`{"a": 01}`,
+    "full-stop": String.raw`{"a": 1.}`,
+    "minus": String.raw`{"a": -}`,
+    "exponent": String.raw`{"a": 1e}`,
+    "exponent-sign": String.raw`{"a": 1e+}`,
+    "exponent-sign-twice": String.raw`{"a": 1e+-1}`,
+    "decimal-dot": String.raw`{"a": 1.5.2}`,
+    "true-typo": String.raw`{"a": trux}`,
+    "false-typo": String.raw`{"a": falsy}`,
+    "null-typo": String.raw`{"a": nulx}`,
+    "bad-escape": String.raw`{"version": "\x"}`,
+    "bad-unicode": String.raw`{"version": "\u12g4"}`,
+    "control-in-string": '{"version": "a\tb"}',
+    "surrogates": `{"version": "${u("d83d")}${u("de00")} ${u("d800")}${u("0041")}z ${u("dc00")} ${u("d800")}Az ${u("dc00")} ${u("00e9")} ${u("D83D")}${u("DE00")}"}`,
+    "surrogate-across-strings": String.raw`{"version": "\ud800", "a" "\udc00"}`,
+    "escapes": String.raw`{"version": "\b\f\n\r\t\/\\\""}`,
+    "root-string": '"abc"',
+    "root-number": "123",
+    "root-number-newline": "123\n",
+    "root-minus": "-",
+    "root-array": String.raw`[{"hospital_name": "x"}]`,
+    "root-null": "null",
+    "root-true": "true",
+    "empty": "",
+    "whitespace": " \n\t\r ",
+    "garbage-after-root": String.raw`{"version": "1.0.0"} xyz`,
+    "two-roots": String.raw`{"version": "1.0.0"}{"version": "2.0.0"}`,
+    "duplicate-metadata": String.raw`{"version": "1.0.0", "version": "9.9.9"}`,
+    "charges-object": String.raw`{"standard_charge_information": {"a": {"description": "x"}, "version": "8.8.8"}}`,
+    "charges-primitives": String.raw`{"standard_charge_information": [1, null, "x", [], true, 1e400]}`,
+    "charges-twice": String.raw`{"standard_charge_information": [{}], "standard_charge_information": [{}, {}]}`,
+    "charges-nested-name": String.raw`{"standard_charge_information": {"standard_charge_information": 5}}`,
+    "charges-deep": String.raw`{"x": {"y": {"standard_charge_information": [{}]}}}`,
+    "duplicate-item-member": String.raw`{"standard_charge_information": [{"description": 5, "description": "x"}]}`,
+    "truncated-number": String.raw`{"a": 12`,
+    "truncated-item-number": String.raw`{"standard_charge_information": [12`,
+    "truncated-string": String.raw`{"a": "x`,
+    "truncated-escape": '{"a": "\\',
+    "truncated-unicode": String.raw`{"a": "\u12`,
+    "truncated-true": String.raw`{"a": tr`,
+    "truncated-value": String.raw`{"a":`,
+    "truncated-colon": String.raw`{"a"`,
+    "truncated-array": "[1",
+    "truncated-nested": String.raw`{"a": [{"b": 1}`,
+    "bom-whitespace-error": "﻿ \n\n{@",
+    "bom-twice": "﻿﻿{}",
+    "bom-only": "﻿",
+    "bom-not-first": " ﻿{}",
+  };
+  for (const [name, text] of Object.entries(SYNTAX)) write(`json/syntax/${name}.json`, text);
+
+  // Bytes Node's decoder replaces or carries across the 64 KiB read boundary.
+  const bytes = (...parts) => Buffer.concat(parts.map((p) => Buffer.from(p)));
+  write("json/syntax/invalid-byte-at-end.json", bytes('{"a": 1 ', [0xe2, 0x82]));
+  write("json/syntax/invalid-byte-in-string.json", bytes('{"version": "a', [0xff], 'b"}'));
+  write("json/syntax/invalid-byte-shifts-position.json", bytes('{"version": "', [0xff], '", @'));
+  const pad = (n) => '{"version": "' + "x".repeat(n - 13);
+  write("json/syntax/split-char-second-chunk.json", bytes(pad(65535), "é", '", @'));
+  write("json/syntax/invalid-byte-second-chunk.json", bytes(pad(65535), [0xc3], '", @'));
+  write("json/syntax/bom-second-chunk.json", bytes(pad(65536), [0xef, 0xbb, 0xbf], '", @'));
+
+  // Schema keywords on the metadata and on charge items.
+  const v2doc = () => fixture("sample-valid.json");
+  const v3doc = () => fixture("3.0/sample-valid.json");
+  const INF = "__INFINITY__"; // 1e400 in the file, which JSON.stringify cannot write
+  const raw = (doc) => json(doc).replaceAll(`"${INF}"`, "1e400");
+  {
+    const doc = v3doc();
+    Object.assign(doc, {
+      hospital_name: "",
+      location_name: [],
+      hospital_address: ["", 5],
+      license_information: { state: "XX", license_number: "" },
+      type_2_npi: "1234567890",
+      attestation: { attestation: "no", confirm_attestation: "yes", attester_name: "" },
+      version: 3,
+      modifier_information: [{ description: "", code: 5, modifier_payer_information: [], setting: "x" }, 5],
+      affirmation: { affirmation: "no", confirm_affirmation: 1 },
+      hospital_location: [""],
+    });
+    write("json/schema/metadata.json", json(doc));
+    write("json/schema/metadata-wrong-types.json", raw({
+      hospital_name: 5, last_updated_on: null, location_name: {}, hospital_address: "x", license_information: [],
+      type_2_npi: [""], attestation: "yes", version: "", modifier_information: {}, affirmation: [],
+      hospital_location: INF, standard_charge_information: [{}],
+    }));
+  }
+  ["2024-02-29", "2023-02-29", "1900-02-29", "2000-02-29", "2024-04-31", "2024-13-01", "2024-00-01", "2024-01-00",
+    "2024-1-01", "24-01-01", "2024-01-01T00:00:00Z", "２０２４-01-01", "2024/01/01", "", 20240101, "2024-01-01\n"]
+    .forEach((date, i) => write(`json/schema/date-${i}.json`, json({ last_updated_on: date })));
+  {
+    const doc = v3doc();
+    const payer = doc.standard_charge_information[0].standard_charges[0].payers_information[0];
+    const COUNTS = ["0", "1 through 10", "1 THROUGH 10", "10", "011", "11", "19", "20", "100", "9", "abc", "", 5, "１２",
+      "12 ", "00", "999999999"];
+    doc.standard_charge_information[0].standard_charges[0].payers_information = COUNTS.map((count) => ({
+      ...payer, standard_charge_dollar: undefined, standard_charge_percentage: 50, count,
+    }));
+    write("json/schema/counts.json", json(doc));
+  }
+  {
+    const doc = v3doc();
+    const item = doc.standard_charge_information[0];
+    const charge = item.standard_charges[0];
+    const payer = charge.payers_information[0];
+    doc.standard_charge_information = [
+      5, "x", null, [], true, {},
+      { description: 5, code_information: [], standard_charges: [] },
+      { description: "x", code_information: [{ code: "", type: "BAD" }, { type: "NDC", code: "1" }, 5], standard_charges: [5, {}] },
+      { ...item, drug_information: { unit: 0, type: "XX" } },
+      { ...item, drug_information: { unit: "1" } },
+      { ...item, drug_information: 5 },
+      { ...item, code_information: [{ code: "1", type: "NDC" }] },
+      { ...item, code_information: undefined },
+      { ...item, standard_charges: [{ ...charge, setting: "x", minimum: 0, maximum: -5, gross_charge: "1",
+        discounted_cash: INF, modifier_code: [""], additional_generic_notes: "" }] },
+      { ...item, standard_charges: [{ setting: "both", modifier_code: [] }] },
+      { ...item, standard_charges: [{ setting: "both", payers_information: [] }] },
+      { ...item, standard_charges: [{ setting: "both", payers_information: [5, {}] }] },
+      { ...item, standard_charges: [{ setting: "both", payers_information: [
+        { payer_name: "", plan_name: 5, standard_charge_percentage: 0, methodology: "other" },
+        { payer_name: "a", plan_name: "b", standard_charge_dollar: 1, methodology: "case rate" },
+        { payer_name: "a", plan_name: "b", standard_charge_algorithm: "", methodology: "per diem", count: "0",
+          median_amount: 0, "10th_percentile": -1, "90th_percentile": "1", estimated_amount: 5 },
+        { ...payer, methodology: "fee schedule", additional_payer_notes: "" },
+      ] }] },
+    ];
+    write("json/schema/charge-items.json", raw(doc));
+  }
+  {
+    // Nine 9s and estimated amounts, for both alert schemas; more than two, for the limit.
+    const N = 999999999;
+    for (const [name, doc] of [["v2", v2doc()], ["v3", v3doc()]]) {
+      const payer = doc.standard_charge_information[0].standard_charges[0].payers_information[0];
+      doc.standard_charge_information[0].standard_charges[0].payers_information = [
+        { ...payer, estimated_amount: N, count: String(N), median_amount: N, "10th_percentile": N, "90th_percentile": N },
+        { ...payer, estimated_amount: String(N), count: N, median_amount: "__NINES_DECIMAL__" },
+        { ...payer, estimated_amount: "__NINES_EXPONENT__" },
+      ];
+      write(`json/schema/nines-${name}.json`, json(doc)
+        .replace('"__NINES_DECIMAL__"', "999999999.0").replace('"__NINES_EXPONENT__"', "9.99999999e8"));
+    }
+  }
 }
 
 // --- versions (F-22): validated with extra version strings by the oracle ---------------

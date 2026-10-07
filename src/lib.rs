@@ -6,6 +6,7 @@ use std::io::{self, Read};
 
 mod csv;
 mod js;
+mod json;
 
 /// Data dictionary versions upstream accepts, for CSV and JSON alike.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
@@ -37,7 +38,7 @@ pub fn validate(
 ) -> Result<Report, Error> {
     match format {
         Format::Csv => Ok(csv::validate(input, version, options)?),
-        Format::Json => todo!("JSON validation, roadmap Phase 4"),
+        Format::Json => json::validate(input, version, options),
     }
 }
 
@@ -211,6 +212,35 @@ impl Finding {
         out.push('}');
         out
     }
+}
+
+/// Whether `list` has reached the limit; `max` 0 is unlimited.
+fn full(list: &[Finding], max: usize) -> bool {
+    max > 0 && list.len() >= max
+}
+
+/// Upstream's `addItemsWithLimit`: `max` 0 is unlimited.
+fn add(list: &mut Vec<Finding>, items: impl IntoIterator<Item = Finding>, max: usize) {
+    let room = if max > 0 {
+        max.saturating_sub(list.len())
+    } else {
+        usize::MAX
+    };
+    list.extend(items.into_iter().take(room));
+}
+
+/// `VersionMismatchAlert`'s message, CSV and JSON alike.
+fn version_mismatch(found: &str, expected: &[&str]) -> String {
+    let expected = match expected {
+        [one] => format!("the expected template version \"{one}\""),
+        many => {
+            let quoted: Vec<String> = many.iter().map(|v| format!("\"{v}\"")).collect();
+            format!("an expected template version {}", quoted.join(", "))
+        }
+    };
+    format!(
+        "The value in this MRF's version data element \"{found}\" does not match {expected} for the data dictionary requirements selected for validation."
+    )
 }
 
 /// A string literal as `JSON.stringify` writes it.

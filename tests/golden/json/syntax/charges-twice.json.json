@@ -1,0 +1,445 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'version'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'version'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'version'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must match \"then\" schema",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/1",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'location_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'type_2_npi'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'attestation'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'version'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  }
+}

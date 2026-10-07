@@ -1,0 +1,330 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address/1",
+        "message": "must be string",
+        "field": "1"
+      },
+      {
+        "path": "/affirmation/affirmation",
+        "message": "must be equal to constant",
+        "field": "affirmation"
+      },
+      {
+        "path": "/affirmation/confirm_affirmation",
+        "message": "must be boolean",
+        "field": "confirm_affirmation"
+      },
+      {
+        "path": "/license_information/license_number",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "license_number"
+      },
+      {
+        "path": "/license_information/state",
+        "message": "must be equal to one of the allowed values",
+        "field": "state"
+      },
+      {
+        "path": "/version",
+        "message": "must be string",
+        "field": "version"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "hospital_name"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address/1",
+        "message": "must be string",
+        "field": "1"
+      },
+      {
+        "path": "/affirmation/affirmation",
+        "message": "must be equal to constant",
+        "field": "affirmation"
+      },
+      {
+        "path": "/affirmation/confirm_affirmation",
+        "message": "must be boolean",
+        "field": "confirm_affirmation"
+      },
+      {
+        "path": "/license_information/license_number",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "license_number"
+      },
+      {
+        "path": "/license_information/state",
+        "message": "must be equal to one of the allowed values",
+        "field": "state"
+      },
+      {
+        "path": "/version",
+        "message": "must be string",
+        "field": "version"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "hospital_name"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'estimated_amount'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address/1",
+        "message": "must be string",
+        "field": "1"
+      },
+      {
+        "path": "/affirmation/affirmation",
+        "message": "must be equal to constant",
+        "field": "affirmation"
+      },
+      {
+        "path": "/affirmation/confirm_affirmation",
+        "message": "must be boolean",
+        "field": "confirm_affirmation"
+      },
+      {
+        "path": "/license_information/license_number",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "license_number"
+      },
+      {
+        "path": "/license_information/state",
+        "message": "must be equal to one of the allowed values",
+        "field": "state"
+      },
+      {
+        "path": "/version",
+        "message": "must be string",
+        "field": "version"
+      },
+      {
+        "path": "/modifier_information/0/description",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "description"
+      },
+      {
+        "path": "/modifier_information/0/code",
+        "message": "must be string",
+        "field": "code"
+      },
+      {
+        "path": "/modifier_information/0/modifier_payer_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "modifier_payer_information"
+      },
+      {
+        "path": "/modifier_information/1",
+        "message": "must be object",
+        "field": "1"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/hospital_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address/0",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "0"
+      },
+      {
+        "path": "/hospital_address/1",
+        "message": "must be string",
+        "field": "1"
+      },
+      {
+        "path": "/attestation/attestation",
+        "message": "must be equal to constant",
+        "field": "attestation"
+      },
+      {
+        "path": "/attestation/confirm_attestation",
+        "message": "must be boolean",
+        "field": "confirm_attestation"
+      },
+      {
+        "path": "/attestation/attester_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "attester_name"
+      },
+      {
+        "path": "/license_information/license_number",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "license_number"
+      },
+      {
+        "path": "/license_information/state",
+        "message": "must be equal to one of the allowed values",
+        "field": "state"
+      },
+      {
+        "path": "/version",
+        "message": "must be string",
+        "field": "version"
+      },
+      {
+        "path": "/location_name",
+        "message": "must NOT have fewer than 1 items",
+        "field": "location_name"
+      },
+      {
+        "path": "/type_2_npi",
+        "message": "must be array",
+        "field": "type_2_npi"
+      },
+      {
+        "path": "/modifier_information/0/description",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "description"
+      },
+      {
+        "path": "/modifier_information/0/code",
+        "message": "must be string",
+        "field": "code"
+      },
+      {
+        "path": "/modifier_information/0/modifier_payer_information",
+        "message": "must NOT have fewer than 1 items",
+        "field": "modifier_payer_information"
+      },
+      {
+        "path": "/modifier_information/0/setting",
+        "message": "must be equal to one of the allowed values",
+        "field": "setting"
+      },
+      {
+        "path": "/modifier_information/1",
+        "message": "must be object",
+        "field": "1"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/hospital_name",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address/0",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "0"
+      }
+    ],
+    "alerts": []
+  }
+}

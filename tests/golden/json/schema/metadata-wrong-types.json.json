@@ -1,0 +1,330 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must be string",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address",
+        "message": "must be array",
+        "field": "hospital_address"
+      },
+      {
+        "path": "/last_updated_on",
+        "message": "must be string",
+        "field": "last_updated_on"
+      },
+      {
+        "path": "/affirmation",
+        "message": "must be object",
+        "field": "affirmation"
+      },
+      {
+        "path": "/license_information",
+        "message": "must be object",
+        "field": "license_information"
+      },
+      {
+        "path": "/version",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "version"
+      },
+      {
+        "path": "/hospital_location",
+        "message": "must be array",
+        "field": "hospital_location"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must be string",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address",
+        "message": "must be array",
+        "field": "hospital_address"
+      },
+      {
+        "path": "/last_updated_on",
+        "message": "must be string",
+        "field": "last_updated_on"
+      },
+      {
+        "path": "/affirmation",
+        "message": "must be object",
+        "field": "affirmation"
+      },
+      {
+        "path": "/license_information",
+        "message": "must be object",
+        "field": "license_information"
+      },
+      {
+        "path": "/version",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "version"
+      },
+      {
+        "path": "/hospital_location",
+        "message": "must be array",
+        "field": "hospital_location"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must match \"then\" schema",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must be string",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address",
+        "message": "must be array",
+        "field": "hospital_address"
+      },
+      {
+        "path": "/last_updated_on",
+        "message": "must be string",
+        "field": "last_updated_on"
+      },
+      {
+        "path": "/affirmation",
+        "message": "must be object",
+        "field": "affirmation"
+      },
+      {
+        "path": "/license_information",
+        "message": "must be object",
+        "field": "license_information"
+      },
+      {
+        "path": "/version",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "version"
+      },
+      {
+        "path": "/hospital_location",
+        "message": "must be array",
+        "field": "hospital_location"
+      },
+      {
+        "path": "/modifier_information",
+        "message": "must be array",
+        "field": "modifier_information"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must match \"then\" schema",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      },
+      {
+        "path": "/hospital_name",
+        "message": "must be string",
+        "field": "hospital_name"
+      },
+      {
+        "path": "/hospital_address",
+        "message": "must be array",
+        "field": "hospital_address"
+      },
+      {
+        "path": "/last_updated_on",
+        "message": "must be string",
+        "field": "last_updated_on"
+      },
+      {
+        "path": "/attestation",
+        "message": "must be object",
+        "field": "attestation"
+      },
+      {
+        "path": "/license_information",
+        "message": "must be object",
+        "field": "license_information"
+      },
+      {
+        "path": "/version",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "version"
+      },
+      {
+        "path": "/location_name",
+        "message": "must be array",
+        "field": "location_name"
+      },
+      {
+        "path": "/type_2_npi/0",
+        "message": "must NOT have fewer than 1 characters",
+        "field": "0"
+      },
+      {
+        "path": "/modifier_information",
+        "message": "must be array",
+        "field": "modifier_information"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\" does not match the expected template version \"3.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'description'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  }
+}

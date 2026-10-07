@@ -1,0 +1,18 @@
+{
+  "hospital_name": 5,
+  "last_updated_on": null,
+  "location_name": {},
+  "hospital_address": "x",
+  "license_information": [],
+  "type_2_npi": [
+    ""
+  ],
+  "attestation": "yes",
+  "version": "",
+  "modifier_information": {},
+  "affirmation": [],
+  "hospital_location": 1e400,
+  "standard_charge_information": [
+    {}
+  ]
+}

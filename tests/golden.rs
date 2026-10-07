@@ -35,16 +35,16 @@ fn golden() {
     let tests = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests");
     let mut goldens = Vec::new();
     files(&tests.join("golden"), &mut goldens);
-    let (mut checked, mut later, mut failed) = (0, 0, Vec::new());
+    let (mut checked, mut failed) = (0, Vec::new());
     for golden in goldens {
         let case = tests
             .join("cases")
             .join(golden.strip_prefix(tests.join("golden")).unwrap())
             .with_extension("");
-        if case.extension().unwrap() != "csv" {
-            later += 1; // JSON: roadmap Phase 4
-            continue;
-        }
+        let format = match case.extension().unwrap().to_str() {
+            Some("csv") => Format::Csv,
+            _ => Format::Json,
+        };
         let results: Value = serde_json::from_str(&fs::read_to_string(&golden).unwrap()).unwrap();
         for (key, expected) in results.as_object().unwrap() {
             let want = serde_json::to_string(expected).unwrap();
@@ -54,10 +54,18 @@ fn golden() {
                     max_errors: max_errors.parse().unwrap(),
                     mode,
                 };
-                let report =
-                    validate(File::open(&case).unwrap(), Format::Csv, version, &options).unwrap();
-                let got = serde_json::to_string(&upstream_json(&report)).unwrap();
-                let plain = report.file_type.is_none() && report.extended.is_empty();
+                let (got, plain) =
+                    match validate(File::open(&case).unwrap(), format, version, &options) {
+                        Ok(report) => (
+                            upstream_json(&report),
+                            report.file_type.is_none() && report.extended.is_empty(),
+                        ),
+                        Err(e) => (
+                            json!({ "throws": format!("Error: {e}") }),
+                            mode == Mode::Default,
+                        ),
+                    };
+                let got = serde_json::to_string(&got).unwrap();
                 if got != want || (mode == Mode::Default) != plain {
                     failed.push(format!(
                         "{} {key} {mode:?}\n  got  {got}\n  want {want}",
@@ -68,7 +76,7 @@ fn golden() {
             checked += 1;
         }
     }
-    eprintln!("golden: {checked} CSV results checked, {later} JSON cases left");
+    eprintln!("golden: {checked} results checked");
     assert!(checked > 0);
     assert!(
         failed.is_empty(),

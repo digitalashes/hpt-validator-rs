@@ -1,0 +1,110 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Unexpected RIGHT_BRACKET (\"]\") in state VALUE. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Unexpected RIGHT_BRACKET (\"]\") in state VALUE. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Unexpected RIGHT_BRACKET (\"]\") in state VALUE. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'drug_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must match \"then\" schema",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "JSON parsing error: Unexpected RIGHT_BRACKET (\"]\") in state VALUE. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON.",
+        "originalError": {}
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'code_information'",
+        "field": ""
+      },
+      {
+        "path": "/standard_charge_information/0",
+        "message": "must have required property 'standard_charges'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  }
+}

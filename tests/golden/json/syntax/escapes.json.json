@@ -1,0 +1,265 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\b\f\n\r\t/\\\"\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\b\f\n\r\t/\\\"\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\b\f\n\r\t/\\\"\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\b\f\n\r\t/\\\"\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'last_updated_on'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'location_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_address'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'type_2_npi'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'license_information'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'attestation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\b\f\n\r\t/\\\"\" does not match the expected template version \"3.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "",
+        "message": "must have required property 'hospital_name'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'standard_charge_information'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"\b\f\n\r\t/\\\"\" does not match the expected template version \"3.0.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.1.0\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property 'estimated_amount'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must have required property 'estimated_amount'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must have required property 'estimated_amount'",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2",
+        "message": "must match \"then\" schema",
+        "field": "2"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must have required property 'estimated_amount'",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3",
+        "message": "must match \"then\" schema",
+        "field": "3"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/4",
+        "message": "must have required property 'estimated_amount'",
+        "field": "4"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/4",
+        "message": "must match \"then\" schema",
+        "field": "4"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/5",
+        "message": "must have required property 'estimated_amount'",
+        "field": "5"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/5",
+        "message": "must match \"then\" schema",
+        "field": "5"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/6",
+        "message": "must have required property 'estimated_amount'",
+        "field": "6"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/6",
+        "message": "must match \"then\" schema",
+        "field": "6"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/7",
+        "message": "must have required property 'estimated_amount'",
+        "field": "7"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/7",
+        "message": "must match \"then\" schema",
+        "field": "7"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/8",
+        "message": "must have required property 'estimated_amount'",
+        "field": "8"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/8",
+        "message": "must match \"then\" schema",
+        "field": "8"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/9",
+        "message": "must have required property 'estimated_amount'",
+        "field": "9"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/9",
+        "message": "must match \"then\" schema",
+        "field": "9"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/10",
+        "message": "must have required property 'estimated_amount'",
+        "field": "10"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/10",
+        "message": "must match \"then\" schema",
+        "field": "10"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/11",
+        "message": "must have required property 'estimated_amount'",
+        "field": "11"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/11",
+        "message": "must match \"then\" schema",
+        "field": "11"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/12",
+        "message": "must have required property 'estimated_amount'",
+        "field": "12"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/12",
+        "message": "must match \"then\" schema",
+        "field": "12"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/13",
+        "message": "must have required property 'estimated_amount'",
+        "field": "13"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/13",
+        "message": "must match \"then\" schema",
+        "field": "13"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/14",
+        "message": "must have required property 'estimated_amount'",
+        "field": "14"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/14",
+        "message": "must match \"then\" schema",
+        "field": "14"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/15",
+        "message": "must have required property 'estimated_amount'",
+        "field": "15"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/15",
+        "message": "must match \"then\" schema",
+        "field": "15"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/16",
+        "message": "must have required property 'estimated_amount'",
+        "field": "16"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/16",
+        "message": "must match \"then\" schema",
+        "field": "16"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must have required property 'estimated_amount'",
+        "field": "1"
+      },
+      {
+        "path": "/standard_charge_information/1/standard_charges/0/payers_information/1",
+        "message": "must match \"then\" schema",
+        "field": "1"
+      },
+      {
+        "path": "",
+        "message": "must have required property 'hospital_location'",
+        "field": ""
+      },
+      {
+        "path": "",
+        "message": "must have required property 'affirmation'",
+        "field": ""
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/version",
+        "message": "The value in this MRF's version data element \"3.0.0\" does not match an expected template version \"2.0.0\", \"2.2.0\", \"2.2.1\" for the data dictionary requirements selected for validation."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/code_information/1/type",
+        "message": "must be equal to one of the allowed values",
+        "field": "type"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property 'estimated_amount'",
+        "field": "0"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property 'additional_payer_notes'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/2/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/3/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/4/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/9/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/10/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/11/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/12/count",
+        "message": "must be string",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/13/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/14/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/15/count",
+        "message": "must match pattern \"^(0|1 through 10|1[1-9]|[2-9]\\d+|[1-9]\\d{2,})$\"",
+        "field": "count"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/16/count",
+        "message": "Nine 9s used for count.",
+        "field": "count"
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must have required property 'additional_payer_notes'",
+        "field": "0"
+      },
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/0",
+        "message": "must match \"then\" schema",
+        "field": "0"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "/standard_charge_information/0/standard_charges/0/payers_information/16/count",
+        "message": "Nine 9s used for count.",
+        "field": "count"
+      }
+    ]
+  }
+}

@@ -44,6 +44,10 @@ const NUMBERS = [...NINES, "", " ", "\t\n", "0", "-0", ".5", "5.", ".", "+", "-"
   "Infinity", "-Infinity", "+Infinity", "infinity", "inf", "NaN", "0x", "0x1g", "0b2", "0o8", "-0x10", "1__0",
   "12345678901234567890", "123456789012345678901234567890", "0.1", "00", "1 2"];
 
+// String(n), which JSON parser errors and Ajv messages print numbers with.
+const STRINGS = [...NUMBERS, "1e21", "1e20", "123e19", "123e18", "1e-6", "1e-7", "1.5e-7", "0.000001234", "5e-324",
+  "1.7976931348623157e308", "4.35", "-1.5", "1e100", "1.25e-5", "0.1e1", "100", "2.5e-300"];
+
 const DATES = ["2024-01-31", "2024-02-29", "2023-02-29", "2024-13-01", "2024-00-10", "2024-01-00", "2024-1-01",
   "0000-01-01", "0099-12-31", "9999-12-31", "2024-01-01\n", " 2024-01-01", "2024-01-01 ", "٢٠٢٤-01-01",
   "1/2/2024", "01/02/2024", "12/31/0099", "1/1/0000", "1/1/0100", "2/29/2000", "2/29/1900", "2/30/2024",
@@ -72,6 +76,7 @@ fs.writeFileSync("tests/js.json", JSON.stringify({
   lower,
   lowerStrings: LOWER.map((s) => [s, s.toLocaleLowerCase()]),
   number: NUMBERS.map((s) => [s, num(Number(s))]),
+  numberString: STRINGS.map((s) => [s, String(Number(s))]),
   isValidDate: DATES.map((s) => [s, isValidDate(s)]),
   positive: POSITIVE.map((s) => [s, positive(s)]),
   coerce: COERCE.map((s) => [s, coerce(s)]),

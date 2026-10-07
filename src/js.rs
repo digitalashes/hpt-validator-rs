@@ -1,5 +1,7 @@
 //! JavaScript semantics upstream depends on, where the natural Rust choice answers differently.
-//! `tests/js.json`, written by Node itself, pins every function here.
+//! `tests/js.json` and the reader corpus, written by Node itself, pin every function here.
+
+use std::io::{self, Read};
 
 /// JS whitespace (`trim`, `\s`): Rust's `char::is_whitespace` minus U+0085, plus U+FEFF.
 pub fn is_space(c: char) -> bool {
@@ -113,7 +115,8 @@ pub fn is_valid_date(s: &str) -> bool {
     false
 }
 
-fn is_real_date(y: u32, m: u32, d: u32) -> bool {
+/// Whether month `m` of year `y` has a day `d`, leap years by the Gregorian rule.
+pub fn is_real_date(y: u32, m: u32, d: u32) -> bool {
     let leap = y.is_multiple_of(4) && (!y.is_multiple_of(100) || y.is_multiple_of(400));
     let days = match m {
         2 if leap => 29,
@@ -165,6 +168,117 @@ pub fn coerce(v: &str) -> String {
     } else {
         v.to_string()
     }
+}
+
+/// `String(n)`: the shortest digits that read back as `n`, laid out as `Number::toString` does.
+pub fn number_string(n: f64) -> String {
+    if n.is_nan() {
+        return "NaN".into();
+    }
+    if n == 0.0 {
+        return "0".into();
+    }
+    let sign = if n < 0.0 { "-" } else { "" };
+    if n.is_infinite() {
+        return format!("{sign}Infinity");
+    }
+    // `{:e}` gives the shortest digits as `d.ddde-7`; ECMAScript names the count of digits k
+    // and the decimal point's position n.
+    let sci = format!("{:e}", n.abs());
+    let (mantissa, exp) = sci.split_once('e').unwrap();
+    let digits = mantissa.replace('.', "");
+    let (k, e) = (digits.len() as i32, exp.parse::<i32>().unwrap());
+    let n = e + 1;
+    let body = if k <= n && n <= 21 {
+        digits + &"0".repeat((n - k) as usize)
+    } else if 0 < n && n <= 21 {
+        format!("{}.{}", &digits[..n as usize], &digits[n as usize..])
+    } else if -6 < n && n <= 0 {
+        format!("0.{}{digits}", "0".repeat(-n as usize))
+    } else {
+        let exp = format!("e{}{}", if e < 0 { '-' } else { '+' }, e.abs());
+        match digits.split_at(1) {
+            (d, "") => format!("{d}{exp}"),
+            (d, rest) => format!("{d}.{rest}{exp}"),
+        }
+    };
+    format!("{sign}{body}")
+}
+
+/// `fs.createReadStream`'s chunk size.
+pub const CHUNK: usize = 64 * 1024;
+
+/// A file as `fs.createReadStream(path, "utf-8")` emits it: fixed-size reads decoded by Node's
+/// streaming UTF-8 decoder, one string per `data` event, never an empty one.
+pub struct Stream<R> {
+    input: R,
+    chunk: u64,
+    /// Bytes of a UTF-8 sequence split by the chunk boundary.
+    undecoded: Vec<u8>,
+    ended: bool,
+}
+
+impl<R: Read> Stream<R> {
+    pub fn new(input: R, chunk: usize) -> Self {
+        Stream {
+            input,
+            chunk: chunk as u64,
+            undecoded: Vec::new(),
+            ended: false,
+        }
+    }
+
+    /// Appends the next `data` event's text to `out`; false once the input is exhausted.
+    pub fn next(&mut self, out: &mut String) -> io::Result<bool> {
+        while !self.ended {
+            let n = (self.input.by_ref())
+                .take(self.chunk)
+                .read_to_end(&mut self.undecoded)?;
+            if n == 0 {
+                self.ended = true;
+                // The decoder's `end()`: an unfinished sequence is one U+FFFD, its own event.
+                if !self.undecoded.is_empty() {
+                    self.undecoded.clear();
+                    out.push('\u{fffd}');
+                    return Ok(true);
+                }
+            } else {
+                let start = out.len();
+                decode(&mut self.undecoded, out);
+                if out.len() > start {
+                    return Ok(true);
+                }
+            }
+        }
+        Ok(false)
+    }
+}
+
+/// Node's streaming UTF-8 decoder: complete sequences go to `out`, each maximal invalid
+/// subpart becomes U+FFFD, and an incomplete sequence at the end stays in `bytes`.
+fn decode(bytes: &mut Vec<u8>, out: &mut String) {
+    let done = match std::str::from_utf8(bytes) {
+        Ok(text) => {
+            out.push_str(text);
+            bytes.len()
+        }
+        // Valid but for a sequence cut short at the end: no lossy pass needed.
+        Err(e) if e.error_len().is_none() => {
+            out.push_str(std::str::from_utf8(&bytes[..e.valid_up_to()]).unwrap());
+            e.valid_up_to()
+        }
+        Err(_) => {
+            let incomplete = bytes.utf8_chunks().last().map_or(0, |c| {
+                let bad = c.invalid();
+                let cut_short = std::str::from_utf8(bad).is_err_and(|e| e.error_len().is_none());
+                if cut_short { bad.len() } else { 0 }
+            });
+            let done = bytes.len() - incomplete;
+            out.push_str(&String::from_utf8_lossy(&bytes[..done]));
+            done
+        }
+    };
+    bytes.drain(..done);
 }
 
 #[cfg(test)]
@@ -254,6 +368,13 @@ mod tests {
                 is_positive_number(s),
                 e.as_bool().unwrap(),
                 "positive({s:?})"
+            );
+        }
+        for (s, e) in pairs(&t, "numberString") {
+            assert_eq!(
+                number_string(number(s)),
+                e.as_str().unwrap(),
+                "String(Number({s:?}))"
             );
         }
         for (s, e) in pairs(&t, "coerce") {
