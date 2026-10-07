@@ -6,27 +6,8 @@ use crate::{Code, Finding, Version, js};
 
 /// Upstream's `BILLING_CODE_TYPES`, then the two 3.0 adds.
 const BILLING_CODES: &[&str] = &[
-    "CPT",
-    "HCPCS",
-    "ICD",
-    "DRG",
-    "MS-DRG",
-    "R-DRG",
-    "S-DRG",
-    "APS-DRG",
-    "AP-DRG",
-    "APR-DRG",
-    "APC",
-    "NDC",
-    "HIPPS",
-    "LOCAL",
-    "EAPG",
-    "CDT",
-    "RC",
-    "CDM",
-    "TRIS-DRG",
-    "CMG",
-    "MS-LTC-DRG",
+    "CPT", "HCPCS", "ICD", "DRG", "MS-DRG", "R-DRG", "S-DRG", "APS-DRG", "AP-DRG", "APR-DRG",
+    "APC", "NDC", "HIPPS", "LOCAL", "EAPG", "CDT", "RC", "CDM", "TRIS-DRG", "CMG", "MS-LTC-DRG",
 ];
 
 const SETTINGS: &[&str] = &["inpatient", "outpatient", "both"];
