@@ -1,5 +1,5 @@
 // Writes the JavaScript behaviour the port re-implements:
-//   tests/js.json        trim set, upper-case map, Number(), and upstream's own helpers on edge inputs
+//   tests/js.json        trim set, case maps, Number(), and upstream's own helpers on edge inputs
 //   tests/reader/*.csv   the reader corpus; *.json next to each holds papaparse's rows per chunk size
 import fs from "node:fs";
 import path from "node:path";
@@ -25,8 +25,13 @@ const trim = chars.filter(([, s]) => s.trim() === "").map(([cp]) => cp);
 for (const [cp, s] of chars) {
   if (/^\s$/.test(s) !== trim.includes(cp)) throw new Error(`\\s and trim() differ at ${cp}`);
   if (s.toLocaleUpperCase() !== s.toUpperCase()) throw new Error(`locale upper case differs at ${cp}`);
+  if (s.toLocaleLowerCase() !== s.toLowerCase()) throw new Error(`locale lower case differs at ${cp}`);
 }
 const upper = Object.fromEntries(chars.filter(([, s]) => s.toUpperCase() !== s).map(([cp, s]) => [cp, s.toUpperCase()]));
+const lower = Object.fromEntries(chars.filter(([, s]) => s.toLowerCase() !== s).map(([cp, s]) => [cp, s.toLowerCase()]));
+// Lower-casing a string is not per character: a final capital sigma becomes ς.
+const LOWER = ["Σ", "ΑΣ", "ΑΣ Β", "ΑΣ.Β", "Α.Σ", "ΑΣ'", "ΑΣ'Β", "ΑΣ\u00adΒ", "Σ Α", "Payer Σ | PLAN ΑΣ", "1Σ", "ΑΣ1",
+  "ΑΣ\u{16ea0}", "ΑΣ\u{16ebb}Β", "\u{16ebb}Σ", "ΑΣ\ua7d3"]; // Unicode 17 letters are unassigned to Node 20
 
 // Non-finite numbers and -0 do not survive JSON, so they are written as strings.
 const num = (n) => (Number.isFinite(n) && !Object.is(n, -0) ? n : String(Object.is(n, -0) ? "-0" : n));
@@ -63,6 +68,8 @@ const coerce = (v) => semver.coerce(v)?.toString() ?? v; // CsvValidator and Jso
 fs.writeFileSync("tests/js.json", JSON.stringify({
   trim,
   upper,
+  lower,
+  lowerStrings: LOWER.map((s) => [s, s.toLocaleLowerCase()]),
   number: NUMBERS.map((s) => [s, num(Number(s))]),
   isValidDate: DATES.map((s) => [s, isValidDate(s)]),
   positive: POSITIVE.map((s) => [s, positive(s)]),
@@ -145,5 +152,5 @@ for (const [name, bytes] of Object.entries(CORPUS)) {
   if (new Set(Object.values(golden).map((g) => JSON.stringify(g))).size > 1) chunkSensitive++;
   fs.writeFileSync(path.join("tests/reader", name + ".json"), JSON.stringify(golden) + "\n");
 }
-console.log(`js tables: ${trim.length} trim, ${Object.keys(upper).length} upper; ` +
+console.log(`js tables: ${trim.length} trim, ${Object.keys(upper).length} upper, ${Object.keys(lower).length} lower; ` +
   `reader: ${Object.keys(CORPUS).length} inputs, ${chunkSensitive} chunk-size sensitive`);

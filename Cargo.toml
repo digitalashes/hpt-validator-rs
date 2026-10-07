@@ -1,0 +1,10 @@
+[package]
+name = "hpt-validator"
+version = "0.1.0"
+edition = "2024"
+description = "Validator for CMS Hospital Price Transparency machine-readable files, a port of @cmsgov/hpt-validator"
+license = "CC0-1.0"
+exclude = ["/oracle", "/tests"]
+
+[dev-dependencies]
+serde_json = "1"
