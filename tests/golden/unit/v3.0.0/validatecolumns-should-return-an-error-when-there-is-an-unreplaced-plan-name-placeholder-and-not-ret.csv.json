@@ -1,0 +1,34 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "T3",
+        "message": "Column header standard_charge | Plan XYZ | [plan_name] | negotiated_dollar contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "standard_charge | Plan XYZ | [plan_name] | negotiated_dollar",
+        "column": 19
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "T3",
+        "message": "Column header standard_charge | Plan XYZ | [plan_name] | negotiated_dollar contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "standard_charge | Plan XYZ | [plan_name] | negotiated_dollar",
+        "column": 19
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  }
+}

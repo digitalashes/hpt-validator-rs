@@ -1,0 +1,44 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "H4",
+        "message": "\"drug_type_of_measurement\" value \"XYZ\" is not one of the allowed valid values. You must encode one of these valid values: GR, ME, ML, UN, F2, EA, GM",
+        "columnName": "drug_type_of_measurement",
+        "value": "XYZ",
+        "allowedValues": [
+          "GR",
+          "ME",
+          "ML",
+          "UN",
+          "F2",
+          "EA",
+          "GM"
+        ]
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "H4",
+        "message": "\"drug_type_of_measurement\" value \"XYZ\" is not one of the allowed valid values. You must encode one of these valid values: GR, ME, ML, UN, F2, EA, GM",
+        "columnName": "drug_type_of_measurement",
+        "value": "XYZ",
+        "allowedValues": [
+          "GR",
+          "ME",
+          "ML",
+          "UN",
+          "F2",
+          "EA",
+          "GM"
+        ]
+      }
+    ],
+    "alerts": []
+  }
+}

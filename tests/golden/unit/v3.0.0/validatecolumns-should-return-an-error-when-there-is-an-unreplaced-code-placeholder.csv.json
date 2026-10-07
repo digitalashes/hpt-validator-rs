@@ -1,0 +1,46 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "D3",
+        "message": "Column header code | [i] | Type contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "code | [i] | Type",
+        "column": 3
+      },
+      {
+        "path": "Q3",
+        "message": "Column header code | [i] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "code | [i]",
+        "column": 16
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "D3",
+        "message": "Column header code | [i] | Type contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "code | [i] | Type",
+        "column": 3
+      },
+      {
+        "path": "Q3",
+        "message": "Column header code | [i] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "code | [i]",
+        "column": 16
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  }
+}

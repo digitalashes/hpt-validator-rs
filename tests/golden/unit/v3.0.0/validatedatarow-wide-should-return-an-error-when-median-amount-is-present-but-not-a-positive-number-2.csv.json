@@ -1,0 +1,26 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "T4",
+        "message": "\"90th_percentile | Payer ABC | Plan 1\" value \"max allowed\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "90th_percentile | Payer ABC | Plan 1",
+        "value": "max allowed"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "T4",
+        "message": "\"90th_percentile | Payer ABC | Plan 1\" value \"max allowed\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "90th_percentile | Payer ABC | Plan 1",
+        "value": "max allowed"
+      }
+    ],
+    "alerts": []
+  }
+}

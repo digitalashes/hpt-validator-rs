@@ -1,0 +1,12 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": []
+  }
+}

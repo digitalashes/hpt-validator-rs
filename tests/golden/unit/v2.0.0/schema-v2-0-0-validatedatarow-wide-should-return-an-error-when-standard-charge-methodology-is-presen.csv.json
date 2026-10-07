@@ -1,0 +1,40 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "N4",
+        "message": "\"standard_charge | Payer ABC | Plan 1 | methodology\" value \"incorrect\" is not one of the allowed valid values. You must encode one of these valid values: case rate, fee schedule, percent of total billed charges, per diem, other",
+        "columnName": "standard_charge | Payer ABC | Plan 1 | methodology",
+        "value": "incorrect",
+        "allowedValues": [
+          "case rate",
+          "fee schedule",
+          "percent of total billed charges",
+          "per diem",
+          "other"
+        ]
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "N4",
+        "message": "\"standard_charge | Payer ABC | Plan 1 | methodology\" value \"incorrect\" is not one of the allowed valid values. You must encode one of these valid values: case rate, fee schedule, percent of total billed charges, per diem, other",
+        "columnName": "standard_charge | Payer ABC | Plan 1 | methodology",
+        "value": "incorrect",
+        "allowedValues": [
+          "case rate",
+          "fee schedule",
+          "percent of total billed charges",
+          "per diem",
+          "other"
+        ]
+      }
+    ],
+    "alerts": []
+  }
+}

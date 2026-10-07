@@ -1,0 +1,22 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "V4",
+        "message": "Nine 9s used for 10th percentile."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "V4",
+        "message": "Nine 9s used for 10th percentile."
+      }
+    ]
+  }
+}

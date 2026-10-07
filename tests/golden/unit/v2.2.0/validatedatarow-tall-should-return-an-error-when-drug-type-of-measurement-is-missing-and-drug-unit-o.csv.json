@@ -1,0 +1,24 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "H4",
+        "message": "A value is required for \"drug_type_of_measurement\" when \"drug_unit_of_measurement\" is present. You must encode the missing information.",
+        "columnName": "drug_type_of_measurement"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "H4",
+        "message": "A value is required for \"drug_type_of_measurement\" when \"drug_unit_of_measurement\" is present. You must encode the missing information.",
+        "columnName": "drug_type_of_measurement"
+      }
+    ],
+    "alerts": []
+  }
+}

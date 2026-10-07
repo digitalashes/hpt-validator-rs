@@ -1,0 +1,24 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "F4",
+        "message": "A value is required for \"setting\". You must encode the missing information.",
+        "columnName": "setting"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "F4",
+        "message": "A value is required for \"setting\". You must encode the missing information.",
+        "columnName": "setting"
+      }
+    ],
+    "alerts": []
+  }
+}

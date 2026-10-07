@@ -1,0 +1,22 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "O4",
+        "message": "If a payer name and plan name are encoded, a payer-specific charge must also be encoded."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "O4",
+        "message": "If a payer name and plan name are encoded, a payer-specific charge must also be encoded."
+      }
+    ],
+    "alerts": []
+  }
+}

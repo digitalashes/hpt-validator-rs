@@ -1,0 +1,22 @@
+{
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "T4",
+        "message": "If the \"standard charge methodology\" encoded value is \"other\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "T4",
+        "message": "If the \"standard charge methodology\" encoded value is \"other\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      }
+    ],
+    "alerts": []
+  }
+}

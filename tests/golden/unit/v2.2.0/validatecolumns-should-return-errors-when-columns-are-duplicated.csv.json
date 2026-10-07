@@ -1,0 +1,42 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "H3",
+        "message": "Column setting duplicated in header. You must review and revise your column headers so that each header appears only once in the third row.",
+        "columnName": "setting"
+      },
+      {
+        "path": "U3",
+        "message": "Column estimated_amount duplicated in header. You must review and revise your column headers so that each header appears only once in the third row.",
+        "columnName": "estimated_amount"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "H3",
+        "message": "Column setting duplicated in header. You must review and revise your column headers so that each header appears only once in the third row.",
+        "columnName": "setting"
+      },
+      {
+        "path": "U3",
+        "message": "Column estimated_amount duplicated in header. You must review and revise your column headers so that each header appears only once in the third row.",
+        "columnName": "estimated_amount"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  }
+}

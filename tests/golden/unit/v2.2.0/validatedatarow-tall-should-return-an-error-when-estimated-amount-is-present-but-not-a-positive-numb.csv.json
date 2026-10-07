@@ -1,0 +1,26 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "U4",
+        "message": "\"estimated_amount\" value \"Unknown\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "estimated_amount",
+        "value": "Unknown"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "U4",
+        "message": "\"estimated_amount\" value \"Unknown\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "estimated_amount",
+        "value": "Unknown"
+      }
+    ],
+    "alerts": []
+  }
+}

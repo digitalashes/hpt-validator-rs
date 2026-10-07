@@ -1,0 +1,26 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "K4",
+        "message": "\"standard_charge | Payer ABC | Plan 1 | negotiated_dollar\" value \"$5\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge | Payer ABC | Plan 1 | negotiated_dollar",
+        "value": "$5"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "K4",
+        "message": "\"standard_charge | Payer ABC | Plan 1 | negotiated_dollar\" value \"$5\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge | Payer ABC | Plan 1 | negotiated_dollar",
+        "value": "$5"
+      }
+    ],
+    "alerts": []
+  }
+}

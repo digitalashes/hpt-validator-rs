@@ -1,0 +1,22 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "U4",
+        "message": "Nine 9s used for estimated amount."
+      }
+    ]
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "U4",
+        "message": "Nine 9s used for estimated amount."
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "N4",
+        "message": "If the \"count of allowed amounts\" encoded value is \"0\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "N4",
+        "message": "If the \"count of allowed amounts\" encoded value is \"0\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      }
+    ],
+    "alerts": []
+  }
+}

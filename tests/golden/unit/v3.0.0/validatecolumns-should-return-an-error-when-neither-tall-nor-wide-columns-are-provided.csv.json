@@ -1,0 +1,30 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Required payer-specific information data element headers are missing or miscoded from the MRF that does not follow the specifications for the CSV \"Tall\" or CSV \"Wide\" format."
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Required payer-specific information data element headers are missing or miscoded from the MRF that does not follow the specifications for the CSV \"Tall\" or CSV \"Wide\" format."
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  }
+}

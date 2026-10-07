@@ -1,0 +1,26 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "AB4",
+        "message": "\"10th_percentile | Payer XYZ | Plan 2\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "10th_percentile | Payer XYZ | Plan 2",
+        "value": "0"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "AB4",
+        "message": "\"10th_percentile | Payer XYZ | Plan 2\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "10th_percentile | Payer XYZ | Plan 2",
+        "value": "0"
+      }
+    ],
+    "alerts": []
+  }
+}

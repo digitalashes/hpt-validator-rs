@@ -1,0 +1,36 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "F4",
+        "message": "\"setting\" value \"strange\" is not one of the allowed valid values. You must encode one of these valid values: inpatient, outpatient, both",
+        "columnName": "setting",
+        "value": "strange",
+        "allowedValues": [
+          "inpatient",
+          "outpatient",
+          "both"
+        ]
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "F4",
+        "message": "\"setting\" value \"strange\" is not one of the allowed valid values. You must encode one of these valid values: inpatient, outpatient, both",
+        "columnName": "setting",
+        "value": "strange",
+        "allowedValues": [
+          "inpatient",
+          "outpatient",
+          "both"
+        ]
+      }
+    ],
+    "alerts": []
+  }
+}

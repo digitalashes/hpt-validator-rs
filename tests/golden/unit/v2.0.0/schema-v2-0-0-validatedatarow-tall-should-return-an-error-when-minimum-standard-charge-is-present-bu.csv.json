@@ -1,0 +1,26 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "I4",
+        "message": "\"standard_charge | min\" value \"NaN\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge | min",
+        "value": "NaN"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "I4",
+        "message": "\"standard_charge | min\" value \"NaN\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "standard_charge | min",
+        "value": "NaN"
+      }
+    ],
+    "alerts": []
+  }
+}

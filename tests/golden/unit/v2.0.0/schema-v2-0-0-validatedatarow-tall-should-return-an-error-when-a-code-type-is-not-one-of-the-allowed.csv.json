@@ -1,0 +1,68 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code |1| type\" value \"BOAT\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code |1| type",
+        "value": "BOAT",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C4",
+        "message": "\"code |1| type\" value \"BOAT\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code |1| type",
+        "value": "BOAT",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      }
+    ],
+    "alerts": []
+  }
+}

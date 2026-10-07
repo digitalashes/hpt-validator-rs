@@ -1,0 +1,26 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "U4",
+        "message": "\"median_amount\" value \"XX\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount",
+        "value": "XX"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "U4",
+        "message": "\"median_amount\" value \"XX\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount",
+        "value": "XX"
+      }
+    ],
+    "alerts": []
+  }
+}

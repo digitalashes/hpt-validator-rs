@@ -1,0 +1,26 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "X4",
+        "message": "\"count\" value \"5\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count",
+        "value": "5"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "X4",
+        "message": "\"count\" value \"5\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count",
+        "value": "5"
+      }
+    ],
+    "alerts": []
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "G2",
+        "message": "\"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" value \"I agree\" is not one of the allowed valid values. You must encode one of these valid values: true, false",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.",
+        "value": "I agree",
+        "allowedValues": [
+          "true",
+          "false"
+        ]
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "G2",
+        "message": "\"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" value \"I agree\" is not one of the allowed valid values. You must encode one of these valid values: true, false",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.",
+        "value": "I agree",
+        "allowedValues": [
+          "true",
+          "false"
+        ]
+      }
+    ],
+    "alerts": []
+  }
+}

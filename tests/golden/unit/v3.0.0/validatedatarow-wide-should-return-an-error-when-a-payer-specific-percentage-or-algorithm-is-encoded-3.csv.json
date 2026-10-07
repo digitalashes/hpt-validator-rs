@@ -1,0 +1,22 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "S4",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"10th Percentile\" must also be encoded."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "S4",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"10th Percentile\" must also be encoded."
+      }
+    ],
+    "alerts": []
+  }
+}

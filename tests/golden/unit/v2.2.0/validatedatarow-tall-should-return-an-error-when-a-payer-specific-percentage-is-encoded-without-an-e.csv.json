@@ -1,0 +1,22 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "U4",
+        "message": "If a \"payer specific negotiated charge\" can only be expressed as a percentage or algorithm, then a corresponding \"Estimated Allowed Amount\" must also be encoded."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "U4",
+        "message": "If a \"payer specific negotiated charge\" can only be expressed as a percentage or algorithm, then a corresponding \"Estimated Allowed Amount\" must also be encoded."
+      }
+    ],
+    "alerts": []
+  }
+}

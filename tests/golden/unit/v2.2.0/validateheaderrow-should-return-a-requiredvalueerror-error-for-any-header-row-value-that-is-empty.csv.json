@@ -1,0 +1,54 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A2",
+        "message": "A value is required for \"hospital_name\". You must encode the missing information.",
+        "columnName": "hospital_name"
+      },
+      {
+        "path": "B2",
+        "message": "A value is required for \"last_updated_on\". You must encode the missing information.",
+        "columnName": "last_updated_on"
+      },
+      {
+        "path": "C2",
+        "message": "A value is required for \"version\". You must encode the missing information.",
+        "columnName": "version"
+      },
+      {
+        "path": "D2",
+        "message": "A value is required for \"hospital_location\". You must encode the missing information.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "E2",
+        "message": "A value is required for \"hospital_address\". You must encode the missing information.",
+        "columnName": "hospital_address"
+      },
+      {
+        "path": "G2",
+        "message": "A value is required for \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\". You must encode the missing information.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A2",
+        "message": "A value is required for \"hospital_name\". You must encode the missing information.",
+        "columnName": "hospital_name"
+      },
+      {
+        "path": "B2",
+        "message": "A value is required for \"last_updated_on\". You must encode the missing information.",
+        "columnName": "last_updated_on"
+      }
+    ],
+    "alerts": []
+  }
+}

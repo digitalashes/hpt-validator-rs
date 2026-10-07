@@ -202,3 +202,52 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
 
 write("versions/tall-2.0.0.csv", csv(tall("2.0.0")));
 write("versions/sample-valid.json", json(fixture("sample-valid.json")));
+
+// --- upstream unit tests ----------------------------------------------------------------
+// target/lift.jsonl holds every direct call upstream's CSV unit tests make to a row-level
+// method (lift.setup.mjs). Each becomes a whole file: the tested row in place, the other
+// rows filled with valid defaults for the version. Validated at that version only.
+
+const norm = (c) => (c ?? "").split("|").map((p) => p.trim()).join(" | ").toUpperCase();
+function headerValues(cols, version) {
+  const [defaultCols, defaultVals] = header(version);
+  const byName = new Map(defaultCols.map((c, i) => [norm(c), defaultVals[i]]));
+  return cols.map((c) => (norm(c).startsWith("LICENSE_NUMBER") ? "50056" : byName.get(norm(c)) ?? ""));
+}
+
+function lift({ method, arg, version, headerColumns, dataColumns, normalizedColumns }) {
+  const [h, v] = header(version, { version: v3(version) ? "3.0.0" : "2.0.0" });
+  const cols = tallColumns(version);
+  switch (method) {
+    case "validateHeaderColumns": {
+      const row = arg.length ? arg : ["comment"]; // an empty row 1 would be a blank line
+      return [row, headerValues(row, version), cols, item(cols)];
+    }
+    case "validateHeaderRow":
+    case "alertHeaderRow":
+      return [headerColumns, arg, cols, item(cols)];
+    case "validateColumns":
+    case "alertColumns":
+      return [h, v, arg, []];
+    case "validateDataRow":
+    case "alertDataRow":
+      return [h, v, dataColumns.map((c) => c ?? ""), dataColumns.map((_, i) => arg[normalizedColumns[i]] ?? "")];
+  }
+  throw new Error(`no lift for ${method}`);
+}
+
+if (fs.existsSync("target/lift.jsonl")) {
+  const seen = new Map(); // file -> content
+  for (const line of fs.readFileSync("target/lift.jsonl", "utf-8").trim().split("\n")) {
+    const call = JSON.parse(line);
+    const content = csv(lift(call));
+    const slug = call.test.replace(/^CsvValidator v[\d.]+ > /, "").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 100);
+    const dir = `unit/v${call.version}`;
+    if ([...seen].some(([f, c]) => f.startsWith(dir) && c === content)) continue;
+    let file = `${dir}/${slug}.csv`;
+    for (let n = 2; seen.has(file); n++) file = `${dir}/${slug}-${n}.csv`;
+    seen.set(file, content);
+    write(file, content);
+  }
+}

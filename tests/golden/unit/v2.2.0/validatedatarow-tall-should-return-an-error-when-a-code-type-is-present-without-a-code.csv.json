@@ -1,0 +1,24 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "B4",
+        "message": "A value is required for \"code |1\". You must encode the missing information.",
+        "columnName": "code |1"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "B4",
+        "message": "A value is required for \"code |1\". You must encode the missing information.",
+        "columnName": "code |1"
+      }
+    ],
+    "alerts": []
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A2",
+        "message": "A value is required for \"hospital_name\". You must encode the missing information.",
+        "columnName": "hospital_name"
+      },
+      {
+        "path": "B2",
+        "message": "A value is required for \"last_updated_on\". You must encode the missing information.",
+        "columnName": "last_updated_on"
+      },
+      {
+        "path": "C2",
+        "message": "A value is required for \"version\". You must encode the missing information.",
+        "columnName": "version"
+      },
+      {
+        "path": "D2",
+        "message": "A value is required for \"location_name\". You must encode the missing information.",
+        "columnName": "location_name"
+      },
+      {
+        "path": "E2",
+        "message": "A value is required for \"hospital_address\". You must encode the missing information.",
+        "columnName": "hospital_address"
+      },
+      {
+        "path": "G2",
+        "message": "A value is required for \"To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula.\". You must encode the missing information.",
+        "columnName": "To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula."
+      },
+      {
+        "path": "H2",
+        "message": "A value is required for \"attester_name\". You must encode the missing information.",
+        "columnName": "attester_name"
+      },
+      {
+        "path": "I2",
+        "message": "A value is required for \"type_2_npi\". You must encode the missing information.",
+        "columnName": "type_2_npi"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "A2",
+        "message": "A value is required for \"hospital_name\". You must encode the missing information.",
+        "columnName": "hospital_name"
+      },
+      {
+        "path": "B2",
+        "message": "A value is required for \"last_updated_on\". You must encode the missing information.",
+        "columnName": "last_updated_on"
+      }
+    ],
+    "alerts": []
+  }
+}

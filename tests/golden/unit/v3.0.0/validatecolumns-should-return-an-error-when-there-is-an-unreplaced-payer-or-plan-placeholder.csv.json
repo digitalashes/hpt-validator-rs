@@ -1,0 +1,88 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C3",
+        "message": "Column header standard_charge | [payer_name] | [plan_name] | methodology contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "standard_charge | [payer_name] | [plan_name] | methodology",
+        "column": 2
+      },
+      {
+        "path": "G3",
+        "message": "Column header 10th_percentile |  [payer_name] | [plan_name] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "10th_percentile |  [payer_name] | [plan_name]",
+        "column": 6
+      },
+      {
+        "path": "I3",
+        "message": "Column header additional_payer_notes | [payer_name] | [plan_name] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "additional_payer_notes | [payer_name] | [plan_name]",
+        "column": 8
+      },
+      {
+        "path": "J3",
+        "message": "Column header standard_charge | [payer_name] | [plan_name] | negotiated_dollar contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "standard_charge | [payer_name] | [plan_name] | negotiated_dollar",
+        "column": 9
+      },
+      {
+        "path": "L3",
+        "message": "Column header median_amount |  [payer_name] | [plan_name] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "median_amount |  [payer_name] | [plan_name]",
+        "column": 11
+      },
+      {
+        "path": "O3",
+        "message": "Column header standard_charge | [payer_name] | [plan_name] | negotiated_algorithm contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "standard_charge | [payer_name] | [plan_name] | negotiated_algorithm",
+        "column": 14
+      },
+      {
+        "path": "P3",
+        "message": "Column header 90th_percentile |  [payer_name] | [plan_name] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "90th_percentile |  [payer_name] | [plan_name]",
+        "column": 15
+      },
+      {
+        "path": "V3",
+        "message": "Column header standard_charge | [payer_name] | [plan_name] | negotiated_percentage contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "standard_charge | [payer_name] | [plan_name] | negotiated_percentage",
+        "column": 21
+      },
+      {
+        "path": "Z3",
+        "message": "Column header count | [payer_name] | [plan_name] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "count | [payer_name] | [plan_name]",
+        "column": 25
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "C3",
+        "message": "Column header standard_charge | [payer_name] | [plan_name] | methodology contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "standard_charge | [payer_name] | [plan_name] | methodology",
+        "column": 2
+      },
+      {
+        "path": "G3",
+        "message": "Column header 10th_percentile |  [payer_name] | [plan_name] contains a placeholder. All placeholders must be removed from column headers.",
+        "columnName": "10th_percentile |  [payer_name] | [plan_name]",
+        "column": 6
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  }
+}

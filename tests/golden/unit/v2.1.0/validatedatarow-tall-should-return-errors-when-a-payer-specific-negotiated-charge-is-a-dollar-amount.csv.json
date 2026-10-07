@@ -1,0 +1,39 @@
+{
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "L4",
+        "message": "A value is required for \"payer_name\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "payer_name"
+      },
+      {
+        "path": "M4",
+        "message": "A value is required for \"plan_name\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "plan_name"
+      },
+      {
+        "path": "Q4",
+        "message": "A value is required for \"standard_charge | methodology\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "standard_charge | methodology"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "L4",
+        "message": "A value is required for \"payer_name\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "payer_name"
+      },
+      {
+        "path": "M4",
+        "message": "A value is required for \"plan_name\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "plan_name"
+      }
+    ],
+    "alerts": []
+  }
+}

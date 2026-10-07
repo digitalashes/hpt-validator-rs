@@ -17,7 +17,8 @@ for (const file of fs.readdirSync("tests/cases", { recursive: true }).sort()) {
   if (ext !== ".csv" && ext !== ".json") continue;
   const validate = ext === ".csv" ? validateCsv : validateJson;
   const golden = {};
-  for (const version of file.startsWith("versions") ? [...VERSIONS, ...ODD_VERSIONS] : VERSIONS) {
+  const unit = file.match(/^unit\/(v[\d.]+)\//); // lifted unit tests: their own version only
+  for (const version of unit ? [unit[1]] : file.startsWith("versions") ? [...VERSIONS, ...ODD_VERSIONS] : VERSIONS) {
     for (const maxErrors of LIMITS) {
       const input = fs.createReadStream(path.join("tests/cases", file), "utf-8");
       golden[`${version} maxErrors=${maxErrors}`] = await validate(input, version, { maxErrors })

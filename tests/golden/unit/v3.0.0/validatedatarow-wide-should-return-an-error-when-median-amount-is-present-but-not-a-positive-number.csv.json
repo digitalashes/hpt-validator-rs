@@ -1,0 +1,26 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "R4",
+        "message": "\"median_amount |  Payer ABC | Plan 1\" value \"N/A\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount |  Payer ABC | Plan 1",
+        "value": "N/A"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "R4",
+        "message": "\"median_amount |  Payer ABC | Plan 1\" value \"N/A\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "median_amount |  Payer ABC | Plan 1",
+        "value": "N/A"
+      }
+    ],
+    "alerts": []
+  }
+}

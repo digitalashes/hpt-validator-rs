@@ -1,0 +1,24 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "Q4",
+        "message": "A value is required for \"standard_charge | Payer ABC | Plan 1 | methodology\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "standard_charge | Payer ABC | Plan 1 | methodology"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "Q4",
+        "message": "A value is required for \"standard_charge | Payer ABC | Plan 1 | methodology\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "standard_charge | Payer ABC | Plan 1 | methodology"
+      }
+    ],
+    "alerts": []
+  }
+}

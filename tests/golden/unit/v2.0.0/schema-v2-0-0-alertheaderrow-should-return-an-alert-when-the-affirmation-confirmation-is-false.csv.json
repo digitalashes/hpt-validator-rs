@@ -1,0 +1,22 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "G3",
+        "message": "Affirmation value is false."
+      }
+    ]
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": true,
+    "errors": [],
+    "alerts": [
+      {
+        "path": "G3",
+        "message": "Affirmation value is false."
+      }
+    ]
+  }
+}

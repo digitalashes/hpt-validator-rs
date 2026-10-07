@@ -1,0 +1,22 @@
+{
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "G4",
+        "message": "If code type is NDC, then the corresponding drug unit of measure and drug type of measure data element must be encoded."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "G4",
+        "message": "If code type is NDC, then the corresponding drug unit of measure and drug type of measure data element must be encoded."
+      }
+    ],
+    "alerts": []
+  }
+}

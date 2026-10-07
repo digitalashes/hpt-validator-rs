@@ -1,0 +1,26 @@
+{
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "W4",
+        "message": "\"90th_percentile\" value \"Fifty-five\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "90th_percentile",
+        "value": "Fifty-five"
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "W4",
+        "message": "\"90th_percentile\" value \"Fifty-five\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "90th_percentile",
+        "value": "Fifty-five"
+      }
+    ],
+    "alerts": []
+  }
+}
