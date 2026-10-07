@@ -95,28 +95,34 @@ pub fn number(s: &str) -> f64 {
 /// Upstream's `isValidDate`: `M/D/YYYY` through `Date.UTC`, which maps years 0–99 to
 /// 1900–1999 and so rejects them, or `YYYY-MM-DD` through `Date` parsing, which does not.
 pub fn is_valid_date(s: &str) -> bool {
-    let num = |p: &str, len: std::ops::RangeInclusive<usize>| {
-        (len.contains(&p.len()) && p.bytes().all(|b| b.is_ascii_digit()))
-            .then(|| p.parse::<u32>().unwrap())
-    };
     let parts: Vec<&str> = s.split('/').collect();
     if let [m, d, y] = parts[..] {
-        return match (num(m, 1..=2), num(d, 1..=2), num(y, 4..=4)) {
+        return match (digits(m, 1..=2), digits(d, 1..=2), digits(y, 4..=4)) {
             (Some(m), Some(d), Some(y)) => y >= 100 && is_real_date(y, m, d),
             _ => false,
         };
     }
-    let parts: Vec<&str> = s.split('-').collect();
-    if let [y, m, d] = parts[..]
-        && let (Some(y), Some(m), Some(d)) = (num(y, 4..=4), num(m, 2..=2), num(d, 2..=2))
-    {
-        return is_real_date(y, m, d);
-    }
-    false
+    is_iso_date(s)
 }
 
-/// Whether month `m` of year `y` has a day `d`, leap years by the Gregorian rule.
-pub fn is_real_date(y: u32, m: u32, d: u32) -> bool {
+/// `YYYY-MM-DD` naming a real day: `isValidDate`'s second form and ajv-formats' `date`.
+pub fn is_iso_date(s: &str) -> bool {
+    let parts: Vec<&str> = s.split('-').collect();
+    match parts[..] {
+        [y, m, d] => match (digits(y, 4..=4), digits(m, 2..=2), digits(d, 2..=2)) {
+            (Some(y), Some(m), Some(d)) => is_real_date(y, m, d),
+            _ => false,
+        },
+        _ => false,
+    }
+}
+
+/// `p` as a number if it is `len` ASCII digits.
+fn digits(p: &str, len: std::ops::RangeInclusive<usize>) -> Option<u32> {
+    (len.contains(&p.len()) && p.bytes().all(|b| b.is_ascii_digit())).then(|| p.parse().unwrap())
+}
+
+fn is_real_date(y: u32, m: u32, d: u32) -> bool {
     let leap = y.is_multiple_of(4) && (!y.is_multiple_of(100) || y.is_multiple_of(400));
     let days = match m {
         2 if leap => 29,

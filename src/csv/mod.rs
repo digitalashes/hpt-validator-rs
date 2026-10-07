@@ -7,8 +7,7 @@ mod tall;
 mod wide;
 
 use crate::{
-    Code, FileType, Finding, Mode, Options, Report, VERSIONS, Version, add, full, js,
-    version_mismatch,
+    Code, FileType, Finding, Options, Report, VERSIONS, Version, add, full, js, version_mismatch,
 };
 use reader::Reader;
 use rules::{Amounts, Group, Layout};
@@ -54,7 +53,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
     let done = |errors, alerts, file_type| Report {
         errors,
         alerts,
-        file_type: (options.mode == Mode::Extended).then_some(file_type),
+        file_type: Some(file_type),
         extended: Vec::new(),
     };
     let Some(v) = Version::parse(version) else {

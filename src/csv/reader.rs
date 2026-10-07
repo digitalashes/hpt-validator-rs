@@ -1,6 +1,6 @@
 //! papaparse 5.5.3's `Parser.parse` loop for upstream's configuration (`delimiter: ","`,
 //! `newline: "\n"`, quote and escape `"`), fed the way a Node file stream feeds it
-//! (`js::Stream`): a BOM `trimStart` on the first chunk only, and an unfinished row parsed
+//! (`js::Stream`): upstream's `removeBOM` on the first chunk only, and an unfinished row parsed
 //! again once the next chunk arrives.
 
 use crate::{Code, js};
@@ -105,14 +105,11 @@ impl<R: Read> Reader<R> {
         self.pos = 0;
         if !self.stream.next(&mut self.text)? {
             self.eof = true;
-        } else if self.first {
-            self.first = false;
-            if self.text.starts_with('\u{feff}') {
-                let cut = self.text.len() - js::trim_start(&self.text).len();
-                self.bom_lines = self.text[..cut].matches('\n').count() as u64;
-                self.line += self.bom_lines;
-                self.text.drain(..cut);
-            }
+        } else if std::mem::take(&mut self.first) {
+            let cut = self.text.len() - crate::remove_bom(&self.text).len();
+            self.bom_lines = self.text[..cut].matches('\n').count() as u64;
+            self.line += self.bom_lines;
+            self.text.drain(..cut);
         }
         Ok(())
     }

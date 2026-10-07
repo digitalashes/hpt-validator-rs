@@ -266,15 +266,14 @@ impl<'a> Check<'a> {
         }
     }
 
-    /// A count of allowed amounts: `0`, `1 through 10`, or
-    /// `/^(1[1-9]|[2-9]\d+|[1-9]\d{2,})$/`, an integer from 11 without leading zeros.
+    /// A count of allowed amounts: `0`, `1 through 10` in any case, or an integer from 11.
     fn count(&mut self, slot: usize) {
         let value = self.value(slot);
-        let integer = value.len() >= 2
-            && value.bytes().all(|b| b.is_ascii_digit())
-            && !value.starts_with('0')
-            && value != "10";
-        if value.is_empty() || same(value, "0") || same(value, "1 through 10") || integer {
+        if value.is_empty()
+            || same(value, "0")
+            || same(value, "1 through 10")
+            || crate::is_count_integer(value)
+        {
             return;
         }
         let (i, name) = self.column(slot);

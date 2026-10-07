@@ -36,10 +36,15 @@ pub fn validate(
     version: &str,
     options: &Options,
 ) -> Result<Report, Error> {
-    match format {
-        Format::Csv => Ok(csv::validate(input, version, options)?),
-        Format::Json => json::validate(input, version, options),
+    let mut report = match format {
+        Format::Csv => csv::validate(input, version, options)?,
+        Format::Json => json::validate(input, version, options)?,
+    };
+    if options.mode == Mode::Default {
+        report.file_type = None;
+        report.extended.clear();
     }
+    Ok(report)
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -227,6 +232,22 @@ fn add(list: &mut Vec<Finding>, items: impl IntoIterator<Item = Finding>, max: u
         usize::MAX
     };
     list.extend(items.into_iter().take(room));
+}
+
+/// Upstream's `removeBOM`, applied to the first chunk: a leading BOM goes with all the
+/// whitespace after it.
+fn remove_bom(chunk: &str) -> &str {
+    if chunk.starts_with('\u{feff}') {
+        js::trim_start(chunk)
+    } else {
+        chunk
+    }
+}
+
+/// A count of allowed amounts written as an integer: `1[1-9]|[2-9]\d+|[1-9]\d{2,}`, so 11
+/// or more without leading zeros. Both formats also take `0` and `1 through 10`.
+fn is_count_integer(v: &str) -> bool {
+    v.len() >= 2 && v.bytes().all(|b| b.is_ascii_digit()) && !v.starts_with('0') && v != "10"
 }
 
 /// `VersionMismatchAlert`'s message, CSV and JSON alike.

@@ -1,7 +1,7 @@
 //! `@streamparser/json` 0.0.21's tokenizer and token parser for upstream's configuration
 //! (string input, `paths`, `keepStack: false`), fed as `parseJson` feeds them: `js::Stream`
-//! chunks, a BOM `trimStart` on the first one. Tokenizer errors name a byte position within
-//! the current chunk (F-30).
+//! chunks, `removeBOM` on the first one. Tokenizer errors name a byte position within the
+//! current chunk (F-30).
 
 use crate::js;
 use std::io::{self, Read};
@@ -14,7 +14,7 @@ pub enum Value {
     Number(f64),
     String(String),
     Array(Vec<Value>),
-    /// Members in first-seen order; a repeated name replaces the value, as assignment does.
+    /// Members in first-seen order (see `set`).
     Object(Vec<(String, Value)>),
 }
 
@@ -24,6 +24,14 @@ impl Value {
             Value::Object(members) => members.iter().find(|(k, _)| k == name).map(|(_, v)| v),
             _ => None,
         }
+    }
+}
+
+/// Assigns an object member: a repeated name replaces the value in place, as JS does.
+pub fn set(members: &mut Vec<(String, Value)>, name: String, value: Value) {
+    match members.iter_mut().find(|(k, _)| *k == name) {
+        Some(member) => member.1 = value,
+        None => members.push((name, value)),
     }
 }
 
@@ -45,8 +53,8 @@ pub enum End {
 }
 
 /// Parses `input`, handing `on_value` each value whose path matches one of `paths`, in
-/// `@streamparser/json` selector syntax without the `$`: `&["a", "*"]` is `$.a.*`.
-/// Values elsewhere are checked but never built.
+/// `@streamparser/json` selector syntax without the `$` (`&["a", "*"]` is `$.a.*`), with
+/// names or `*` as selectors. Values elsewhere are checked but never built.
 pub fn parse(
     input: impl Read,
     paths: &[&[&str]],
@@ -55,13 +63,11 @@ pub fn parse(
     let mut parser = Parser {
         paths,
         on_value,
-        state: State::BomOrStart,
-        string: String::new(),
-        number: String::new(),
+        state: State::BOM_OR_START,
+        buffer: String::new(),
         unicode: 0,
         high_surrogate: None,
-        expect: Expect::Value,
-        container: None,
+        expect: Expect::VALUE,
         key: None,
         value: None,
         stack: Vec::new(),
@@ -70,10 +76,11 @@ pub fn parse(
     let mut text = String::new();
     let mut first = true;
     while stream.next(&mut text)? {
-        let mut chunk = text.as_str();
-        if std::mem::take(&mut first) && chunk.starts_with('\u{feff}') {
-            chunk = js::trim_start(chunk); // upstream's removeBOM
-        }
+        let chunk = if std::mem::take(&mut first) {
+            crate::remove_bom(&text)
+        } else {
+            &text
+        };
         if let Err(end) = parser.write(chunk) {
             return Ok(end);
         }
@@ -87,7 +94,7 @@ pub fn document(text: &str) -> Value {
     let mut members = Vec::new();
     let end = parse(text.as_bytes(), &[&["*"]], |key, value| {
         if let Key::Name(name) = key {
-            members.push((name, value));
+            set(&mut members, name, value);
         }
         ControlFlow::Continue(())
     });
@@ -101,76 +108,46 @@ pub fn document(text: &str) -> Value {
 /// `Err` ends parsing.
 type Step = Result<(), End>;
 
+/// The tokenizer's state, named as upstream's are in its error texts.
+#[allow(non_camel_case_types, clippy::upper_case_acronyms)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 enum State {
-    BomOrStart,
-    Start,
-    True1,
-    True2,
-    True3,
-    False1,
-    False2,
-    False3,
-    False4,
-    Null1,
-    Null2,
-    Null3,
-    StringDefault,
-    StringAfterBackslash,
-    StringUnicodeDigit1,
-    StringUnicodeDigit2,
-    StringUnicodeDigit3,
-    StringUnicodeDigit4,
-    NumberAfterInitialMinus,
-    NumberAfterInitialZero,
-    NumberAfterInitialNonZero,
-    NumberAfterFullStop,
-    NumberAfterDecimal,
-    NumberAfterE,
-    NumberAfterEAndSign,
-    NumberAfterEAndDigit,
+    BOM_OR_START,
+    START,
+    /// `true`, `false` or `null` with this many bytes read: upstream's `TRUE1` to `NULL3`.
+    LITERAL(&'static str, usize),
+    STRING_DEFAULT,
+    STRING_AFTER_BACKSLASH,
+    /// Expecting this hex digit, 1 to 4, of a `\u` escape.
+    STRING_UNICODE_DIGIT(u32),
+    NUMBER_AFTER_INITIAL_MINUS,
+    NUMBER_AFTER_INITIAL_ZERO,
+    NUMBER_AFTER_INITIAL_NON_ZERO,
+    NUMBER_AFTER_FULL_STOP,
+    NUMBER_AFTER_DECIMAL,
+    NUMBER_AFTER_E,
+    NUMBER_AFTER_E_AND_SIGN,
+    NUMBER_AFTER_E_AND_DIGIT,
 }
 
 impl State {
-    fn name(self) -> &'static str {
-        [
-            "BOM_OR_START",
-            "START",
-            "TRUE1",
-            "TRUE2",
-            "TRUE3",
-            "FALSE1",
-            "FALSE2",
-            "FALSE3",
-            "FALSE4",
-            "NULL1",
-            "NULL2",
-            "NULL3",
-            "STRING_DEFAULT",
-            "STRING_AFTER_BACKSLASH",
-            "STRING_UNICODE_DIGIT_1",
-            "STRING_UNICODE_DIGIT_2",
-            "STRING_UNICODE_DIGIT_3",
-            "STRING_UNICODE_DIGIT_4",
-            "NUMBER_AFTER_INITIAL_MINUS",
-            "NUMBER_AFTER_INITIAL_ZERO",
-            "NUMBER_AFTER_INITIAL_NON_ZERO",
-            "NUMBER_AFTER_FULL_STOP",
-            "NUMBER_AFTER_DECIMAL",
-            "NUMBER_AFTER_E",
-            "NUMBER_AFTER_E_AND_SIGN",
-            "NUMBER_AFTER_E_AND_DIGIT",
-        ][self as usize]
+    fn name(self) -> String {
+        match self {
+            State::LITERAL(word, read) => format!("{}{read}", word.to_ascii_uppercase()),
+            State::STRING_UNICODE_DIGIT(n) => format!("STRING_UNICODE_DIGIT_{n}"),
+            state => format!("{state:?}"),
+        }
     }
 }
 
 /// The token parser's state.
+#[allow(non_camel_case_types, clippy::upper_case_acronyms)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 enum Expect {
-    Value,
-    Key,
-    Colon,
-    Comma,
+    VALUE,
+    KEY,
+    COLON,
+    COMMA,
 }
 
 enum Token {
@@ -208,17 +185,10 @@ impl Token {
     }
 }
 
-#[derive(Clone, Copy, PartialEq)]
-enum Container {
-    Object,
-    Array,
-}
-
 /// An open container's parent, as `push` saves it.
 struct Frame {
     key: Option<Key>,
     value: Option<Value>,
-    container: Option<Container>,
     /// Whether the container this frame opened is emitted when it closes.
     emit: bool,
 }
@@ -228,14 +198,15 @@ struct Parser<'p, F> {
     on_value: F,
     // tokenizer
     state: State,
-    string: String,
-    number: String,
+    /// The string or number being read.
+    buffer: String,
     unicode: u32,
     /// Survives the string it was read in, as upstream's does.
     high_surrogate: Option<u32>,
     // token parser
     expect: Expect,
-    container: Option<Container>,
+    /// An array element's index, an object member's name, or none: what the open container
+    /// is, too.
     key: Option<Key>,
     /// The open container, built only while it or an ancestor is emitted: elsewhere
     /// `keepStack: false` deletes each member once it is complete.
@@ -252,7 +223,7 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
         while i < b.len() {
             let n = b[i];
             match self.state {
-                BomOrStart | Start => match n {
+                BOM_OR_START | START => match n {
                     b' ' | b'\n' | b'\r' | b'\t' => {}
                     b'{' => self.token(Token::LeftBrace)?,
                     b'}' => self.token(Token::RightBrace)?,
@@ -260,44 +231,62 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
                     b']' => self.token(Token::RightBracket)?,
                     b':' => self.token(Token::Colon)?,
                     b',' => self.token(Token::Comma)?,
-                    b't' => self.state = True1,
-                    b'f' => self.state = False1,
-                    b'n' => self.state = Null1,
+                    b't' => self.state = LITERAL("true", 1),
+                    b'f' => self.state = LITERAL("false", 1),
+                    b'n' => self.state = LITERAL("null", 1),
                     b'"' => {
-                        self.string.clear();
-                        self.state = StringDefault;
+                        self.buffer.clear();
+                        self.state = STRING_DEFAULT;
                     }
                     b'0'..=b'9' | b'-' => {
-                        self.number.clear();
-                        self.number.push(n as char);
+                        self.buffer.clear();
+                        self.buffer.push(n as char);
                         self.state = match n {
-                            b'0' => NumberAfterInitialZero,
-                            b'-' => NumberAfterInitialMinus,
-                            _ => NumberAfterInitialNonZero,
+                            b'0' => NUMBER_AFTER_INITIAL_ZERO,
+                            b'-' => NUMBER_AFTER_INITIAL_MINUS,
+                            _ => NUMBER_AFTER_INITIAL_NON_ZERO,
                         };
                     }
                     _ => return Err(self.unexpected(n, i)),
                 },
-                StringDefault => match n {
+                LITERAL(word, read) => {
+                    if n != word.as_bytes()[read] {
+                        return Err(self.unexpected(n, i));
+                    }
+                    if read + 1 < word.len() {
+                        self.state = LITERAL(word, read + 1);
+                    } else {
+                        self.state = START;
+                        let value = match word {
+                            "true" => Value::Bool(true),
+                            "false" => Value::Bool(false),
+                            _ => Value::Null,
+                        };
+                        self.token(Token::Value(value))?;
+                    }
+                }
+                STRING_DEFAULT => match n {
                     b'"' => {
-                        self.state = Start;
-                        let s = std::mem::take(&mut self.string);
-                        self.token(Token::Value(Value::String(s)))?;
+                        self.state = START;
+                        let s = Value::String(self.buffer.as_str().into());
+                        self.token(Token::Value(s))?;
                     }
-                    b'\\' => self.state = StringAfterBackslash,
-                    0x80.. => {
-                        // The chunk is a JS string re-encoded, so every sequence is whole.
-                        let c = chunk[i..].chars().next().unwrap();
-                        self.string.push(c);
-                        i += c.len_utf8() - 1;
+                    b'\\' => self.state = STRING_AFTER_BACKSLASH,
+                    0x20.. => {
+                        // A run of plain bytes, which ends at ASCII, so at a char boundary.
+                        let run = (b[i..].iter())
+                            .position(|&c| c == b'"' || c == b'\\' || c < 0x20)
+                            .unwrap_or(b.len() - i);
+                        self.buffer.push_str(&chunk[i..i + run]);
+                        i += run;
+                        continue;
                     }
-                    0x20.. => self.string.push(n as char),
                     _ => return Err(self.unexpected(n, i)),
                 },
-                StringAfterBackslash => match n {
+                STRING_AFTER_BACKSLASH => match n {
                     b'u' => {
                         self.unicode = 0;
-                        self.state = StringUnicodeDigit1;
+                        self.state = STRING_UNICODE_DIGIT(1);
                     }
                     _ => {
                         let c = match n {
@@ -309,90 +298,62 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
                             b't' => '\t',
                             _ => return Err(self.unexpected(n, i)),
                         };
-                        self.string.push(c);
-                        self.state = StringDefault;
+                        self.buffer.push(c);
+                        self.state = STRING_DEFAULT;
                     }
                 },
-                StringUnicodeDigit1 | StringUnicodeDigit2 | StringUnicodeDigit3
-                | StringUnicodeDigit4 => {
+                STRING_UNICODE_DIGIT(k) => {
                     let Some(digit) = (n as char).to_digit(16) else {
                         return Err(self.unexpected(n, i));
                     };
                     self.unicode = self.unicode * 16 + digit;
-                    self.state = match self.state {
-                        StringUnicodeDigit1 => StringUnicodeDigit2,
-                        StringUnicodeDigit2 => StringUnicodeDigit3,
-                        StringUnicodeDigit3 => StringUnicodeDigit4,
-                        _ => {
-                            self.push_unicode();
-                            StringDefault
-                        }
+                    self.state = if k < 4 {
+                        STRING_UNICODE_DIGIT(k + 1)
+                    } else {
+                        self.push_unicode();
+                        STRING_DEFAULT
                     };
                 }
-                NumberAfterInitialMinus => match n {
-                    b'0' => self.digit(n, NumberAfterInitialZero),
-                    b'1'..=b'9' => self.digit(n, NumberAfterInitialNonZero),
+                NUMBER_AFTER_INITIAL_MINUS => match n {
+                    b'0' => self.digit(n, NUMBER_AFTER_INITIAL_ZERO),
+                    b'1'..=b'9' => self.digit(n, NUMBER_AFTER_INITIAL_NON_ZERO),
                     _ => return Err(self.unexpected(n, i)),
                 },
-                NumberAfterFullStop => match n {
-                    b'0'..=b'9' => self.digit(n, NumberAfterDecimal),
+                NUMBER_AFTER_FULL_STOP => match n {
+                    b'0'..=b'9' => self.digit(n, NUMBER_AFTER_DECIMAL),
                     _ => return Err(self.unexpected(n, i)),
                 },
-                NumberAfterE | NumberAfterEAndSign => match n {
-                    b'+' | b'-' if self.state == NumberAfterE => self.digit(n, NumberAfterEAndSign),
-                    b'0'..=b'9' => self.digit(n, NumberAfterEAndDigit),
+                NUMBER_AFTER_E | NUMBER_AFTER_E_AND_SIGN => match n {
+                    b'+' | b'-' if self.state == NUMBER_AFTER_E => {
+                        self.digit(n, NUMBER_AFTER_E_AND_SIGN)
+                    }
+                    b'0'..=b'9' => self.digit(n, NUMBER_AFTER_E_AND_DIGIT),
                     _ => return Err(self.unexpected(n, i)),
                 },
-                NumberAfterInitialZero
-                | NumberAfterInitialNonZero
-                | NumberAfterDecimal
-                | NumberAfterEAndDigit => match n {
-                    b'0'..=b'9' if self.state != NumberAfterInitialZero => {
-                        self.number.push(n as char)
+                NUMBER_AFTER_INITIAL_ZERO
+                | NUMBER_AFTER_INITIAL_NON_ZERO
+                | NUMBER_AFTER_DECIMAL
+                | NUMBER_AFTER_E_AND_DIGIT => match n {
+                    b'0'..=b'9' if self.state != NUMBER_AFTER_INITIAL_ZERO => {
+                        self.buffer.push(n as char)
                     }
                     b'.' if matches!(
                         self.state,
-                        NumberAfterInitialZero | NumberAfterInitialNonZero
+                        NUMBER_AFTER_INITIAL_ZERO | NUMBER_AFTER_INITIAL_NON_ZERO
                     ) =>
                     {
-                        self.digit(n, NumberAfterFullStop)
+                        self.digit(n, NUMBER_AFTER_FULL_STOP)
                     }
-                    b'e' | b'E' if self.state != NumberAfterEAndDigit => {
-                        self.digit(n, NumberAfterE)
+                    b'e' | b'E' if self.state != NUMBER_AFTER_E_AND_DIGIT => {
+                        self.digit(n, NUMBER_AFTER_E)
                     }
                     _ => {
                         // The number ended before this byte, which is read again in START.
-                        self.state = Start;
+                        self.state = START;
                         self.emit_number()?;
                         continue;
                     }
                 },
-                True1 | True2 | True3 | False1 | False2 | False3 | False4 | Null1 | Null2
-                | Null3 => {
-                    let (expected, next) = match self.state {
-                        True1 => (b'r', True2),
-                        True2 => (b'u', True3),
-                        False1 => (b'a', False2),
-                        False2 => (b'l', False3),
-                        False3 => (b's', False4),
-                        Null1 => (b'u', Null2),
-                        Null2 => (b'l', Null3),
-                        _ => (if self.state == Null3 { b'l' } else { b'e' }, Start),
-                    };
-                    if n != expected {
-                        return Err(self.unexpected(n, i));
-                    }
-                    let last = self.state;
-                    self.state = next;
-                    if next == Start {
-                        let value = match last {
-                            True3 => Value::Bool(true),
-                            False4 => Value::Bool(false),
-                            _ => Value::Null,
-                        };
-                        self.token(Token::Value(value))?;
-                    }
-                }
             }
             i += 1;
         }
@@ -400,7 +361,7 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
     }
 
     fn digit(&mut self, n: u8, next: State) {
-        self.number.push(n as char);
+        self.buffer.push(n as char);
         self.state = next;
     }
 
@@ -413,8 +374,8 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
         ))
     }
 
-    /// A completed `\uXXXX`. Surrogates pair across escapes; a lone one becomes U+FFFD, and
-    /// an escape that fails to complete a pending high surrogate is dropped with it.
+    /// A completed `\u` escape. Surrogates pair across escapes; a lone one becomes U+FFFD,
+    /// and an escape that fails to complete a pending high surrogate is dropped with it.
     fn push_unicode(&mut self) {
         let code = self.unicode;
         let c = match self.high_surrogate.take() {
@@ -428,87 +389,79 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
             }
             Some(_) => None,
         };
-        self.string.push(c.unwrap_or('\u{fffd}'));
+        self.buffer.push(c.unwrap_or('\u{fffd}'));
     }
 
     fn emit_number(&mut self) -> Step {
-        let n = self
-            .number
-            .parse()
-            .expect("the tokenizer only builds JSON numbers");
+        let n = (self.buffer.parse()).expect("the tokenizer only builds JSON numbers");
         self.token(Token::Value(Value::Number(n)))
     }
 
     /// The tokenizer's `end`.
     fn end(&mut self) -> End {
         use State::*;
-        let step = match self.state {
-            NumberAfterInitialZero
-            | NumberAfterInitialNonZero
-            | NumberAfterDecimal
-            | NumberAfterEAndDigit => self.emit_number().and_then(|()| self.end_tokens()),
-            BomOrStart | Start => self.end_tokens(),
-            state => Err(End::Invalid(format!(
+        match self.state {
+            NUMBER_AFTER_INITIAL_ZERO
+            | NUMBER_AFTER_INITIAL_NON_ZERO
+            | NUMBER_AFTER_DECIMAL
+            | NUMBER_AFTER_E_AND_DIGIT => {
+                (self.emit_number().err()).unwrap_or_else(|| self.end_tokens())
+            }
+            BOM_OR_START | START => self.end_tokens(),
+            state => End::Invalid(format!(
                 "Tokenizer ended in the middle of a token (state: {}). Either not all the data was received or the data was invalid.",
                 state.name()
-            ))),
-        };
-        step.expect_err("the end of input always ends parsing")
+            )),
+        }
     }
 
     /// The token parser's `end`.
-    fn end_tokens(&self) -> Step {
-        if self.expect != Expect::Value || !self.stack.is_empty() {
-            return Err(End::Invalid(format!(
-                "Parser ended in mid-parsing (state: {}). Either not all the data was received or the data was invalid.",
-                format!("{:?}", self.expect).to_uppercase()
-            )));
+    fn end_tokens(&self) -> End {
+        if self.expect != Expect::VALUE || !self.stack.is_empty() {
+            return End::Invalid(format!(
+                "Parser ended in mid-parsing (state: {:?}). Either not all the data was received or the data was invalid.",
+                self.expect
+            ));
         }
-        Err(End::Done)
+        End::Done
     }
 
-    /// The token parser's `write`.
+    /// The token parser's `write`. At the top level a value ends parsing before `expect`
+    /// is read again, so it is set as inside a container.
     fn token(&mut self, token: Token) -> Step {
-        let array = self.container == Some(Container::Array);
+        let array = matches!(self.key, Some(Key::Index(_)));
         match (self.expect, token) {
-            (Expect::Value, Token::Value(value)) => {
-                if self.container.is_some() {
-                    self.expect = Expect::Comma;
-                }
+            (Expect::VALUE, Token::Value(value)) => {
+                self.expect = Expect::COMMA;
                 let emit = self.should_emit();
                 self.emit(Some(value), emit)
             }
-            (Expect::Value, token @ (Token::LeftBrace | Token::LeftBracket)) => {
+            (Expect::VALUE, token @ (Token::LeftBrace | Token::LeftBracket)) => {
                 let emit = self.should_emit();
                 let build = emit || self.value.is_some();
                 self.stack.push(Frame {
                     key: self.key.take(),
                     value: self.value.take(),
-                    container: self.container,
                     emit,
                 });
                 if matches!(token, Token::LeftBracket) {
-                    self.container = Some(Container::Array);
                     self.key = Some(Key::Index(0));
                     self.value = build.then(|| Value::Array(Vec::new()));
                 } else {
-                    self.container = Some(Container::Object);
-                    self.expect = Expect::Key;
+                    self.expect = Expect::KEY;
                     self.value = build.then(|| Value::Object(Vec::new()));
                 }
                 Ok(())
             }
             // `this.value.length === 0`, which only holds right after `[`.
-            (Expect::Value, Token::RightBracket) if array && self.key == Some(Key::Index(0)) => {
-                self.pop()
-            }
-            (Expect::Key, Token::Value(Value::String(name))) => {
+            (Expect::VALUE, Token::RightBracket) if self.key == Some(Key::Index(0)) => self.pop(),
+            (Expect::KEY, Token::Value(Value::String(name))) => {
                 self.key = Some(Key::Name(name));
-                self.expect = Expect::Colon;
+                self.expect = Expect::COLON;
                 Ok(())
             }
             // `Object.keys(this.value).length === 0`: members not kept count as gone.
-            (Expect::Key, Token::RightBrace)
+            (Expect::KEY, Token::RightBrace)
                 if self
                     .value
                     .as_ref()
@@ -516,27 +469,24 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
             {
                 self.pop()
             }
-            (Expect::Colon, Token::Colon) => {
-                self.expect = Expect::Value;
+            (Expect::COLON, Token::Colon) => {
+                self.expect = Expect::VALUE;
                 Ok(())
             }
-            (Expect::Comma, Token::Comma) if self.container.is_some() => {
+            (Expect::COMMA, Token::Comma) => {
                 if let Some(Key::Index(i)) = &mut self.key {
                     *i += 1;
-                    self.expect = Expect::Value;
+                    self.expect = Expect::VALUE;
                 } else {
-                    self.expect = Expect::Key;
+                    self.expect = Expect::KEY;
                 }
                 Ok(())
             }
-            (Expect::Comma, Token::RightBrace) if self.container == Some(Container::Object) => {
-                self.pop()
-            }
-            (Expect::Comma, Token::RightBracket) if array => self.pop(),
+            (Expect::COMMA, Token::RightBrace) if !array => self.pop(),
+            (Expect::COMMA, Token::RightBracket) if array => self.pop(),
             (expect, token) => Err(End::Invalid(format!(
-                "{} in state {}",
-                token.describe(),
-                format!("{expect:?}").to_uppercase()
+                "{} in state {expect:?}",
+                token.describe()
             ))),
         }
     }
@@ -546,19 +496,18 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
         let frame = self.stack.pop().expect("a container is open");
         self.key = frame.key;
         self.value = frame.value;
-        self.container = frame.container;
-        self.expect = if self.container.is_some() {
-            Expect::Comma
-        } else {
-            Expect::Value
-        };
+        self.expect = Expect::COMMA;
         self.emit(value, frame.emit)
     }
 
     /// A completed value: handed to `on_value` if emitted, else kept in a built parent.
     /// With the paths used here an emitted value never has a built parent.
     fn emit(&mut self, value: Option<Value>, emit: bool) -> Step {
-        let key = self.key.clone();
+        // An array keeps its index for the next element; a member's name is not read again.
+        let key = match self.key {
+            Some(Key::Index(i)) => Some(Key::Index(i)),
+            _ => self.key.take(),
+        };
         if emit {
             let (Some(key), Some(value)) = (key, value) else {
                 unreachable!("emitted values are built and have keys")
@@ -569,12 +518,7 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
         } else if let (Some(parent), Some(value)) = (&mut self.value, value) {
             match (parent, key) {
                 (Value::Array(items), _) => items.push(value),
-                (Value::Object(members), Some(Key::Name(name))) => {
-                    match members.iter_mut().find(|(k, _)| *k == name) {
-                        Some(member) => member.1 = value,
-                        None => members.push((name, value)),
-                    }
-                }
+                (Value::Object(members), Some(Key::Name(name))) => set(members, name, value),
                 _ => unreachable!("object members have names"),
             }
         }
@@ -586,19 +530,11 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
 
     /// Whether the value at the current key matches a path.
     fn should_emit(&self) -> bool {
+        let keys = || (self.stack.iter().skip(1).map(|f| &f.key)).chain([&self.key]);
         self.paths.iter().any(|path| {
-            let Some((last, parents)) = path.split_last() else {
-                return false;
-            };
             path.len() == self.stack.len()
-                && (parents.iter().zip(&self.stack[1..]))
-                    .all(|(s, f)| *s == "*" || matches!(&f.key, Some(Key::Name(k)) if k == s))
-                && (*last == "*"
-                    || match &self.key {
-                        Some(Key::Name(k)) => k == last,
-                        Some(Key::Index(i)) => i.to_string() == *last,
-                        None => false,
-                    })
+                && (path.iter().zip(keys()))
+                    .all(|(s, k)| *s == "*" || matches!(k, Some(Key::Name(n)) if n == s))
         })
     }
 }

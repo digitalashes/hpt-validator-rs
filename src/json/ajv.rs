@@ -5,7 +5,7 @@
 
 use super::parse::Value;
 use crate::js;
-use std::fmt::Write as _;
+use std::fmt::{Display, Write as _};
 
 /// Ajv's `ErrorObject`, as far as upstream reads it.
 pub struct Error<'s> {
@@ -20,7 +20,7 @@ pub struct Error<'s> {
 /// Validates `data` against `schema`; `root` holds the `definitions` that `$ref`s name.
 pub fn validate<'s>(root: &'s Value, schema: &'s Value, data: &Value) -> Vec<Error<'s>> {
     let mut run = Run {
-        root,
+        definitions: root.get("definitions"),
         path: String::new(),
         errors: Vec::new(),
         failed: 0,
@@ -38,18 +38,15 @@ const TYPED: [(&str, &[&str]); 4] = [
     ("object", &["required", "properties"]),
 ];
 
-/// The one `pattern` in the schemas: v3.0's count of allowed amounts.
-const COUNT: &str = r"^(0|1 through 10|1[1-9]|[2-9]\d+|[1-9]\d{2,})$";
-
 // ponytail: keywords are looked up by name on every check, about a third of the run time on
 // large files; compile each schema object into a struct of keyword fields if that matters.
 struct Run<'s> {
-    root: &'s Value,
+    definitions: Option<&'s Value>,
     path: String,
     errors: Vec<Error<'s>>,
     /// Errors found, kept or not: a subschema is valid when it adds none.
     failed: usize,
-    /// Inside `not` or `if`, whose errors Ajv never creates.
+    /// Inside a check whose errors are never kept: `not`, `if`, `contains`, `anyOf` trials.
     quiet: usize,
 }
 
@@ -78,8 +75,8 @@ impl<'s> Run<'s> {
     fn check(&mut self, s: &'s Value, data: &Value) {
         if let Some(Value::String(r)) = s.get("$ref") {
             let name = r.strip_prefix("#/definitions/").expect("local refs only");
-            let definitions = self.root.get("definitions").expect("definitions");
-            return self.check(definitions.get(name).expect("defined"), data);
+            let target = self.definitions.and_then(|d| d.get(name));
+            return self.check(target.expect("defined"), data);
         }
         let has = |keywords: &[&str]| keywords.iter().any(|k| s.get(k).is_some());
         let ty = s.get("type").map(|t| match t {
@@ -112,20 +109,14 @@ impl<'s> Run<'s> {
         {
             self.error(s, "not", || "must NOT be valid".into());
         }
-        if let Some(Value::Array(branches)) = s.get("anyOf") {
-            // Branches run until one passes, which discards the others' errors.
-            let (failed, kept) = (self.failed, self.errors.len());
-            let passed = branches.iter().any(|b| {
-                let before = self.failed;
+        // One passing branch discards the others' errors; with none, all of them stay.
+        if let Some(Value::Array(branches)) = s.get("anyOf")
+            && !branches.iter().any(|b| self.valid(b, data))
+        {
+            for b in branches {
                 self.check(b, data);
-                self.failed == before
-            });
-            if passed {
-                self.failed = failed;
-                self.errors.truncate(kept);
-            } else {
-                self.error(s, "anyOf", || "must match a schema in anyOf".into());
             }
+            self.error(s, "anyOf", || "must match a schema in anyOf".into());
         }
         if let Some(Value::Array(all)) = s.get("allOf") {
             for b in all {
@@ -147,7 +138,7 @@ impl<'s> Run<'s> {
                 continue;
             }
             if !is(group, data) {
-                if !up_front && ty == Some(group) {
+                if ty == Some(group) {
                     self.error(s, "type", || format!("must be {group}"));
                 }
                 continue;
@@ -182,17 +173,13 @@ impl<'s> Run<'s> {
                 format!("must NOT have fewer than {min} characters")
             });
         }
-        if let Some(Value::String(p)) = s.get("pattern") {
-            assert_eq!(p, COUNT, "the one pattern the schemas use");
-            if !is_count(v) {
-                self.error(s, "pattern", || format!("must match pattern \"{p}\""));
-            }
+        if let Some(Value::String(p)) = s.get("pattern")
+            && !is_count(v)
+        {
+            self.error(s, "pattern", || format!("must match pattern \"{p}\""));
         }
-        if let Some(Value::String(f)) = s.get("format") {
-            assert_eq!(f, "date", "the one format the schemas use");
-            if !is_date(v) {
-                self.error(s, "format", || "must match format \"date\"".into());
-            }
+        if s.get("format").is_some() && !js::is_iso_date(v) {
+            self.error(s, "format", || "must match format \"date\"".into());
         }
     }
 
@@ -207,10 +194,7 @@ impl<'s> Run<'s> {
         }
         if let Some(schema) = s.get("items") {
             for (i, item) in items.iter().enumerate() {
-                let len = self.path.len();
-                write!(self.path, "/{i}").unwrap();
-                self.check(schema, item);
-                self.path.truncate(len);
+                self.at(i, schema, item);
             }
         }
         if let Some(schema) = s.get("contains")
@@ -220,6 +204,15 @@ impl<'s> Run<'s> {
                 "must contain at least 1 valid item(s)".into()
             });
         }
+    }
+
+    /// Checks `data` found at `segment` below the current path. No property name in the
+    /// schemas needs JSON Pointer escaping.
+    fn at(&mut self, segment: impl Display, schema: &'s Value, data: &Value) {
+        let len = self.path.len();
+        write!(self.path, "/{segment}").unwrap();
+        self.check(schema, data);
+        self.path.truncate(len);
     }
 
     fn object(&mut self, s: &'s Value, data: &Value) {
@@ -236,17 +229,7 @@ impl<'s> Run<'s> {
         if let Some(Value::Object(properties)) = s.get("properties") {
             for (name, schema) in properties {
                 if let Some(value) = data.get(name) {
-                    let len = self.path.len();
-                    self.path.push('/');
-                    for c in name.chars() {
-                        match c {
-                            '~' => self.path.push_str("~0"),
-                            '/' => self.path.push_str("~1"),
-                            c => self.path.push(c),
-                        }
-                    }
-                    self.check(schema, value);
-                    self.path.truncate(len);
+                    self.at(name, schema, value);
                 }
             }
         }
@@ -266,24 +249,52 @@ fn is(ty: &str, v: &Value) -> bool {
     }
 }
 
-/// `COUNT`: `0`, `1 through 10`, or a whole number from 11 without leading zeros.
+/// The one `pattern` in the schemas, v3.0's count of allowed amounts (`COUNT` in the
+/// test): `0`, `1 through 10`, or an integer from 11.
 fn is_count(v: &str) -> bool {
-    let digits = v.len() >= 2 && v.bytes().all(|b| b.is_ascii_digit()) && !v.starts_with('0');
-    v == "0" || v == "1 through 10" || (digits && v != "10")
+    v == "0" || v == "1 through 10" || crate::is_count_integer(v)
 }
 
-/// ajv-formats' `date`: `YYYY-MM-DD` naming a real day.
-fn is_date(v: &str) -> bool {
-    let b = v.as_bytes();
-    let shape = b.len() == 10
-        && b[4] == b'-'
-        && b[7] == b'-'
-        && [0, 1, 2, 3, 5, 6, 8, 9]
-            .iter()
-            .all(|&i| b[i].is_ascii_digit());
-    if !shape {
-        return false;
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::Version;
+
+    const COUNT: &str = r"^(0|1 through 10|1[1-9]|[2-9]\d+|[1-9]\d{2,})$";
+
+    /// `check` reads every keyword the vendored schemas use, in the form it assumes.
+    #[test]
+    fn schemas_stay_in_the_subset() {
+        fn walk(s: &Value) {
+            let Value::Object(members) = s else {
+                panic!("schemas are objects")
+            };
+            for (keyword, v) in members {
+                match (keyword.as_str(), v) {
+                    ("$ref", Value::String(r)) => {
+                        assert!(r.starts_with("#/definitions/") && members.len() == 1)
+                    }
+                    ("type", Value::String(_))
+                    | ("const" | "enum" | "required" | "$schema" | "$message", _)
+                    | ("minLength" | "minItems" | "exclusiveMinimum", Value::Number(_)) => {}
+                    ("pattern", Value::String(p)) => assert_eq!(p, COUNT),
+                    ("format", Value::String(f)) => assert_eq!(f, "date"),
+                    ("properties" | "definitions", Value::Object(m)) => {
+                        for (name, s) in m {
+                            assert!(!name.contains(['~', '/']), "{name} needs escaping");
+                            walk(s);
+                        }
+                    }
+                    ("items" | "contains" | "not" | "if" | "then", s) => walk(s),
+                    ("anyOf" | "allOf", Value::Array(all)) => all.iter().for_each(walk),
+                    (keyword, _) => panic!("{keyword} is outside the subset"),
+                }
+            }
+        }
+        for v in [Version::V2_0, Version::V2_1, Version::V2_2, Version::V3_0] {
+            let schemas = crate::json::schemas(v);
+            walk(&schemas.full);
+            schemas.alerts.iter().for_each(walk);
+        }
     }
-    let num = |r: std::ops::Range<usize>| v[r].parse().unwrap();
-    js::is_real_date(num(0..4), num(5..7), num(8..10))
 }

@@ -4,7 +4,7 @@
 mod ajv;
 mod parse;
 
-use crate::{Code, Error, FileType, Finding, Mode, Options, Report, Version, add, full};
+use crate::{Code, Error, FileType, Finding, Options, Report, Version, add, full};
 use parse::{End, Key, Value};
 use std::io::Read;
 use std::ops::ControlFlow;
@@ -83,24 +83,22 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
     let end = parse::parse(input, PATHS, |key, value| {
         match key {
             Key::Name(name) if name == CHARGES => {}
-            Key::Name(name) => match metadata.iter_mut().find(|(k, _)| *k == name) {
-                Some(member) => *member = (name, value),
-                None => metadata.push((name, value)),
-            },
+            Key::Name(name) => parse::set(&mut metadata, name, value),
             Key::Index(i) => {
                 charges = true;
-                let prefix = format!("/{CHARGES}/{i}");
                 let found = ajv::validate(&schemas.full, item, &value);
                 add(
                     &mut errors,
-                    found.into_iter().map(|e| error(e, &prefix)),
+                    found.into_iter().map(|e| error(e, Some(i))),
                     max,
                 );
-                if let Some(schema) = &schemas.alerts {
+                if let Some(schema) = &schemas.alerts
+                    && !full(&alerts, max)
+                {
                     let found = ajv::validate(schema, schema, &value);
                     add(
                         &mut alerts,
-                        found.into_iter().filter_map(|e| alert(e, &prefix)),
+                        found.into_iter().filter_map(|e| alert(e, i)),
                         max,
                     );
                 }
@@ -122,7 +120,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
                 &schemas.full
             };
             let found = ajv::validate(&schemas.full, schema, &metadata);
-            add(&mut errors, found.into_iter().map(|e| error(e, "")), max);
+            add(&mut errors, found.into_iter().map(|e| error(e, None)), max);
             add(&mut alerts, file_alerts(v, &metadata), max);
         }
         End::Stopped => {}
@@ -137,25 +135,29 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
     Ok(Report {
         errors,
         alerts,
-        file_type: (options.mode == Mode::Extended).then_some(FileType::Json),
+        file_type: Some(FileType::Json),
         extended: Vec::new(),
     })
 }
 
-/// `errorObjectToValidationError`, the path then prefixed: `field` is the last segment of
-/// the unprefixed path.
-fn error(e: ajv::Error, prefix: &str) -> Finding {
+/// `errorObjectToValidationError`; a charge item's errors then get the item's path in
+/// front, while `field` stays the last segment of the path within the item.
+fn error(e: ajv::Error, item: Option<usize>) -> Finding {
     let field = e.path.rsplit('/').next().unwrap_or_default().to_string();
+    let path = match item {
+        Some(i) => format!("/{CHARGES}/{i}{}", e.path),
+        None => e.path,
+    };
     Finding {
         field: Some(field),
         keyword: Some(e.keyword),
-        ..Finding::new(Code::JsonSchema, format!("{prefix}{}", e.path), e.message)
+        ..Finding::new(Code::JsonSchema, path, e.message)
     }
 }
 
 /// `errorObjectToValidationAlert` for the errors that carry a `$message`: the alert
 /// schemas fail on purpose where CMS wants a warning.
-fn alert(e: ajv::Error, prefix: &str) -> Option<Finding> {
+fn alert(e: ajv::Error, item: usize) -> Option<Finding> {
     let not = e.schema?;
     let Some(Value::String(message)) = not.get("$message") else {
         return None;
@@ -165,29 +167,27 @@ fn alert(e: ajv::Error, prefix: &str) -> Option<Finding> {
     } else {
         Code::JsonNineNines
     };
-    let field = e.path.rsplit('/').next().unwrap_or_default().to_string();
+    let message = message.clone();
     Some(Finding {
-        field: Some(field),
-        keyword: Some(e.keyword),
-        ..Finding::new(code, format!("{prefix}{}", e.path), message.clone())
+        code,
+        message,
+        ..error(e, Some(item))
     })
 }
 
 /// `buildFileLevelChecks`, in its order.
 fn file_alerts(v: Version, metadata: &Value) -> Vec<Finding> {
     let mut alerts = Vec::new();
-    let is_false = |object, field| {
-        metadata.get(object).and_then(|o| o.get(field)) == Some(&Value::Bool(false))
+    let (object, field, code, statement) = if v < Version::V3_0 {
+        let code = Code::JsonFalseAffirmation;
+        ("affirmation", "confirm_affirmation", code, "Affirmation")
+    } else {
+        let code = Code::JsonFalseAttestation;
+        ("attestation", "confirm_attestation", code, "Attestation")
     };
-    if v < Version::V3_0 && is_false("affirmation", "confirm_affirmation") {
-        let path = "/affirmation/confirm_affirmation".into();
-        let message = "Affirmation value is false.".into();
-        alerts.push(Finding::new(Code::JsonFalseAffirmation, path, message));
-    }
-    if v >= Version::V3_0 && is_false("attestation", "confirm_attestation") {
-        let path = "/attestation/confirm_attestation".into();
-        let message = "Attestation value is false.".into();
-        alerts.push(Finding::new(Code::JsonFalseAttestation, path, message));
+    if metadata.get(object).and_then(|o| o.get(field)) == Some(&Value::Bool(false)) {
+        let message = format!("{statement} value is false.");
+        alerts.push(Finding::new(code, format!("/{object}/{field}"), message));
     }
     let expected: &[&str] = match v {
         Version::V2_0 => &[],

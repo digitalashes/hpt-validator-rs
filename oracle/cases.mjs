@@ -288,6 +288,8 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
     "colon-token": String.raw`{:`,
     "comma-token": String.raw`[,`,
     "right-brace-in-value": String.raw`{"a": }`,
+    "brace-closes-array": "[1}",
+    "bracket-closes-object": String.raw`{"a": 1]`,
     "leading-zero": String.raw`{"a": 01}`,
     "full-stop": String.raw`{"a": 1.}`,
     "minus": String.raw`{"a": -}`,
