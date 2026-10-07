@@ -2,6 +2,7 @@
 name = "hpt-validator"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.88"
 description = "Validator for CMS Hospital Price Transparency machine-readable files, a port of @cmsgov/hpt-validator"
 license = "CC0-1.0"
 repository = "https://github.com/digitalashes/hpt-validator-rs"
