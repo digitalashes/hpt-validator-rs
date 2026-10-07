@@ -2,12 +2,24 @@
 //! [`@cmsgov/hpt-validator`](https://github.com/CMSgov/hpt-validator).
 
 use std::fmt::{self, Write as _};
-use std::io;
+use std::io::{self, Read};
 
-#[expect(dead_code, reason = "not wired to a validator yet")]
 mod csv;
-#[cfg_attr(not(test), expect(dead_code, reason = "not wired to a validator yet"))]
 mod js;
+
+/// Validates a machine-readable file against data dictionary `version` (`"3.0.0"`, `"v2.2"`
+/// and the like, coerced as upstream does).
+pub fn validate(
+    input: impl Read,
+    format: Format,
+    version: &str,
+    options: &Options,
+) -> Result<Report, Error> {
+    match format {
+        Format::Csv => Ok(csv::validate(input, version, options)?),
+        Format::Json => todo!("JSON validation, roadmap Phase 4"),
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Format {
@@ -104,6 +116,22 @@ pub struct Finding {
 }
 
 impl Finding {
+    fn new(code: Code, path: String, message: String) -> Self {
+        Finding {
+            code,
+            path,
+            message,
+            field: None,
+            column_name: None,
+            value: None,
+            allowed_values: None,
+            versions: None,
+            column: None,
+            keyword: None,
+            line: None,
+        }
+    }
+
     /// The finding as upstream's `JSON.stringify` renders it, then `code`, `keyword` and `line`.
     pub fn to_json(&self) -> String {
         let mut out = String::from("{");

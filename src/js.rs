@@ -57,6 +57,10 @@ pub fn to_lower(s: &str) -> String {
 }
 
 /// `Number(s)`.
+#[cfg_attr(
+    not(test),
+    expect(dead_code, reason = "data-row rules, roadmap Phase 3")
+)]
 pub fn number(s: &str) -> f64 {
     let s = trim(s);
     if s.is_empty() {
@@ -121,6 +125,10 @@ fn is_real_date(y: u32, m: u32, d: u32) -> bool {
 
 /// Upstream's positive-number rule for a non-empty value:
 /// `/^(?:\d+|\d+\.\d+|\d+\.|\.\d+)$/` and `parseFloat(value) > 0`.
+#[cfg_attr(
+    not(test),
+    expect(dead_code, reason = "data-row rules, roadmap Phase 3")
+)]
 pub fn is_positive_number(s: &str) -> bool {
     // Rust's float grammar rejects the rest: no digit, or a second dot.
     s.bytes().all(|b| b.is_ascii_digit() || b == b'.') && s.parse::<f64>().is_ok_and(|n| n > 0.0)
