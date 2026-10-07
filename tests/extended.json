@@ -1,5 +1,5 @@
 {
-  "findings/f11-bom-blank-row1.csv v2.2.0 maxErrors=2": {
+  "findings/bom-blank-row1.csv v2.2.0 maxErrors=2": {
     "file_type": "Tall",
     "errors": [
       {
@@ -33,7 +33,7 @@
       }
     ]
   },
-  "findings/f15-blank-row3.csv v2.0.0 maxErrors=0": {
+  "findings/blank-row3.csv v2.0.0 maxErrors=0": {
     "file_type": "Unknown",
     "errors": [
       {
@@ -55,7 +55,7 @@
       }
     ]
   },
-  "findings/f20-min-rows.csv v2.0.0 maxErrors=0": {
+  "findings/min-rows.csv v2.0.0 maxErrors=0": {
     "file_type": "Tall",
     "errors": [
       {
@@ -76,7 +76,7 @@
       }
     ]
   },
-  "findings/f21-syntax-error-after-errors.json v2.0.0 maxErrors=0": {
+  "findings/syntax-error-after-errors.json v2.0.0 maxErrors=0": {
     "file_type": "Json",
     "errors": [
       {
@@ -118,7 +118,7 @@
       }
     ]
   },
-  "findings/f28-invalid-quotes.csv v2.0.0 maxErrors=0": {
+  "findings/invalid-quotes.csv v2.0.0 maxErrors=0": {
     "file_type": "Tall",
     "errors": [
       {
@@ -151,7 +151,7 @@
       }
     ]
   },
-  "findings/f28-missing-quotes.csv v2.0.0 maxErrors=0": {
+  "findings/missing-quotes.csv v2.0.0 maxErrors=0": {
     "file_type": "Tall",
     "errors": [
       {
@@ -184,7 +184,7 @@
     "alerts": [],
     "extended": []
   },
-  "findings/f23-false-affirmation.csv v2.0.0 maxErrors=0": {
+  "findings/false-affirmation.csv v2.0.0 maxErrors=0": {
     "file_type": "Tall",
     "errors": [],
     "alerts": [
@@ -197,7 +197,7 @@
     ],
     "extended": []
   },
-  "findings/f28-invalid-quotes.csv v2.0.0 maxErrors=1": {
+  "findings/invalid-quotes.csv v2.0.0 maxErrors=1": {
     "file_type": "Tall",
     "errors": [
       {
