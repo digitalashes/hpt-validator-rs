@@ -73,7 +73,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
     let mut layout = None;
     let mut index = 0;
     while let Some(row) = reader.next_row()? {
-        let row: Vec<&str> = row.fields.iter().map(|f| js::trim(f)).collect();
+        let row: Vec<&str> = row.fields().map(js::trim).collect();
         let blank = row.iter().all(|f| f.is_empty());
         if blank && (index == 0 || index == 2) {
             // The errors found so far are dropped, the alerts kept (F-15).
