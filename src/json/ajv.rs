@@ -100,9 +100,7 @@ impl<'s> Run<'s> {
         if let Some(Value::Array(allowed)) = s.get("enum")
             && !allowed.contains(data)
         {
-            self.error(s, "enum", || {
-                "must be equal to one of the allowed values".into()
-            });
+            self.error(s, "enum", || "must be equal to one of the allowed values".into());
         }
         if let Some(not) = s.get("not")
             && self.valid(not, data)
@@ -157,9 +155,7 @@ impl<'s> Run<'s> {
         if let Some(Value::Number(min)) = s.get("exclusiveMinimum")
             && n <= *min
         {
-            self.error(s, "exclusiveMinimum", || {
-                format!("must be > {}", js::number_string(*min))
-            });
+            self.error(s, "exclusiveMinimum", || format!("must be > {}", js::number_string(*min)));
         }
         // `format` has no number formats here.
     }
@@ -170,9 +166,7 @@ impl<'s> Run<'s> {
             && (v.chars().count() as f64) < *min
         {
             let min = js::number_string(*min);
-            self.error(s, "minLength", || {
-                format!("must NOT have fewer than {min} characters")
-            });
+            self.error(s, "minLength", || format!("must NOT have fewer than {min} characters"));
         }
         if let Some(Value::String(p)) = s.get("pattern")
             && !is_count(v)
@@ -190,9 +184,7 @@ impl<'s> Run<'s> {
             && (items.len() as f64) < *min
         {
             let min = js::number_string(*min);
-            self.error(s, "minItems", || {
-                format!("must NOT have fewer than {min} items")
-            });
+            self.error(s, "minItems", || format!("must NOT have fewer than {min} items"));
         }
         if let Some(schema) = s.get("items") {
             for (i, item) in items.iter().enumerate() {
@@ -202,9 +194,7 @@ impl<'s> Run<'s> {
         if let Some(schema) = s.get("contains")
             && !items.iter().any(|item| self.valid(schema, item))
         {
-            self.error(s, "contains", || {
-                "must contain at least 1 valid item(s)".into()
-            });
+            self.error(s, "contains", || "must contain at least 1 valid item(s)".into());
         }
     }
 
@@ -222,9 +212,7 @@ impl<'s> Run<'s> {
             for name in required {
                 let Value::String(name) = name else { continue };
                 if data.get(name).is_none() {
-                    self.error(s, "required", || {
-                        format!("must have required property '{name}'")
-                    });
+                    self.error(s, "required", || format!("must have required property '{name}'"));
                 }
             }
         }
@@ -268,9 +256,7 @@ mod tests {
     #[test]
     fn schemas_stay_in_the_subset() {
         fn walk(s: &Value) {
-            let Value::Object(members) = s else {
-                panic!("schemas are objects")
-            };
+            let Value::Object(members) = s else { panic!("schemas are objects") };
             for (keyword, v) in members {
                 match (keyword.as_str(), v) {
                     ("$ref", Value::String(r)) => {

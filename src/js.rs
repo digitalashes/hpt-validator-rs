@@ -23,10 +23,7 @@ pub fn is_line_terminator(c: char) -> bool {
 
 /// Letters Node 20 does not know: its case tables are Unicode 16, Rust's std is on Unicode 17.
 fn newer_than_node(c: char) -> bool {
-    matches!(
-        c,
-        '\u{a7ce}' | '\u{a7cf}' | '\u{a7d2}' | '\u{a7d4}' | '\u{16ea0}'..='\u{16edf}'
-    )
+    matches!(c, '\u{a7ce}' | '\u{a7cf}' | '\u{a7d2}' | '\u{a7d4}' | '\u{16ea0}'..='\u{16edf}')
 }
 
 /// `toUpperCase` / `toLocaleUpperCase`.
@@ -78,9 +75,8 @@ pub fn number(s: &str) -> f64 {
     if let Some(radix) = radix {
         let digits = &s[2..];
         // ponytail: not correctly rounded above 2^53, which no caller can tell apart
-        let n = (digits.chars()).try_fold(0.0, |n, c| {
-            Some(n * f64::from(radix) + f64::from(c.to_digit(radix)?))
-        });
+        let n = (digits.chars())
+            .try_fold(0.0, |n, c| Some(n * f64::from(radix) + f64::from(c.to_digit(radix)?)));
         return n.filter(|_| !digits.is_empty()).unwrap_or(f64::NAN);
     }
     // Rust's grammar is JS's StrDecimalLiteral plus `inf`, `nan` and `infinity` in any case,
@@ -146,10 +142,8 @@ pub fn is_positive_number(s: &str) -> bool {
 pub fn coerce(v: &str) -> String {
     const MAX_SAFE_INTEGER: u64 = (1 << 53) - 1;
     let b = v.as_bytes();
-    let run = |i: usize| {
-        b.get(i..)
-            .map_or(0, |r| r.iter().take_while(|c| c.is_ascii_digit()).count())
-    };
+    let run =
+        |i: usize| b.get(i..).map_or(0, |r| r.iter().take_while(|c| c.is_ascii_digit()).count());
     // semver's COERCE regex: (^|[^\d])(\d{1,16})(?:\.(\d{1,16}))?(?:\.(\d{1,16}))?(?:$|[^\d])
     // The leftmost start whose digit run is 1–16 long matches; a longer run fails there.
     let starts = |&i: &usize| (i == 0 || !b[i - 1].is_ascii_digit()) && (1..=16).contains(&run(i));
@@ -171,11 +165,7 @@ pub fn coerce(v: &str) -> String {
     let valid = parts.iter().all(|p| {
         (*p == "0" || !p.starts_with('0')) && p.parse::<u64>().is_ok_and(|n| n <= MAX_SAFE_INTEGER)
     });
-    if valid {
-        parts.join(".")
-    } else {
-        v.to_string()
-    }
+    if valid { parts.join(".") } else { v.to_string() }
 }
 
 /// `String(n)`: the shortest digits that read back as `n`, laid out as `Number::toString` does.
@@ -201,10 +191,8 @@ pub fn number_string(n: f64) -> String {
     let sci = format!("{:e}", n.abs());
     let (mantissa, exp) = sci.split_once('e').expect("{:e} has an exponent");
     let digits = mantissa.replace('.', "");
-    let (k, e) = (
-        digits.len() as i32,
-        exp.parse::<i32>().expect("{:e} writes an integer exponent"),
-    );
+    let (k, e) =
+        (digits.len() as i32, exp.parse::<i32>().expect("{:e} writes an integer exponent"));
     let n = e + 1;
     let body = if k <= n && n <= 21 {
         digits + &"0".repeat((n - k) as usize)
@@ -237,20 +225,13 @@ pub struct Stream<R> {
 
 impl<R: Read> Stream<R> {
     pub fn new(input: R, chunk: usize) -> Self {
-        Stream {
-            input,
-            chunk: chunk as u64,
-            undecoded: Vec::new(),
-            ended: false,
-        }
+        Stream { input, chunk: chunk as u64, undecoded: Vec::new(), ended: false }
     }
 
     /// Appends the next `data` event's text to `out`; false once the input is exhausted.
     pub fn next(&mut self, out: &mut String) -> io::Result<bool> {
         while !self.ended {
-            let n = (self.input.by_ref())
-                .take(self.chunk)
-                .read_to_end(&mut self.undecoded)?;
+            let n = (self.input.by_ref()).take(self.chunk).read_to_end(&mut self.undecoded)?;
             if n == 0 {
                 self.ended = true;
                 // The decoder's `end()`: an unfinished sequence is one U+FFFD, its own event.
@@ -311,51 +292,24 @@ mod tests {
     }
 
     fn pairs<'a>(t: &'a Value, key: &str) -> impl Iterator<Item = (&'a str, &'a Value)> {
-        t[key]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|p| (p[0].as_str().unwrap(), &p[1]))
+        t[key].as_array().unwrap().iter().map(|p| (p[0].as_str().unwrap(), &p[1]))
     }
 
     #[test]
     fn whitespace_and_case() {
         let unicode = char::UNICODE_VERSION;
-        assert_eq!(
-            unicode,
-            (17, 0, 0),
-            "recheck newer_than_node against Node's Unicode 16"
-        );
+        assert_eq!(unicode, (17, 0, 0), "recheck newer_than_node against Node's Unicode 16");
         let t = table();
-        let trim: Vec<u64> = t["trim"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|v| v.as_u64().unwrap())
-            .collect();
+        let trim: Vec<u64> =
+            t["trim"].as_array().unwrap().iter().map(|v| v.as_u64().unwrap()).collect();
         let mapped = |key: &str, c: char| {
             let v = t[key].get((c as u32).to_string());
             v.map_or(c.to_string(), |v| v.as_str().unwrap().into())
         };
         for c in (0..=u32::from(char::MAX)).filter_map(char::from_u32) {
-            assert_eq!(
-                is_space(c),
-                trim.contains(&(c as u64)),
-                "trim {:#x}",
-                c as u32
-            );
-            assert_eq!(
-                to_upper(&c.to_string()),
-                mapped("upper", c),
-                "upper {:#x}",
-                c as u32
-            );
-            assert_eq!(
-                to_lower(&c.to_string()),
-                mapped("lower", c),
-                "lower {:#x}",
-                c as u32
-            );
+            assert_eq!(is_space(c), trim.contains(&(c as u64)), "trim {:#x}", c as u32);
+            assert_eq!(to_upper(&c.to_string()), mapped("upper", c), "upper {:#x}", c as u32);
+            assert_eq!(to_lower(&c.to_string()), mapped("lower", c), "lower {:#x}", c as u32);
         }
         for (s, e) in pairs(&t, "lowerStrings") {
             assert_eq!(to_lower(s), e.as_str().unwrap(), "lower {s:?}");
@@ -383,18 +337,10 @@ mod tests {
             assert_eq!(is_valid_date(s), e.as_bool().unwrap(), "isValidDate({s:?})");
         }
         for (s, e) in pairs(&t, "positive") {
-            assert_eq!(
-                is_positive_number(s),
-                e.as_bool().unwrap(),
-                "positive({s:?})"
-            );
+            assert_eq!(is_positive_number(s), e.as_bool().unwrap(), "positive({s:?})");
         }
         for (s, e) in pairs(&t, "numberString") {
-            assert_eq!(
-                number_string(number(s)),
-                e.as_str().unwrap(),
-                "String(Number({s:?}))"
-            );
+            assert_eq!(number_string(number(s)), e.as_str().unwrap(), "String(Number({s:?}))");
         }
         for (s, e) in pairs(&t, "coerce") {
             assert_eq!(coerce(s), e.as_str().unwrap(), "coerce({s:?})");

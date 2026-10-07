@@ -41,24 +41,15 @@ const SHARED_COLUMNS: [&str; 7] = [
 ];
 
 /// A charge group's charge columns.
-const CHARGES: [&str; 4] = [
-    "negotiated_dollar",
-    "negotiated_percentage",
-    "negotiated_algorithm",
-    "methodology",
-];
+const CHARGES: [&str; 4] =
+    ["negotiated_dollar", "negotiated_percentage", "negotiated_algorithm", "methodology"];
 
-#[expect(
-    clippy::too_many_lines,
-    reason = "upstream's phase machine, kept in one place"
-)]
+#[expect(clippy::too_many_lines, reason = "upstream's phase machine, kept in one place")]
 pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Result<Report> {
     let max = options.max_errors;
     let Some(v) = Version::parse(version) else {
-        let message = format!(
-            "Invalid version supplied. Allowed versions are: {}",
-            VERSIONS.join(", ")
-        );
+        let message =
+            format!("Invalid version supplied. Allowed versions are: {}", VERSIONS.join(", "));
         let error = Finding {
             versions: Some(VERSIONS),
             ..at(Code::CsvInvalidVersion, 0, Some(0), message)
@@ -83,10 +74,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             let line = row.line;
             // Every finding gets the physical line of the row it was found on.
             let lined = move |found: Vec<Finding>| {
-                found.into_iter().map(move |f| Finding {
-                    line: Some(line),
-                    ..f
-                })
+                found.into_iter().map(move |f| Finding { line: Some(line), ..f })
             };
             // Upstream never reads papaparse's quote errors.
             for &(code, column) in &row.quotes {
@@ -172,21 +160,14 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             "The byte order mark was removed together with the {n} blank line{} after it, so row numbers are {n} lower than physical line numbers.",
             if n == 1 { "" } else { "s" }
         );
-        let finding = Finding {
-            line: Some(1),
-            ..at(Code::XCsvBomSwallowedLines, 0, Some(0), message)
-        };
+        let finding =
+            Finding { line: Some(1), ..at(Code::XCsvBomSwallowedLines, 0, Some(0), message) };
         extended.insert(0, finding);
         if max > 0 {
             extended.truncate(max);
         }
     }
-    Ok(Report {
-        errors,
-        alerts,
-        file_type: Some(file_type),
-        extended,
-    })
+    Ok(Report { errors, alerts, file_type: Some(file_type), extended })
 }
 
 /// Rows 1 and 2, upstream's `validateHeaderColumns` then `validateHeaderRow`: the recognised
@@ -196,13 +177,8 @@ fn header<'a>(
     names: &'a [String],
     values: &[&str],
 ) -> (Vec<Option<&'a str>>, Vec<Finding>) {
-    let mut remaining = vec![
-        "hospital_name",
-        "last_updated_on",
-        "version",
-        "hospital_address",
-        LICENSE,
-    ];
+    let mut remaining =
+        vec!["hospital_name", "last_updated_on", "version", "hospital_address", LICENSE];
     if v == Version::V3_0 {
         remaining.extend(["location_name", "type_2_npi", ATTESTATION, "attester_name"]);
     } else {
@@ -267,14 +243,7 @@ fn header<'a>(
             errors.push(required_value(1, i, name, ""));
         } else if sep_eq(name, "last_updated_on") && !js::is_valid_date(value) {
             let problem = "is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY";
-            errors.push(invalid_value(
-                Code::CsvInvalidDate,
-                1,
-                i,
-                name,
-                value,
-                problem,
-            ));
+            errors.push(invalid_value(Code::CsvInvalidDate, 1, i, name, value, problem));
         } else if (sep_eq(name, AFFIRMATION) || sep_eq(name, ATTESTATION))
             && !TRUE_FALSE.iter().any(|t| same(value, t))
         {
@@ -319,17 +288,9 @@ fn header_alerts(v: Version, found: &[Option<&str>], values: &[&str]) -> Vec<Fin
         alerts.push(at(Code::CsvVersionMismatch, 2, Some(i), message));
     }
     let (statement, code, message) = if v == Version::V3_0 {
-        (
-            ATTESTATION,
-            Code::CsvFalseAttestation,
-            "Attestation value is false.",
-        )
+        (ATTESTATION, Code::CsvFalseAttestation, "Attestation value is false.")
     } else {
-        (
-            AFFIRMATION,
-            Code::CsvFalseAffirmation,
-            "Affirmation value is false.",
-        )
+        (AFFIRMATION, Code::CsvFalseAffirmation, "Affirmation value is false.")
     };
     if let Some(i) = find(statement)
         && same(value(i), "false")
@@ -343,10 +304,7 @@ fn header_alerts(v: Version, found: &[Option<&str>], values: &[&str]) -> Vec<Fin
 type Columns = Result<(Layout, Vec<Finding>), Vec<Finding>>;
 
 /// Row 3, upstream's `validateColumns` and `alertColumns`.
-#[expect(
-    clippy::too_many_lines,
-    reason = "builds upstream's expected column list in its order"
-)]
+#[expect(clippy::too_many_lines, reason = "builds upstream's expected column list in its order")]
 fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
     let tall = tall::detect(row);
     let (payers_plans, mut errors) = wide::payers_plans(v, row);
@@ -392,12 +350,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
     let [description, setting, gross, discounted, min, max, notes] =
         SHARED_COLUMNS.map(|c| want(c.into()));
     let code_pairs = (1..=codes.max(1))
-        .map(|i| {
-            (
-                want(format!("code | {i}")),
-                want(format!("code | {i} | type")),
-            )
-        })
+        .map(|i| (want(format!("code | {i}")), want(format!("code | {i} | type"))))
         .collect();
     let payer_plan = tall.then(|| tall::COLUMNS.map(|c| want(c.into())));
     let mut groups: Vec<Group> = (suffixes.iter())
@@ -410,11 +363,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
                 algorithm,
                 methodology,
                 // Tall's notes are the shared additional_generic_notes.
-                notes: if tall {
-                    notes
-                } else {
-                    want(format!("additional_payer_notes{g}"))
-                },
+                notes: if tall { notes } else { want(format!("additional_payer_notes{g}")) },
                 payer_plan,
                 amounts: Amounts::None,
             }
@@ -515,12 +464,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
 fn amounts(v: Version) -> &'static [&'static str] {
     match v {
         Version::V2_2 => &["estimated_amount"],
-        Version::V3_0 => &[
-            "median_amount",
-            "10th_percentile",
-            "90th_percentile",
-            "count",
-        ],
+        Version::V3_0 => &["median_amount", "10th_percentile", "90th_percentile", "count"],
         _ => &[],
     }
 }

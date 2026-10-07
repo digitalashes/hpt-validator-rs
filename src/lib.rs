@@ -229,10 +229,7 @@ impl Finding {
                 push_json_str(&mut out, v);
             }
         }
-        for (k, v) in [
-            ("allowedValues", self.allowed_values),
-            ("versions", self.versions),
-        ] {
+        for (k, v) in [("allowedValues", self.allowed_values), ("versions", self.versions)] {
             if let Some(v) = v {
                 key(&mut out, k);
                 out.push('[');
@@ -275,22 +272,14 @@ fn full(list: &[Finding], max: usize) -> bool {
 
 /// Upstream's `addItemsWithLimit`: `max` 0 is unlimited.
 fn add(list: &mut Vec<Finding>, items: impl IntoIterator<Item = Finding>, max: usize) {
-    let room = if max > 0 {
-        max.saturating_sub(list.len())
-    } else {
-        usize::MAX
-    };
+    let room = if max > 0 { max.saturating_sub(list.len()) } else { usize::MAX };
     list.extend(items.into_iter().take(room));
 }
 
 /// Upstream's `removeBOM`, applied to the first chunk: a leading BOM goes with all the
 /// whitespace after it.
 fn remove_bom(chunk: &str) -> &str {
-    if chunk.starts_with('\u{feff}') {
-        js::trim_start(chunk)
-    } else {
-        chunk
-    }
+    if chunk.starts_with('\u{feff}') { js::trim_start(chunk) } else { chunk }
 }
 
 /// A count of allowed amounts written as an integer: `1[1-9]|[2-9]\d+|[1-9]\d{2,}`, so 11

@@ -41,10 +41,7 @@ fn run(case: &Path, key: &str, mode: Mode) -> Result<Report, hpt_validator::Erro
         _ => Format::Json,
     };
     let (version, max_errors) = key.split_once(" maxErrors=").unwrap();
-    let options = Options {
-        max_errors: max_errors.parse().unwrap(),
-        mode,
-    };
+    let options = Options { max_errors: max_errors.parse().unwrap(), mode };
     validate(File::open(case).unwrap(), format, version, &options)
 }
 
@@ -71,10 +68,7 @@ fn golden() {
                             && all.all(|f| f.line.is_none());
                         (upstream_json(&report), plain)
                     }
-                    Err(e) => (
-                        json!({ "throws": format!("Error: {e}") }),
-                        mode == Mode::Default,
-                    ),
+                    Err(e) => (json!({ "throws": format!("Error: {e}") }), mode == Mode::Default),
                 };
                 let got = serde_json::to_string(&got).unwrap();
                 if got != want || (mode == Mode::Default) != plain {
@@ -114,10 +108,7 @@ fn extended() {
         });
         // As strings, so key order counts.
         if serde_json::to_string(&got).unwrap() != serde_json::to_string(expected).unwrap() {
-            failed.push(format!(
-                "\"{name}\": {}",
-                serde_json::to_string_pretty(&got).unwrap()
-            ));
+            failed.push(format!("\"{name}\": {}", serde_json::to_string_pretty(&got).unwrap()));
         }
     }
     assert!(failed.is_empty(), "{}", failed.join(",\n"));

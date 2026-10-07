@@ -12,13 +12,8 @@ const BILLING_CODES: &[&str] = &[
 
 const SETTINGS: &[&str] = &["inpatient", "outpatient", "both"];
 
-const METHODOLOGIES: &[&str] = &[
-    "case rate",
-    "fee schedule",
-    "percent of total billed charges",
-    "per diem",
-    "other",
-];
+const METHODOLOGIES: &[&str] =
+    &["case rate", "fee schedule", "percent of total billed charges", "per diem", "other"];
 
 const DRUG_UNITS: &[&str] = &["GR", "ME", "ML", "UN", "F2", "EA", "GM"];
 
@@ -160,11 +155,7 @@ pub fn alerts(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
             #[expect(clippy::float_cmp, reason = "JavaScript's ===")]
             let nines = js::number(c.value(i)) == 999_999_999.0;
             if nines {
-                c.error(
-                    Code::CsvNineNines,
-                    Some(i),
-                    &format!("Nine 9s used for {name}."),
-                );
+                c.error(Code::CsvNineNines, Some(i), &format!("Nine 9s used for {name}."));
             }
         }
     }
@@ -173,12 +164,7 @@ pub fn alerts(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
 
 impl<'a> Check<'a> {
     fn new(l: &'a Layout, row: u64, values: &'a [&'a str]) -> Self {
-        Check {
-            l,
-            row,
-            values,
-            found: Vec::new(),
-        }
+        Check { l, row, values, found: Vec::new() }
     }
 
     /// The slot's cell; missing cells read as empty.
@@ -216,8 +202,7 @@ impl<'a> Check<'a> {
         let value = self.value(slot);
         if !value.is_empty() && !allowed.iter().any(|a| same(value, a)) {
             let (i, name) = self.column(slot);
-            self.found
-                .push(allowed_values(self.row, i, name, value, allowed));
+            self.found.push(allowed_values(self.row, i, name, value, allowed));
         }
     }
 
@@ -229,8 +214,7 @@ impl<'a> Check<'a> {
             let problem =
                 "is not a positive number. You must encode a positive, non-zero, numeric value.";
             let code = Code::CsvInvalidPositiveNumber;
-            self.found
-                .push(invalid_value(code, self.row, i, name, value, problem));
+            self.found.push(invalid_value(code, self.row, i, name, value, problem));
         }
     }
 
@@ -247,15 +231,12 @@ impl<'a> Check<'a> {
         let (i, name) = self.column(slot);
         let problem = "is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".";
         let code = Code::CsvInvalidCountNumber;
-        self.found
-            .push(invalid_value(code, self.row, i, name, value, problem));
+        self.found.push(invalid_value(code, self.row, i, name, value, problem));
     }
 
     /// Whether the group has a payer-specific charge: dollar, percentage or algorithm.
     fn charged(&self, g: &Group) -> bool {
-        [g.dollar, g.percentage, g.algorithm]
-            .into_iter()
-            .any(|i| self.has(i))
+        [g.dollar, g.percentage, g.algorithm].into_iter().any(|i| self.has(i))
     }
 
     /// Upstream's `nonModifierChecks`.
@@ -297,11 +278,7 @@ impl<'a> Check<'a> {
                 Amounts::Estimated(estimated) => {
                     if !self.has(g.dollar) && ratio && !self.has(estimated) {
                         let message = "If a \"payer specific negotiated charge\" can only be expressed as a percentage or algorithm, then a corresponding \"Estimated Allowed Amount\" must also be encoded.";
-                        self.error(
-                            Code::CsvPercentageAlgorithmEstimate,
-                            Some(estimated),
-                            message,
-                        );
+                        self.error(Code::CsvPercentageAlgorithmEstimate, Some(estimated), message);
                     }
                 }
                 Amounts::Allowed([median, p10, p90, count]) => {

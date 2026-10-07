@@ -64,11 +64,7 @@ fn schemas(v: Version) -> &'static Schemas {
                 }
             }
         }
-        Schemas {
-            full,
-            metadata,
-            alerts: alerts.map(parse::document),
-        }
+        Schemas { full, metadata, alerts: alerts.map(parse::document) }
     })
 }
 
@@ -88,20 +84,12 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
             Key::Index(i) => {
                 charges = true;
                 let found = ajv::validate(&schemas.full, item, &value);
-                add(
-                    &mut errors,
-                    found.into_iter().map(|e| error(e, Some(i))),
-                    max,
-                );
+                add(&mut errors, found.into_iter().map(|e| error(e, Some(i))), max);
                 if let Some(schema) = &schemas.alerts
                     && !full(&alerts, max)
                 {
                     let found = ajv::validate(schema, schema, &value);
-                    add(
-                        &mut alerts,
-                        found.into_iter().filter_map(|e| alert(e, i)),
-                        max,
-                    );
+                    add(&mut alerts, found.into_iter().filter_map(|e| alert(e, i)), max);
                 }
                 // Resolved here, so reaching the limit skips metadata and file-level alerts.
                 if full(&errors, max) {
@@ -115,11 +103,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
         End::Done => {
             let metadata = Value::Object(metadata);
             // With no charge items the full schema reports them missing.
-            let schema = if charges {
-                &schemas.metadata
-            } else {
-                &schemas.full
-            };
+            let schema = if charges { &schemas.metadata } else { &schemas.full };
             let found = ajv::validate(&schemas.full, schema, &metadata);
             add(&mut errors, found.into_iter().map(|e| error(e, None)), max);
             add(&mut alerts, file_alerts(v, &metadata), max);
@@ -136,12 +120,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
             std::mem::replace(&mut errors, vec![error])
         }
     };
-    Ok(Report {
-        errors,
-        alerts,
-        file_type: Some(FileType::Json),
-        extended,
-    })
+    Ok(Report { errors, alerts, file_type: Some(FileType::Json), extended })
 }
 
 /// `errorObjectToValidationError`; a charge item's errors then get the item's path in
@@ -172,11 +151,7 @@ fn alert(e: ajv::Error, item: usize) -> Option<Finding> {
         Code::JsonNineNines
     };
     let message = message.clone();
-    Some(Finding {
-        code,
-        message,
-        ..error(e, Some(item))
-    })
+    Some(Finding { code, message, ..error(e, Some(item)) })
 }
 
 /// `buildFileLevelChecks`, in its order.
@@ -204,11 +179,7 @@ fn file_alerts(v: Version, metadata: &Value) -> Vec<Finding> {
         && !expected.contains(&found.as_str())
     {
         let message = crate::version_mismatch(found, expected);
-        alerts.push(Finding::new(
-            Code::JsonVersionMismatch,
-            "/version".into(),
-            message,
-        ));
+        alerts.push(Finding::new(Code::JsonVersionMismatch, "/version".into(), message));
     }
     alerts
 }

@@ -22,9 +22,7 @@ pub struct Row {
 impl Row {
     pub fn fields(&self) -> impl Iterator<Item = &str> {
         let starts = std::iter::once(0).chain(self.ends.iter().copied());
-        starts
-            .zip(&self.ends)
-            .map(|(start, &end)| &self.text[start..end])
+        starts.zip(&self.ends).map(|(start, &end)| &self.text[start..end])
     }
 
     fn push(&mut self, field: &str) {
@@ -159,9 +157,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                 // A closing quote is followed by optional JS whitespace and `,` or `\n`.
                 let after = &s[q + 1..];
                 let end = q + 1 + after.len()
-                    - after
-                        .trim_start_matches(|c| c != '\n' && js::is_space(c))
-                        .len();
+                    - after.trim_start_matches(|c| c != '\n' && js::is_space(c)).len();
                 match b.get(end) {
                     Some(&c @ (b',' | b'\n')) => {
                         row.push_quoted(&s[start..q]);
@@ -242,11 +238,7 @@ mod tests {
                     .collect();
                 let fields: Vec<Vec<&str>> = rows.iter().map(|r| r.fields().collect()).collect();
                 let got = json!({ "rows": fields, "errors": errors });
-                assert!(
-                    got == golden[chunk.to_string()],
-                    "{} at chunk {chunk}",
-                    path.display()
-                );
+                assert!(got == golden[chunk.to_string()], "{} at chunk {chunk}", path.display());
             }
             cases += 1;
         }
@@ -255,13 +247,8 @@ mod tests {
 
     #[test]
     fn physical_lines() {
-        let lines = |bytes: &[u8], chunk| {
-            read(bytes, chunk)
-                .0
-                .iter()
-                .map(|r| r.line)
-                .collect::<Vec<_>>()
-        };
+        let lines =
+            |bytes: &[u8], chunk| read(bytes, chunk).0.iter().map(|r| r.line).collect::<Vec<_>>();
         assert_eq!(lines(b"a,b\n\n\"c\n\nd\"\ne\n", 65536), [1, 2, 3, 6]);
         assert_eq!(lines("\u{feff}\n\n\na,b\n".as_bytes(), 65536), [4]);
         assert_eq!(lines("\u{feff}\n\n\na,b\n".as_bytes(), 1), [1, 2, 3, 4]);

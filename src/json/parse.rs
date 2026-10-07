@@ -76,11 +76,7 @@ pub fn parse(
     let mut text = String::new();
     let mut first = true;
     while stream.next(&mut text)? {
-        let chunk = if std::mem::take(&mut first) {
-            crate::remove_bom(&text)
-        } else {
-            &text
-        };
+        let chunk = if std::mem::take(&mut first) { crate::remove_bom(&text) } else { &text };
         if let Err(end) = parser.write(chunk) {
             return Ok(end);
         }
@@ -98,10 +94,7 @@ pub fn document(text: &str) -> Value {
         }
         ControlFlow::Continue(())
     });
-    assert!(
-        matches!(end, Ok(End::Done)),
-        "vendored schemas are JSON objects"
-    );
+    assert!(matches!(end, Ok(End::Done)), "vendored schemas are JSON objects");
     Value::Object(members)
 }
 
@@ -376,10 +369,7 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
     fn unexpected(&self, n: u8, i: usize) -> End {
         // The byte read as Latin-1: `String.fromCharCode(n)`.
         let state = self.state.name();
-        End::Invalid(format!(
-            "Unexpected \"{}\" at position \"{i}\" in state {state}",
-            n as char
-        ))
+        End::Invalid(format!("Unexpected \"{}\" at position \"{i}\" in state {state}", n as char))
     }
 
     /// A completed `\u` escape. Surrogates pair across escapes; a lone one becomes U+FFFD,
@@ -448,11 +438,7 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
             (Expect::VALUE, token @ (Token::LeftBrace | Token::LeftBracket)) => {
                 let emit = self.should_emit();
                 let build = emit || self.value.is_some();
-                self.stack.push(Frame {
-                    key: self.key.take(),
-                    value: self.value.take(),
-                    emit,
-                });
+                self.stack.push(Frame { key: self.key.take(), value: self.value.take(), emit });
                 if matches!(token, Token::LeftBracket) {
                     self.key = Some(Key::Index(0));
                     self.value = build.then(|| Value::Array(Vec::new()));
@@ -493,10 +479,9 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
             }
             (Expect::COMMA, Token::RightBrace) if !array => self.pop(),
             (Expect::COMMA, Token::RightBracket) if array => self.pop(),
-            (expect, token) => Err(End::Invalid(format!(
-                "{} in state {expect:?}",
-                token.describe()
-            ))),
+            (expect, token) => {
+                Err(End::Invalid(format!("{} in state {expect:?}", token.describe())))
+            }
         }
     }
 

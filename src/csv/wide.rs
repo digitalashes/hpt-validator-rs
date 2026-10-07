@@ -16,10 +16,7 @@ fn split(v: Version, column: &str) -> Option<(&str, &str, bool)> {
             Some((payer, plan, true))
         }
         [kind, payer, plan]
-            if ["additional_payer_notes"]
-                .iter()
-                .chain(amounts(v))
-                .any(|k| same(k, kind)) =>
+            if ["additional_payer_notes"].iter().chain(amounts(v)).any(|k| same(k, kind)) =>
         {
             Some((payer, plan, false))
         }
