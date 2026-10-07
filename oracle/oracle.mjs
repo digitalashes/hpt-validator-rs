@@ -8,7 +8,7 @@ const upstream = path.resolve(process.argv[2]);
 const { validateCsv, validateJson } = await import(pathToFileURL(path.join(upstream, "lib/index.js")));
 const VERSIONS = ["v2.0.0", "v2.1.0", "v2.2.0", "v3.0.0"];
 const LIMITS = [0, 2];
-// Cases under versions/ also run with these, to pin coercion and unknown versions (F-22).
+// Cases under versions/ also run with these, to pin coercion and unknown versions.
 const ODD_VERSIONS = ["x.y.z", "3", "2.2.1", "03.0.0"];
 
 let count = 0;

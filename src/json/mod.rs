@@ -30,7 +30,8 @@ const CHARGES: &str = "standard_charge_information";
 
 struct Schemas {
     full: Value,
-    /// The full schema without the charge items (`buildMetadataSchema`, minus F-7).
+    /// The full schema without the charge items (`buildMetadataSchema`, without
+    /// changing the shared schema as upstream does).
     metadata: Value,
     alerts: Option<Value>,
 }
@@ -72,7 +73,7 @@ fn schemas(v: Version) -> &'static Schemas {
 }
 
 pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Report, Error> {
-    // Upstream throws where CSV returns a finding (F-22).
+    // Upstream throws where CSV returns a finding.
     let v = Version::parse(version).ok_or_else(|| Error::UnknownJsonVersion(version.into()))?;
     let schemas = schemas(v);
     let item = (schemas.full.get("definitions").and_then(|d| d.get(CHARGES)))
@@ -102,7 +103,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
                         max,
                     );
                 }
-                // Resolved here, before metadata and file-level alerts (F-29).
+                // Resolved here, so reaching the limit skips metadata and file-level alerts.
                 if full(&errors, max) {
                     return ControlFlow::Break(());
                 }
@@ -125,7 +126,8 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
             Vec::new()
         }
         End::Stopped => Vec::new(),
-        // The errors found so far are dropped, the alerts kept (F-21).
+        // Upstream drops the errors found so far and keeps the alerts; Extended keeps the
+        // errors.
         End::Invalid(e) => {
             let message = format!(
                 "JSON parsing error: {e}. The validator is unable to review a syntactically invalid JSON file. Please ensure that your file is well-formatted JSON."

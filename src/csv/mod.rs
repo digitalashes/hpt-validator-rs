@@ -84,7 +84,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                     ..f
                 })
             };
-            // Upstream never reads papaparse's quote errors (F-28).
+            // Upstream never reads papaparse's quote errors.
             for &(code, column) in &row.quotes {
                 let message = if code == Code::XCsvMissingQuotes {
                     "A quoted field is never closed, so the rest of the file was read as this one field."
@@ -97,7 +97,8 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             let row: Vec<&str> = row.fields().map(js::trim).collect();
             let blank = row.iter().all(|f| f.is_empty());
             if blank && (index == 0 || index == 2) {
-                // The errors found so far are dropped, the alerts kept (F-15).
+                // Upstream drops the errors found so far and keeps the alerts; Extended
+                // keeps the errors.
                 add(&mut extended, errors, max);
                 let message = format!(
                     "Required headers must be defined on rows 1 and 3. Row {} is blank",
@@ -114,7 +115,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 0 => names = row.iter().map(|f| f.to_string()).collect(),
                 1 => {
                     let (found, header_errors) = header(v, &names, &row);
-                    // A header error suppresses every header alert (F-16).
+                    // A header error suppresses every header alert.
                     if header_errors.is_empty() {
                         add(&mut alerts, lined(header_alerts(v, &found, &row)), max);
                     }
@@ -130,7 +131,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                         }
                         Err(column_errors) => {
                             add(&mut errors, lined(column_errors), max);
-                            // Added after the limit is applied (F-14).
+                            // Added after the limit is applied, so it can exceed it by one.
                             let message = "Errors were found in the headers in row 3, so the remaining rows were not evaluated.";
                             let error = at(Code::CsvProblemsInHeader, 0, Some(0), message.into());
                             errors.extend(lined(vec![error]));
@@ -152,7 +153,8 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             index += 1;
         }
         if index < 4 {
-            // The errors found so far are dropped, the alerts kept (F-20).
+            // Upstream drops the errors found so far and keeps the alerts; Extended keeps
+            // the errors.
             add(&mut extended, errors, max);
             let message = "At least one row must be present".into();
             break 'rows vec![at(Code::CsvMinRows, 0, Some(0), message)];
@@ -279,7 +281,7 @@ fn header<'a>(
 }
 
 /// Upstream skips the value check for `/^license_number\s*\|\s*.{2}$/`, case-sensitive
-/// unlike the header match (F-25); `.` is a UTF-16 unit other than a line terminator.
+/// unlike the header match; `.` is a UTF-16 unit other than a line terminator.
 fn is_license_skipped(name: &str) -> bool {
     let Some(rest) = name.strip_prefix("license_number") else {
         return false;
@@ -295,7 +297,7 @@ fn is_license_skipped(name: &str) -> bool {
         && char::decode_utf16(tail.iter().copied()).all(|c| !c.is_ok_and(js::is_line_terminator))
 }
 
-/// Upstream's `alertHeaderRow`, anchored at row 3 (F-23).
+/// Upstream's `alertHeaderRow`, anchored at row 3 although the values are in row 2.
 fn header_alerts(v: Version, found: &[Option<&str>], values: &[&str]) -> Vec<Finding> {
     let find = |name| found.iter().position(|f| f.is_some_and(|f| same(f, name)));
     let value = |i: usize| values.get(i).copied().unwrap_or("");
@@ -422,7 +424,8 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
         };
     }
 
-    // Each key's expected positions, earliest first: names can share a key (F-27).
+    // Each key's expected positions, earliest first: names can share a key once the
+    // lower-cased payer and plan names are upper-cased again.
     let mut slots: HashMap<String, VecDeque<usize>> = HashMap::new();
     for (j, name) in expected.iter().enumerate() {
         slots.entry(key(name)).or_default().push_back(j);

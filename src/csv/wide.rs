@@ -33,8 +33,8 @@ fn placeholders(payer: &str, plan: &str) -> (bool, bool) {
 }
 
 /// Upstream's `getPayersPlans` and, for 3.0, `findPayersPlansPlaceholders`: the
-/// `payer | plan` keys, lower-cased (the cause of F-27), each once in order of first
-/// appearance, and the placeholder errors.
+/// `payer | plan` keys, lower-cased, each once in order of first appearance, and the
+/// placeholder errors. Upper-casing does not always undo the lower-casing (`ẞ`, `İ`).
 pub fn payers_plans(v: Version, row: &[&str]) -> (Vec<String>, Vec<Finding>) {
     let (mut keys, mut errors, mut seen) = (Vec::new(), Vec::new(), HashSet::new());
     for (i, column) in row.iter().enumerate() {
@@ -44,7 +44,7 @@ pub fn payers_plans(v: Version, row: &[&str]) -> (Vec<String>, Vec<Finding>) {
         let key = js::to_lower(&format!("{payer} | {plan}"));
         if v == Version::V3_0 {
             // Reported for a charge column with either placeholder, any other with both
-            // (F-24); dropped with either, judged on the lower-cased key as upstream does.
+            // as upstream does; dropped with either, judged on the lower-cased key as upstream does.
             let (payer, plan) = placeholders(payer, plan);
             let reported = if four { payer || plan } else { payer && plan };
             if reported {

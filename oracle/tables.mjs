@@ -119,7 +119,7 @@ const CORPUS = {
   "bom-not-first": b("a,b\n﻿c,d\n"),
   "bom-only": b("﻿"),
   "no-bom-blank-lines": b("\n\na,b\n"),
-  // Upstream reads 64 KiB chunks; only the first goes through removeBOM's trimStart (F-11).
+  // Upstream reads 64 KiB chunks; only the first goes through removeBOM's trimStart.
   "bom-whitespace-past-64k": b("\ufeff\n\n\n" + " ".repeat(70000) + "\n\na,b\n"),
   // 1024-byte chunks split these; 1-byte chunks split every input everywhere.
   "quoted-across-chunk": b('"' + "x".repeat(1100) + '",b\nc,d\n'),

@@ -89,35 +89,35 @@ for (const version of ["2.0.0", "2.2.0", "3.0.0"]) {
   write(`findings/template-wide-${version}.csv`, csv(wide(version, ["Payer A | PPO"])));
 }
 
-// F-1, F-11: a blank row 1 (no BOM) fails; the same file with a BOM is valid, one row lower.
+// A blank row 1 (no BOM) fails; the same file with a BOM is valid, one row lower.
 write("findings/f01-blank-row1.csv", "\n" + csv(tall("2.0.0")));
 write("findings/f11-bom-blank-row1.csv", "﻿\n" + csv(tall("2.0.0")));
-// F-1, F-15: a blank row 3 returns only HeaderBlankError, dropping the row-2 date error.
+// A blank row 3 returns only HeaderBlankError, dropping the row-2 date error.
 {
   const [h, v, ...rest] = tall("2.0.0", [{}], header("2.0.0", { last_updated_on: "July 1 2024" }));
   write("findings/f15-blank-row3.csv", csv([h, v]) + "\n" + csv(rest.slice(1)));
 }
-// F-2, F-23: a CSV declaring 2.2.0 gets VersionMismatchAlert anchored at row 3; JSON does not.
+// A CSV declaring 2.2.0 gets VersionMismatchAlert anchored at row 3; JSON does not.
 write("findings/f02-version-2.2.0.csv", csv(tall("2.2.0", [{}], header("2.2.0"))));
 write("findings/f02-version-2.2.0.json", json({ ...fixture("sample-valid.json"), version: "2.2.0" }));
-// F-6: years below 100.
+// Years below 100.
 write("findings/f06-slash-year-50.csv", csv(tall("2.0.0", [{}], header("2.0.0", { last_updated_on: "1/1/0050" }))));
 write("findings/f06-iso-year-50.csv", csv(tall("2.0.0", [{}], header("2.0.0", { last_updated_on: "0050-01-01" }))));
-// F-13: a tall modifier row without information names additional_payer_notes.
+// A tall modifier row without information names additional_payer_notes.
 write("findings/f13-modifier-tall.csv", csv(tall("3.0.0", [{}, {
   "code | 1": "", "code | 1 | type": "", modifiers: "50", payer_name: "", plan_name: "",
   "standard_charge | negotiated_dollar": "", "standard_charge | methodology": "", "standard_charge | min": "",
   "standard_charge | max": "", "standard_charge | gross": "", "standard_charge | discounted_cash": "",
 }])));
-// F-14: more missing columns than the limit, then ProblemsInHeaderError on top.
+// More missing columns than the limit, then ProblemsInHeaderError on top.
 {
   const [h, v] = header("2.0.0");
   write("findings/f14-many-missing-columns.csv", csv([h, v, ["description", "payer_name", "plan_name"], ["x", "a", "b"]]));
 }
-// F-16: a header error hides the version-mismatch and false-attestation alerts.
+// A header error hides the version-mismatch and false-attestation alerts.
 write("findings/f16-header-error-hides-alerts.csv", csv(tall("3.0.0", [{}],
   header("3.0.0", { last_updated_on: "July 1 2024", version: "2.0.0", [ATTESTATION]: "false" }))));
-// F-17: the nine-9s alert compares with Number().
+// The nine-9s alert compares with Number().
 {
   const NINES = ["999999999", "999999999.0", "9.99999999e8", "+999999999", "0x3B9AC9FF"];
   for (const version of ["2.2.0", "3.0.0"]) {
@@ -127,12 +127,12 @@ write("findings/f16-header-error-hides-alerts.csv", csv(tall("3.0.0", [{}],
       csv(wide(version, ["Payer A | PPO"], NINES.map((n) => ({ [`${key} | Payer A | PPO`]: n })))));
   }
 }
-// F-20: fewer than four rows returns only MinRowsError, dropping the row-2 date error.
+// Fewer than four rows returns only MinRowsError, dropping the row-2 date error.
 write("findings/f20-min-rows.csv", csv(tall("2.0.0", [], header("2.0.0", { last_updated_on: "July 1 2024" }))));
-// F-23: false affirmation (2.x) and attestation (3.0) alerts anchored at row 3.
+// False affirmation (2.x) and attestation (3.0) alerts anchored at row 3.
 write("findings/f23-false-affirmation.csv", csv(tall("2.0.0", [{}], header("2.0.0", { [AFFIRMATION]: "false" }))));
 write("findings/f23-false-attestation.csv", csv(tall("3.0.0", [{}], header("3.0.0", { [ATTESTATION]: "false" }))));
-// F-24: a three-part column with one placeholder is neither reported nor matched (file stays
+// A three-part column with one placeholder is neither reported nor matched (file stays
 // valid); a four-part column with one placeholder is reported.
 for (const [name, column] of [
   ["three-part-ignored", "additional_payer_notes | [payer_name] | Plan 1"],
@@ -143,18 +143,18 @@ for (const [name, column] of [
   rows[3].push("");
   write(`findings/f24-${name}.csv`, csv(rows));
 }
-// F-25: the license-number skip is case-sensitive.
+// The license-number skip is case-sensitive.
 write("findings/f25-license-upper.csv", csv(tall("2.0.0", [{}],
   header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "LICENSE_NUMBER | MD" }))));
 write("findings/f25-license-lower.csv", csv(tall("2.0.0", [{}],
   header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "license_number | MD" }))));
-// F-26: real CRLF and mixed line endings.
+// Real CRLF and mixed line endings.
 write("findings/f26-crlf.csv", csv(tall("2.0.0", [{}, {}])).replaceAll("\n", "\r\n"));
 write("findings/f26-mixed.csv", csv(tall("2.0.0", [{}, {}])).split("\n").map((l, i) => (l && i % 2 ? l + "\r" : l)).join("\n"));
-// F-27: payer names whose lower-then-upper round trip changes.
+// Payer names whose lower-then-upper round trip changes.
 write("findings/f27-sharp-s.csv", csv(wide("2.0.0", ["Groẞ Health | PPO"])));
 write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])));
-// F-28: malformed quotes are ignored; a stray quote merges fields, an unclosed one eats the file.
+// Malformed quotes are ignored; a stray quote merges fields, an unclosed one eats the file.
 {
   const lines = csv(tall("2.0.0", [{}, {}, {}])).split("\n");
   const at = (i, text) => lines.map((l, j) => (j === i ? text : l)).join("\n");
@@ -226,7 +226,7 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
 
 // --- JSON ---------------------------------------------------------------------------
 
-// F-21: a syntax error after invalid charge items returns only InvalidJsonError.
+// A syntax error after invalid charge items returns only InvalidJsonError.
 {
   const doc = fixture("sample-valid.json");
   for (const charge of doc.standard_charge_information) delete charge.description;
@@ -234,7 +234,7 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
   const end = text.lastIndexOf("]");
   write("findings/f21-syntax-error-after-errors.json", text.slice(0, end) + "]]" + text.slice(end + 1));
 }
-// F-29: reaching the limit drops metadata errors and file-level alerts.
+// Reaching the limit drops metadata errors and file-level alerts.
 {
   const doc = fixture("sample-valid.json");
   delete doc.hospital_name;
@@ -243,7 +243,7 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
   for (const charge of doc.standard_charge_information) delete charge.description;
   write("findings/f29-limit-drops-metadata.json", json(doc));
 }
-// F-30: tokenizer errors carry a byte position within the current 64 KiB read chunk;
+// Tokenizer errors carry a byte position within the current 64 KiB read chunk;
 // token-order errors and end-of-input errors carry none.
 {
   const doc = fixture("sample-valid.json");
@@ -435,7 +435,7 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
   }
 }
 
-// --- versions (F-22): validated with extra version strings by the oracle ---------------
+// --- versions: validated with extra version strings by the oracle ---------------
 
 write("versions/tall-2.0.0.csv", csv(tall("2.0.0")));
 write("versions/sample-valid.json", json(fixture("sample-valid.json")));

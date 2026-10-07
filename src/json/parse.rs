@@ -1,7 +1,7 @@
 //! `@streamparser/json` 0.0.21's tokenizer and token parser for upstream's configuration
 //! (string input, `paths`, `keepStack: false`), fed as `parseJson` feeds them: `js::Stream`
 //! chunks, `removeBOM` on the first one. Tokenizer errors name a byte position within the
-//! current chunk (F-30).
+//! current chunk.
 
 use crate::js;
 use std::io::{self, Read};
