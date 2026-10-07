@@ -191,7 +191,9 @@ pub fn alerts(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
             ],
         };
         for &(i, name) in amounts {
-            if js::number(c.value(i)) == 999999999.0 {
+            #[expect(clippy::float_cmp, reason = "JavaScript's ===")]
+            let nines = js::number(c.value(i)) == 999_999_999.0;
+            if nines {
                 c.error(
                     Code::CsvNineNines,
                     Some(i),

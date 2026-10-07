@@ -109,7 +109,11 @@ pub fn document(text: &str) -> Value {
 type Step = Result<(), End>;
 
 /// The tokenizer's state, named as upstream's are in its error texts.
-#[allow(non_camel_case_types, clippy::upper_case_acronyms)]
+#[allow(
+    non_camel_case_types,
+    clippy::upper_case_acronyms,
+    reason = "upstream's names, printed in its error texts"
+)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 enum State {
     BOM_OR_START,
@@ -141,7 +145,11 @@ impl State {
 }
 
 /// The token parser's state.
-#[allow(non_camel_case_types, clippy::upper_case_acronyms)]
+#[allow(
+    non_camel_case_types,
+    clippy::upper_case_acronyms,
+    reason = "upstream's names, printed in its error texts"
+)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 enum Expect {
     VALUE,
@@ -216,7 +224,9 @@ struct Parser<'p, F> {
 
 impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
     /// The tokenizer's `write` loop over one chunk.
+    #[expect(clippy::too_many_lines, reason = "one state machine, as upstream's")]
     fn write(&mut self, chunk: &str) -> Step {
+        #[allow(clippy::enum_glob_use, reason = "states read as upstream names them")]
         use State::*;
         let b = chunk.as_bytes();
         let mut i = 0;
@@ -283,25 +293,23 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
                     }
                     _ => return Err(self.unexpected(n, i)),
                 },
-                STRING_AFTER_BACKSLASH => match n {
-                    b'u' => {
-                        self.unicode = 0;
-                        self.state = STRING_UNICODE_DIGIT(1);
-                    }
-                    _ => {
-                        let c = match n {
-                            b'"' | b'\\' | b'/' => n as char,
-                            b'b' => '\u{8}',
-                            b'f' => '\u{c}',
-                            b'n' => '\n',
-                            b'r' => '\r',
-                            b't' => '\t',
-                            _ => return Err(self.unexpected(n, i)),
-                        };
-                        self.buffer.push(c);
-                        self.state = STRING_DEFAULT;
-                    }
-                },
+                STRING_AFTER_BACKSLASH if n == b'u' => {
+                    self.unicode = 0;
+                    self.state = STRING_UNICODE_DIGIT(1);
+                }
+                STRING_AFTER_BACKSLASH => {
+                    let c = match n {
+                        b'"' | b'\\' | b'/' => n as char,
+                        b'b' => '\u{8}',
+                        b'f' => '\u{c}',
+                        b'n' => '\n',
+                        b'r' => '\r',
+                        b't' => '\t',
+                        _ => return Err(self.unexpected(n, i)),
+                    };
+                    self.buffer.push(c);
+                    self.state = STRING_DEFAULT;
+                }
                 STRING_UNICODE_DIGIT(k) => {
                     let Some(digit) = (n as char).to_digit(16) else {
                         return Err(self.unexpected(n, i));
@@ -325,7 +333,7 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
                 },
                 NUMBER_AFTER_E | NUMBER_AFTER_E_AND_SIGN => match n {
                     b'+' | b'-' if self.state == NUMBER_AFTER_E => {
-                        self.digit(n, NUMBER_AFTER_E_AND_SIGN)
+                        self.digit(n, NUMBER_AFTER_E_AND_SIGN);
                     }
                     b'0'..=b'9' => self.digit(n, NUMBER_AFTER_E_AND_DIGIT),
                     _ => return Err(self.unexpected(n, i)),
@@ -335,17 +343,17 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
                 | NUMBER_AFTER_DECIMAL
                 | NUMBER_AFTER_E_AND_DIGIT => match n {
                     b'0'..=b'9' if self.state != NUMBER_AFTER_INITIAL_ZERO => {
-                        self.buffer.push(n as char)
+                        self.buffer.push(n as char);
                     }
                     b'.' if matches!(
                         self.state,
                         NUMBER_AFTER_INITIAL_ZERO | NUMBER_AFTER_INITIAL_NON_ZERO
                     ) =>
                     {
-                        self.digit(n, NUMBER_AFTER_FULL_STOP)
+                        self.digit(n, NUMBER_AFTER_FULL_STOP);
                     }
                     b'e' | b'E' if self.state != NUMBER_AFTER_E_AND_DIGIT => {
-                        self.digit(n, NUMBER_AFTER_E)
+                        self.digit(n, NUMBER_AFTER_E);
                     }
                     _ => {
                         // The number ended before this byte, which is read again in START.
@@ -399,6 +407,7 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
 
     /// The tokenizer's `end`.
     fn end(&mut self) -> End {
+        #[allow(clippy::enum_glob_use, reason = "states read as upstream names them")]
         use State::*;
         match self.state {
             NUMBER_AFTER_INITIAL_ZERO

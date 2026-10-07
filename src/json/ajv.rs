@@ -164,6 +164,7 @@ impl<'s> Run<'s> {
         // `format` has no number formats here.
     }
 
+    #[expect(clippy::cast_precision_loss, reason = "lengths stay far below 2^52")]
     fn string(&mut self, s: &'s Value, v: &str) {
         if let Some(Value::Number(min)) = s.get("minLength")
             && (v.chars().count() as f64) < *min
@@ -183,6 +184,7 @@ impl<'s> Run<'s> {
         }
     }
 
+    #[expect(clippy::cast_precision_loss, reason = "lengths stay far below 2^52")]
     fn array(&mut self, s: &'s Value, items: &[Value]) {
         if let Some(Value::Number(min)) = s.get("minItems")
             && (items.len() as f64) < *min
@@ -210,7 +212,7 @@ impl<'s> Run<'s> {
     /// schemas needs JSON Pointer escaping.
     fn at(&mut self, segment: impl Display, schema: &'s Value, data: &Value) {
         let len = self.path.len();
-        write!(self.path, "/{segment}").unwrap();
+        write!(self.path, "/{segment}").expect("a String write cannot fail");
         self.check(schema, data);
         self.path.truncate(len);
     }
@@ -272,7 +274,7 @@ mod tests {
             for (keyword, v) in members {
                 match (keyword.as_str(), v) {
                     ("$ref", Value::String(r)) => {
-                        assert!(r.starts_with("#/definitions/") && members.len() == 1)
+                        assert!(r.starts_with("#/definitions/") && members.len() == 1);
                     }
                     ("type", Value::String(_))
                     | ("const" | "enum" | "required" | "$schema" | "$message", _)

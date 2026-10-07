@@ -48,6 +48,10 @@ const CHARGES: [&str; 4] = [
     "methodology",
 ];
 
+#[expect(
+    clippy::too_many_lines,
+    reason = "upstream's phase machine, kept in one place"
+)]
 pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Result<Report> {
     let max = options.max_errors;
     let Some(v) = Version::parse(version) else {
@@ -112,7 +116,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 continue;
             }
             match index {
-                0 => names = row.iter().map(|f| f.to_string()).collect(),
+                0 => names = row.iter().map(ToString::to_string).collect(),
                 1 => {
                     let (found, header_errors) = header(v, &names, &row);
                     // A header error suppresses every header alert.
@@ -339,6 +343,10 @@ fn header_alerts(v: Version, found: &[Option<&str>], values: &[&str]) -> Vec<Fin
 type Columns = Result<(Layout, Vec<Finding>), Vec<Finding>>;
 
 /// Row 3, upstream's `validateColumns` and `alertColumns`.
+#[expect(
+    clippy::too_many_lines,
+    reason = "builds upstream's expected column list in its order"
+)]
 fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
     let tall = tall::detect(row);
     let (payers_plans, mut errors) = wide::payers_plans(v, row);
@@ -350,12 +358,18 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
         let digits: String = n.chars().filter(char::is_ascii_digit).collect();
         // ponytail: unbounded like upstream, which throws above 2^32 - 1 code pairs;
         // bound it with the fuzzing in roadmap Phase 7
-        codes = codes.max(js::number(&digits) as u64);
+        #[expect(
+            clippy::cast_possible_truncation,
+            clippy::cast_sign_loss,
+            reason = "digits only: NaN or a non-negative integer, saturated"
+        )]
+        let count = js::number(&digits) as u64;
+        codes = codes.max(count);
         if v == Version::V3_0 && same(n, "[i]") {
             errors.push(placeholder(i, column));
         }
     }
-    if tall == !payers_plans.is_empty() {
+    if tall != payers_plans.is_empty() {
         let message = "Required payer-specific information data element headers are missing or miscoded from the MRF that does not follow the specifications for the CSV \"Tall\" or CSV \"Wide\" format.";
         errors.push(at(Code::CsvAmbiguousFormat, 2, None, message.into()));
         return (FileType::Unknown, Err(errors));
@@ -557,7 +571,7 @@ fn cell(row: u64, column: Option<usize>) -> String {
     };
     let mut name = String::new();
     loop {
-        name.insert(0, (b'A' + (c % 26) as u8) as char);
+        name.insert(0, char::from(b"ABCDEFGHIJKLMNOPQRSTUVWXYZ"[c % 26]));
         if c < 26 {
             break;
         }
@@ -620,7 +634,7 @@ fn placeholder(column: usize, name: &str) -> Finding {
     );
     Finding {
         column_name: Some(name.into()),
-        column: Some(column as i64),
+        column: i64::try_from(column).ok(),
         ..at(Code::CsvPlaceholder, 2, Some(column), message)
     }
 }

@@ -1,6 +1,8 @@
 //! Every case in `tests/cases` against upstream's own result in `tests/golden`, in both modes,
 //! and the Extended additions on the cases listed in `tests/extended.json`.
 
+#![expect(clippy::unwrap_used, reason = "a broken case should fail the test")]
+
 use hpt_validator::{Finding, Format, Mode, Options, Report, validate};
 use serde_json::{Value, json};
 use std::fs::{self, File};

@@ -32,6 +32,11 @@ impl Version {
 
 /// Validates a machine-readable file against data dictionary `version` (`"3.0.0"`, `"v2.2"`
 /// and the like, coerced as upstream does).
+///
+/// # Errors
+///
+/// [`Error::Io`] when reading `input` fails, [`Error::UnknownJsonVersion`] when a JSON
+/// `version` is not one upstream knows (CSV reports that as a finding instead).
 pub fn validate(
     input: impl Read,
     format: Format,
@@ -96,6 +101,7 @@ pub struct Report {
 
 impl Report {
     /// Upstream's `valid`, which is always "no errors".
+    #[must_use]
     pub fn valid(&self) -> bool {
         self.errors.is_empty()
     }
@@ -188,6 +194,7 @@ impl Finding {
     }
 
     /// The finding as upstream's `JSON.stringify` renders it, then `code`, `keyword` and `line`.
+    #[must_use]
     pub fn to_json(&self) -> String {
         let mut out = String::from("{");
         let key = |out: &mut String, k: &str| {
@@ -227,7 +234,7 @@ impl Finding {
         }
         if let Some(v) = self.column {
             key(&mut out, "column");
-            write!(out, "{v}").unwrap();
+            write!(out, "{v}").expect("a String write cannot fail");
         }
         if self.code == Code::JsonInvalid {
             key(&mut out, "originalError"); // an Error object stringifies to {}
@@ -241,7 +248,7 @@ impl Finding {
         }
         if let Some(v) = self.line {
             key(&mut out, "line");
-            write!(out, "{v}").unwrap();
+            write!(out, "{v}").expect("a String write cannot fail");
         }
         out.push('}');
         out
@@ -305,7 +312,9 @@ fn push_json_str(out: &mut String, s: &str) {
             '\t' => out.push_str("\\t"),
             '\u{8}' => out.push_str("\\b"),
             '\u{c}' => out.push_str("\\f"),
-            c if c < ' ' => write!(out, "\\u{:04x}", c as u32).unwrap(),
+            c if c < ' ' => {
+                write!(out, "\\u{:04x}", u32::from(c)).expect("a String write cannot fail");
+            }
             c => out.push(c),
         }
     }
@@ -382,6 +391,7 @@ codes! {
 
 /// Upstream's `validateFilename`:
 /// `/^(\d{2}\-?\d{7})(\-\d{10})?(_.+_)(standardcharges)\.(csv|json)$/i`.
+#[must_use]
 pub fn validate_filename(name: &str) -> bool {
     fn digits(s: &str, n: usize) -> Option<&str> {
         let d = s.get(..n)?;

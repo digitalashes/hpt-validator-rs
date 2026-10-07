@@ -79,7 +79,7 @@ pub fn number(s: &str) -> f64 {
         let digits = &s[2..];
         // ponytail: not correctly rounded above 2^53, which no caller can tell apart
         let n = (digits.chars()).try_fold(0.0, |n, c| {
-            Some(n * radix as f64 + c.to_digit(radix)? as f64)
+            Some(n * f64::from(radix) + f64::from(c.to_digit(radix)?))
         });
         return n.filter(|_| !digits.is_empty()).unwrap_or(f64::NAN);
     }
@@ -119,7 +119,9 @@ pub fn is_iso_date(s: &str) -> bool {
 
 /// `p` as a number if it is `len` ASCII digits.
 fn digits(p: &str, len: std::ops::RangeInclusive<usize>) -> Option<u32> {
-    (len.contains(&p.len()) && p.bytes().all(|b| b.is_ascii_digit())).then(|| p.parse().unwrap())
+    (len.contains(&p.len()) && p.bytes().all(|b| b.is_ascii_digit()))
+        .then(|| p.parse().ok())
+        .flatten()
 }
 
 fn is_real_date(y: u32, m: u32, d: u32) -> bool {
@@ -167,7 +169,7 @@ pub fn coerce(v: &str) -> String {
     parts.resize(3, "0");
     // semver.parse then rejects leading zeros and unsafe integers
     let valid = parts.iter().all(|p| {
-        (*p == "0" || !p.starts_with('0')) && p.parse::<u64>().unwrap() <= MAX_SAFE_INTEGER
+        (*p == "0" || !p.starts_with('0')) && p.parse::<u64>().is_ok_and(|n| n <= MAX_SAFE_INTEGER)
     });
     if valid {
         parts.join(".")
@@ -177,6 +179,12 @@ pub fn coerce(v: &str) -> String {
 }
 
 /// `String(n)`: the shortest digits that read back as `n`, laid out as `Number::toString` does.
+#[expect(
+    clippy::cast_possible_truncation,
+    clippy::cast_possible_wrap,
+    clippy::cast_sign_loss,
+    reason = "at most 17 digits, exponents within 324, each index cast only when non-negative"
+)]
 pub fn number_string(n: f64) -> String {
     if n.is_nan() {
         return "NaN".into();
@@ -191,9 +199,12 @@ pub fn number_string(n: f64) -> String {
     // `{:e}` gives the shortest digits as `d.ddde-7`; ECMAScript names the count of digits k
     // and the decimal point's position n.
     let sci = format!("{:e}", n.abs());
-    let (mantissa, exp) = sci.split_once('e').unwrap();
+    let (mantissa, exp) = sci.split_once('e').expect("{:e} has an exponent");
     let digits = mantissa.replace('.', "");
-    let (k, e) = (digits.len() as i32, exp.parse::<i32>().unwrap());
+    let (k, e) = (
+        digits.len() as i32,
+        exp.parse::<i32>().expect("{:e} writes an integer exponent"),
+    );
     let n = e + 1;
     let body = if k <= n && n <= 21 {
         digits + &"0".repeat((n - k) as usize)
@@ -270,7 +281,9 @@ fn decode(bytes: &mut Vec<u8>, out: &mut String) {
         }
         // Valid but for a sequence cut short at the end: no lossy pass needed.
         Err(e) if e.error_len().is_none() => {
-            out.push_str(std::str::from_utf8(&bytes[..e.valid_up_to()]).unwrap());
+            out.push_str(
+                std::str::from_utf8(&bytes[..e.valid_up_to()]).expect("valid up to there"),
+            );
             e.valid_up_to()
         }
         Err(_) => {
@@ -324,7 +337,7 @@ mod tests {
             let v = t[key].get((c as u32).to_string());
             v.map_or(c.to_string(), |v| v.as_str().unwrap().into())
         };
-        for c in (0..=0x10ffff).filter_map(char::from_u32) {
+        for c in (0..=u32::from(char::MAX)).filter_map(char::from_u32) {
             assert_eq!(
                 is_space(c),
                 trim.contains(&(c as u64)),

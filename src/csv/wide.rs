@@ -50,7 +50,7 @@ pub fn payers_plans(v: Version, row: &[&str]) -> (Vec<String>, Vec<Finding>) {
             if reported {
                 errors.push(placeholder(i, column));
             }
-            let (payer, plan) = key.split_once(" | ").unwrap();
+            let (payer, plan) = key.split_once(" | ").expect("a key is payer | plan");
             let (payer, plan) = placeholders(payer, plan);
             if payer || plan {
                 continue;

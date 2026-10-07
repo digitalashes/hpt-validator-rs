@@ -58,7 +58,7 @@ fn schemas(v: Version) -> &'static Schemas {
                 match (name.as_str(), value) {
                     ("properties", Value::Object(p)) => p.retain(|(k, _)| k != CHARGES),
                     ("required", Value::Array(r)) => {
-                        r.retain(|k| *k != Value::String(CHARGES.into()))
+                        r.retain(|k| *k != Value::String(CHARGES.into()));
                     }
                     _ => {}
                 }

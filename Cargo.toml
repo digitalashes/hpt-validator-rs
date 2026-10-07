@@ -12,3 +12,14 @@ include = ["/src", "/schemas", "/README.md", "/LICENSE", "/UPSTREAM.lock"]
 
 [dev-dependencies]
 serde_json = { version = "1", features = ["preserve_order"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+panic = "warn"
+dbg_macro = "warn"
+todo = "warn"
+allow_attributes_without_reason = "warn"
