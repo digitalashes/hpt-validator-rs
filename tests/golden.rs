@@ -30,21 +30,6 @@ fn upstream_json(report: &Report) -> Value {
     json!({ "valid": report.valid(), "errors": list(&report.errors), "alerts": list(&report.alerts) })
 }
 
-/// Upstream's result cut to rows 1–3, which roadmap Phase 2 covers. Header and column
-/// findings always come before data-row ones, so each list keeps a prefix.
-fn by_row_3(result: &Value) -> Value {
-    let early = |list: &str| {
-        let findings = result[list].as_array().unwrap().iter().filter(|f| {
-            let path = f["path"].as_str().unwrap();
-            let row = path.trim_start_matches(|c: char| !c.is_ascii_digit());
-            row.parse::<u64>().unwrap() <= 3
-        });
-        findings.cloned().collect::<Vec<_>>()
-    };
-    let errors = early("errors");
-    json!({ "valid": errors.is_empty(), "errors": errors, "alerts": early("alerts") })
-}
-
 #[test]
 fn golden() {
     let tests = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests");
@@ -62,7 +47,7 @@ fn golden() {
         }
         let results: Value = serde_json::from_str(&fs::read_to_string(&golden).unwrap()).unwrap();
         for (key, expected) in results.as_object().unwrap() {
-            let want = serde_json::to_string(&by_row_3(expected)).unwrap();
+            let want = serde_json::to_string(expected).unwrap();
             let (version, max_errors) = key.split_once(" maxErrors=").unwrap();
             for mode in [Mode::Default, Mode::Extended] {
                 let options = Options {
@@ -83,7 +68,7 @@ fn golden() {
             checked += 1;
         }
     }
-    eprintln!("golden: {checked} CSV results checked up to row 3, {later} JSON cases left");
+    eprintln!("golden: {checked} CSV results checked, {later} JSON cases left");
     assert!(checked > 0);
     assert!(
         failed.is_empty(),

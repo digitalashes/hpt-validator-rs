@@ -1,5 +1,6 @@
 // Writes tests/cases/findings: one or more input files per visible upstream finding
-// (docs: upstream-findings F-n), plus tests/cases/versions for version-string handling.
+// (docs: upstream-findings F-n), tests/cases/rules for data-row rule edges, and
+// tests/cases/versions for version-string handling.
 // The oracle then records upstream's result for each, like any other case.
 import fs from "node:fs";
 import path from "node:path";
@@ -159,6 +160,68 @@ write("findings/f27-dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])))
   const at = (i, text) => lines.map((l, j) => (j === i ? text : l)).join("\n");
   write("findings/f28-invalid-quotes.csv", at(4, '"Hip" replacement' + lines[4].slice("Hip replacement".length)));
   write("findings/f28-missing-quotes.csv", at(4, '"Hip replacement' + lines[4].slice("Hip replacement".length)));
+}
+
+// --- data-row rules: edges the fixtures and unit tests leave out ----------------------
+{
+  const GROUP = ["negotiated_dollar", "negotiated_percentage", "negotiated_algorithm", "methodology", "notes",
+    "estimated_amount", "median_amount", "10th_percentile", "90th_percentile", "count"];
+  // A charge group's column: tall's when p is undefined, else wide payer/plan p's.
+  const col = (p, name) => {
+    if (!GROUP.includes(name)) return name;
+    if (name.startsWith("negotiated_") || name === "methodology") {
+      return p ? `standard_charge | ${p} | ${name}` : `standard_charge | ${name}`;
+    }
+    if (name === "notes") return p ? `additional_payer_notes | ${p}` : "additional_generic_notes";
+    return p ? `${name} | ${p}` : name;
+  };
+  const N = "999999999";
+  const NINES = { estimated_amount: N, median_amount: N, "10th_percentile": N, "90th_percentile": N, count: N };
+  // Each row: overrides for the shared columns and the first group, then for the second
+  // group (wide only).
+  const ROWS = [
+    ...["10", "011", "00", "0", "1 THROUGH 10", "11", "19", "20", "100", "9", "12.0", "1e2", "+12", "１２"]
+      .map((count) => [{ count }]),
+    [{ negotiated_dollar: "", negotiated_percentage: "50" }],
+    [{ negotiated_percentage: "50" }],
+    [{ negotiated_dollar: "", negotiated_algorithm: "x", count: "0" }],
+    [{ negotiated_percentage: "50", count: "00" }],
+    [{ negotiated_percentage: "50", count: "0", notes: "n" }],
+    [NINES, NINES],
+    [{ methodology: "Other" }, { negotiated_dollar: "", negotiated_percentage: "5", methodology: "" }],
+    [{ negotiated_dollar: "", methodology: "" }, { negotiated_dollar: "", methodology: "" }],
+    [{ negotiated_dollar: "", methodology: "", "standard_charge | gross": "", "standard_charge | discounted_cash": "" },
+      { negotiated_dollar: "", methodology: "" }],
+    [{ "standard_charge | min": "" }],
+    [{ "standard_charge | max": "" }, { negotiated_dollar: "" }],
+    [{ payer_name: "", plan_name: "" }],
+    [{ "code | 1 | type": "ndc" }],
+    [{ "code | 1 | type": "CMG" }],
+    [{ "code | 1": "", "code | 1 | type": "", modifiers: "25" }],
+    [{ "code | 1": "", "code | 1 | type": "", modifiers: "25", negotiated_dollar: "", methodology: "" },
+      { negotiated_dollar: "", methodology: "" }],
+    [{ "code | 1": "", "code | 1 | type": "", modifiers: "25", negotiated_dollar: "", methodology: "", notes: "n" },
+      { negotiated_dollar: "", methodology: "" }],
+    [{ "code | 1": "", "code | 1 | type": "" }],
+    [{ drug_unit_of_measurement: "0", drug_type_of_measurement: "ml" }],
+    [{ drug_type_of_measurement: "GR" }],
+    [{ setting: "BOTH", description: "" }],
+  ];
+  const PAYERS = ["Payer A | PPO", "Payer B | HMO"];
+  const values = (row, payers) =>
+    Object.fromEntries(row.slice(0, payers.length).flatMap((o, i) =>
+      Object.entries(o).map(([k, v]) => [col(payers[i], k), v])));
+  for (const version of ["2.0.0", "2.2.0", "3.0.0"]) {
+    for (const [shape, rows] of [
+      ["tall", tall(version, ROWS.map((r) => values(r, [undefined])))],
+      ["wide", wide(version, PAYERS, ROWS.map((r) => values(r, PAYERS)))],
+    ]) {
+      // A blank line consumes a row number; missing cells read as empty, extra ones are ignored.
+      const [first] = rows.slice(3);
+      rows.push([""], first.slice(0, 3), [...first, "extra"]);
+      write(`rules/${shape}-${version}.csv`, csv(rows));
+    }
+  }
 }
 
 // --- JSON ---------------------------------------------------------------------------

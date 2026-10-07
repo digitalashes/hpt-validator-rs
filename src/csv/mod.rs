@@ -2,11 +2,13 @@
 //! row 3, which hands the shape-specific parts to the `tall` and `wide` leaves.
 
 mod reader;
+mod rules;
 mod tall;
 mod wide;
 
 use crate::{Code, FileType, Finding, Mode, Options, Report, VERSIONS, Version, js};
 use reader::Reader;
+use rules::{Group, Layout};
 use std::collections::{HashMap, VecDeque};
 use std::io::{self, Read};
 
@@ -68,6 +70,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
     let (mut errors, mut alerts) = (Vec::new(), Vec::new());
     let mut names = Vec::new();
     let mut file_type = FileType::Unknown;
+    let mut layout = None;
     let mut index = 0;
     while let Some(row) = reader.next_row()? {
         let row: Vec<&str> = row.fields.iter().map(|f| js::trim(f)).collect();
@@ -96,19 +99,29 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 add(&mut errors, header_errors, max);
             }
             2 => {
-                let (shape, column_errors, column_alerts) = columns(v, &row);
+                let (shape, result) = columns(v, &row);
                 file_type = shape;
-                if !column_errors.is_empty() {
-                    add(&mut errors, column_errors, max);
-                    // Added after the limit is applied (F-14).
-                    let message = "Errors were found in the headers in row 3, so the remaining rows were not evaluated.";
-                    errors.push(at(Code::CsvProblemsInHeader, 0, Some(0), message.into()));
-                    return Ok(done(errors, alerts, file_type));
+                match result {
+                    Ok((resolved, column_alerts)) => {
+                        add(&mut alerts, column_alerts, max);
+                        layout = Some(resolved);
+                    }
+                    Err(column_errors) => {
+                        add(&mut errors, column_errors, max);
+                        // Added after the limit is applied (F-14).
+                        let message = "Errors were found in the headers in row 3, so the remaining rows were not evaluated.";
+                        errors.push(at(Code::CsvProblemsInHeader, 0, Some(0), message.into()));
+                        return Ok(done(errors, alerts, file_type));
+                    }
                 }
-                add(&mut alerts, column_alerts, max);
             }
-            // Data rows: roadmap Phase 3.
-            _ => {}
+            _ => {
+                let layout = layout.as_ref().expect("data rows follow a valid row 3");
+                add(&mut errors, rules::errors(layout, index, &row), max);
+                if max == 0 || alerts.len() < max {
+                    add(&mut alerts, rules::alerts(layout, index, &row), max);
+                }
+            }
         }
         if max > 0 && errors.len() >= max {
             return Ok(done(errors, alerts, file_type));
@@ -286,9 +299,11 @@ fn header_alerts(v: Version, found: &[Option<&str>], values: &[&str]) -> Vec<Fin
     alerts
 }
 
-/// Row 3, upstream's `validateColumns` and `alertColumns`: the file type, the errors and
-/// the alerts, which count only without errors.
-fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
+/// Row 3's outcome: the columns resolved for the data rows with the alerts, or the errors.
+type Columns = Result<(Layout, Vec<Finding>), Vec<Finding>>;
+
+/// Row 3, upstream's `validateColumns` and `alertColumns`.
+fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
     let tall = tall::detect(row);
     let (payers_plans, mut errors) = wide::payers_plans(v, row);
     let mut codes = 0;
@@ -307,7 +322,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
     if tall == !payers_plans.is_empty() {
         let message = "Required payer-specific information data element headers are missing or miscoded from the MRF that does not follow the specifications for the CSV \"Tall\" or CSV \"Wide\" format.";
         errors.push(at(Code::CsvAmbiguousFormat, 2, None, message.into()));
-        return (FileType::Unknown, errors, Vec::new());
+        return (FileType::Unknown, Err(errors));
     }
     // Group column names end in the group's suffix: none for tall's one group, the
     // payer/plan for each wide one.
@@ -353,7 +368,8 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
     for (j, name) in expected.iter().enumerate() {
         slots.entry(key(name)).or_default().push_back(j);
     }
-    let mut matched = vec![false; expected.len()];
+    // The row 3 column each expected one matched.
+    let mut matched = vec![None; expected.len()];
     let keys: Vec<String> = row.iter().map(|c| key(c)).collect();
     // The first column with each key, recognised or not.
     let mut seen: HashMap<&str, usize> = HashMap::new();
@@ -362,7 +378,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
             continue;
         }
         if let Some(j) = slots.get_mut(k).and_then(VecDeque::pop_front) {
-            matched[j] = true;
+            matched[j] = Some(i);
         } else if seen.contains_key(k.as_str()) {
             // Recognised or not: two identical unknown columns abort the run too.
             let message = format!(
@@ -377,8 +393,10 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
         }
         seen.entry(k).or_insert(i);
     }
+    let mut found = HashMap::new();
     for (name, matched) in expected.into_iter().zip(matched) {
-        if matched {
+        if let Some(i) = matched {
+            found.insert(name, i);
             continue;
         }
         let message = format!(
@@ -388,6 +406,9 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
             column_name: Some(name),
             ..at(Code::CsvColumnMissing, 2, None, message)
         });
+    }
+    if !errors.is_empty() {
+        return (file_type, Err(errors));
     }
 
     let mut alerts = Vec::new();
@@ -402,7 +423,47 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
             }
         }
     }
-    (file_type, errors, alerts)
+
+    // Every expected column was found, so each name resolves.
+    let col = |name: &str| found[name];
+    let layout = Layout {
+        v,
+        names: row.iter().map(|c| c.to_string()).collect(),
+        description: col("description"),
+        setting: col("setting"),
+        codes: (1..=codes)
+            .map(|i| {
+                (
+                    col(&format!("code | {i}")),
+                    col(&format!("code | {i} | type")),
+                )
+            })
+            .collect(),
+        standard: ["gross", "discounted_cash", "min", "max"]
+            .map(|c| col(&format!("standard_charge | {c}"))),
+        notes: col("additional_generic_notes"),
+        payer_plan: tall.then(|| (col("payer_name"), col("plan_name"))),
+        groups: (groups.iter())
+            .map(|g| Group {
+                charges: CHARGES.map(|c| col(&format!("standard_charge{g} | {c}"))),
+                notes: if tall {
+                    col("additional_generic_notes")
+                } else {
+                    col(&format!("additional_payer_notes{g}"))
+                },
+                amounts: amounts(v).iter().map(|a| col(&format!("{a}{g}"))).collect(),
+            })
+            .collect(),
+        drug: (v >= Version::V2_2).then(|| {
+            [
+                "drug_unit_of_measurement",
+                "drug_type_of_measurement",
+                "modifiers",
+            ]
+            .map(col)
+        }),
+    };
+    (file_type, Ok((layout, alerts)))
 }
 
 /// Per-group amount columns: `estimated_amount` only in 2.2, replaced by four in 3.0.

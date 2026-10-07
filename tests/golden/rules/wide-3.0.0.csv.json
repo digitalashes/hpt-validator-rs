@@ -1,0 +1,486 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      },
+      {
+        "path": "C31",
+        "message": "\"code | 1 | type\" value \"CMG\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code | 1 | type",
+        "value": "CMG",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "row 32",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "row 33",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "row 34",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "row 35",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "A38",
+        "message": "A value is required for \"description\". You must encode the missing information.",
+        "columnName": "description"
+      },
+      {
+        "path": "D40",
+        "message": "A value is required for \"setting\". You must encode the missing information.",
+        "columnName": "setting"
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      },
+      {
+        "path": "N24",
+        "message": "If the \"standard charge methodology\" encoded value is \"other\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      },
+      {
+        "path": "V24",
+        "message": "A value is required for \"standard_charge | Payer B | HMO | methodology\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "standard_charge | Payer B | HMO | methodology"
+      },
+      {
+        "path": "H26",
+        "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
+      },
+      {
+        "path": "AB27",
+        "message": "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data."
+      },
+      {
+        "path": "AC28",
+        "message": "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data."
+      },
+      {
+        "path": "C31",
+        "message": "\"code | 1 | type\" value \"CMG\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
+        "columnName": "code | 1 | type",
+        "value": "CMG",
+        "allowedValues": [
+          "CPT",
+          "HCPCS",
+          "ICD",
+          "DRG",
+          "MS-DRG",
+          "R-DRG",
+          "S-DRG",
+          "APS-DRG",
+          "AP-DRG",
+          "APR-DRG",
+          "APC",
+          "NDC",
+          "HIPPS",
+          "LOCAL",
+          "EAPG",
+          "CDT",
+          "RC",
+          "CDM",
+          "TRIS-DRG"
+        ]
+      },
+      {
+        "path": "row 32",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "row 33",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "row 34",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "row 35",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "A38",
+        "message": "A value is required for \"description\". You must encode the missing information.",
+        "columnName": "description"
+      },
+      {
+        "path": "D40",
+        "message": "A value is required for \"setting\". You must encode the missing information.",
+        "columnName": "setting"
+      },
+      {
+        "path": "H40",
+        "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      },
+      {
+        "path": "row 3",
+        "message": "Column estimated_amount | payer a | ppo is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "estimated_amount | payer a | ppo"
+      },
+      {
+        "path": "row 3",
+        "message": "Column estimated_amount | payer b | hmo is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "estimated_amount | payer b | hmo"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"hospital_location\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "hospital_location"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "R4",
+        "message": "\"count | Payer A | PPO\" value \"10\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "10"
+      },
+      {
+        "path": "R5",
+        "message": "\"count | Payer A | PPO\" value \"011\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "011"
+      },
+      {
+        "path": "R6",
+        "message": "\"count | Payer A | PPO\" value \"00\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "00"
+      },
+      {
+        "path": "N7",
+        "message": "If the \"count of allowed amounts\" encoded value is \"0\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      },
+      {
+        "path": "R13",
+        "message": "\"count | Payer A | PPO\" value \"9\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "9"
+      },
+      {
+        "path": "R14",
+        "message": "\"count | Payer A | PPO\" value \"12.0\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "12.0"
+      },
+      {
+        "path": "R15",
+        "message": "\"count | Payer A | PPO\" value \"1e2\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "1e2"
+      },
+      {
+        "path": "R16",
+        "message": "\"count | Payer A | PPO\" value \"+12\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "+12"
+      },
+      {
+        "path": "R17",
+        "message": "\"count | Payer A | PPO\" value \"１２\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "１２"
+      },
+      {
+        "path": "R18",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, then a corresponding \"Count of Allowed Amounts\" must also be encoded."
+      },
+      {
+        "path": "O18",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"Median Amount\" must also be encoded."
+      },
+      {
+        "path": "P18",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"10th Percentile\" must also be encoded."
+      },
+      {
+        "path": "Q18",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"90th Percentile\" must also be encoded."
+      },
+      {
+        "path": "R19",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, then a corresponding \"Count of Allowed Amounts\" must also be encoded."
+      },
+      {
+        "path": "O19",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"Median Amount\" must also be encoded."
+      },
+      {
+        "path": "P19",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"10th Percentile\" must also be encoded."
+      },
+      {
+        "path": "Q19",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"90th Percentile\" must also be encoded."
+      },
+      {
+        "path": "N20",
+        "message": "If the \"count of allowed amounts\" encoded value is \"0\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      },
+      {
+        "path": "R21",
+        "message": "\"count | Payer A | PPO\" value \"00\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "00"
+      },
+      {
+        "path": "O21",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"Median Amount\" must also be encoded."
+      },
+      {
+        "path": "P21",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"10th Percentile\" must also be encoded."
+      },
+      {
+        "path": "Q21",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"90th Percentile\" must also be encoded."
+      },
+      {
+        "path": "N24",
+        "message": "If the \"standard charge methodology\" encoded value is \"other\", there must be a corresponding explanation found in the \"additional notes\" for the associated payer-specific negotiated charge."
+      },
+      {
+        "path": "V24",
+        "message": "A value is required for \"standard_charge | Payer B | HMO | methodology\" when a payer specific negotiated charge is encoded as a dollar amount, percentage, or algorithm. You must encode the missing information.",
+        "columnName": "standard_charge | Payer B | HMO | methodology"
+      },
+      {
+        "path": "AA24",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, then a corresponding \"Count of Allowed Amounts\" must also be encoded."
+      },
+      {
+        "path": "X24",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"Median Amount\" must also be encoded."
+      },
+      {
+        "path": "Y24",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"10th Percentile\" must also be encoded."
+      },
+      {
+        "path": "Z24",
+        "message": "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"90th Percentile\" must also be encoded."
+      },
+      {
+        "path": "H26",
+        "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
+      },
+      {
+        "path": "AB27",
+        "message": "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data."
+      },
+      {
+        "path": "AC28",
+        "message": "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data."
+      },
+      {
+        "path": "E30",
+        "message": "If code type is NDC, then the corresponding drug unit of measure and drug type of measure data element must be encoded."
+      },
+      {
+        "path": "AD33",
+        "message": "If a modifier is encoded without an item or service, then a description and one of the following is the minimum information required: additional_payer_notes, standard_charge | negotiated_dollar, standard_charge | negotiated_percentage, or standard_charge | negotiated_algorithm."
+      },
+      {
+        "path": "row 35",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "E36",
+        "message": "\"drug_unit_of_measurement\" value \"0\" is not a positive number. You must encode a positive, non-zero, numeric value.",
+        "columnName": "drug_unit_of_measurement",
+        "value": "0"
+      },
+      {
+        "path": "E37",
+        "message": "A value is required for \"drug_unit_of_measurement\" when \"drug_type_of_measurement\" is present. You must encode the missing information.",
+        "columnName": "drug_unit_of_measurement"
+      },
+      {
+        "path": "A38",
+        "message": "A value is required for \"description\". You must encode the missing information.",
+        "columnName": "description"
+      },
+      {
+        "path": "D40",
+        "message": "A value is required for \"setting\". You must encode the missing information.",
+        "columnName": "setting"
+      },
+      {
+        "path": "H40",
+        "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
+      },
+      {
+        "path": "R41",
+        "message": "\"count | Payer A | PPO\" value \"10\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "10"
+      }
+    ],
+    "alerts": [
+      {
+        "path": "R23",
+        "message": "Nine 9s used for count."
+      },
+      {
+        "path": "O23",
+        "message": "Nine 9s used for median amount."
+      },
+      {
+        "path": "P23",
+        "message": "Nine 9s used for 10th percentile."
+      },
+      {
+        "path": "Q23",
+        "message": "Nine 9s used for 90th percentile."
+      },
+      {
+        "path": "AA23",
+        "message": "Nine 9s used for count."
+      },
+      {
+        "path": "X23",
+        "message": "Nine 9s used for median amount."
+      },
+      {
+        "path": "Y23",
+        "message": "Nine 9s used for 10th percentile."
+      },
+      {
+        "path": "Z23",
+        "message": "Nine 9s used for 90th percentile."
+      }
+    ]
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "R4",
+        "message": "\"count | Payer A | PPO\" value \"10\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "10"
+      },
+      {
+        "path": "R5",
+        "message": "\"count | Payer A | PPO\" value \"011\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
+        "columnName": "count | Payer A | PPO",
+        "value": "011"
+      }
+    ],
+    "alerts": []
+  }
+}
