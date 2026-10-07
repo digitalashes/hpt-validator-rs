@@ -7,6 +7,26 @@ use std::io::{self, Read};
 mod csv;
 mod js;
 
+/// Data dictionary versions upstream accepts, for CSV and JSON alike.
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+enum Version {
+    V2_0,
+    V2_1,
+    V2_2,
+    V3_0,
+}
+
+const VERSIONS: &[&str] = &["2.0.0", "2.1.0", "2.2.0", "3.0.0"];
+
+impl Version {
+    /// `semver.coerce(version)`, then exactly one of `VERSIONS`.
+    fn parse(version: &str) -> Option<Version> {
+        let coerced = js::coerce(version);
+        let i = VERSIONS.iter().position(|&v| v == coerced)?;
+        Some([Version::V2_0, Version::V2_1, Version::V2_2, Version::V3_0][i])
+    }
+}
+
 /// Validates a machine-readable file against data dictionary `version` (`"3.0.0"`, `"v2.2"`
 /// and the like, coerced as upstream does).
 pub fn validate(
@@ -296,8 +316,7 @@ pub fn validate_filename(name: &str) -> bool {
         let middle = [".csv", ".json"]
             .iter()
             .find_map(|ext| lower.strip_suffix(ext)?.strip_suffix("_standardcharges"))?;
-        // `.+` matches anything but line terminators
-        Some(!middle.is_empty() && !middle.contains(['\n', '\r', '\u{2028}', '\u{2029}']))
+        Some(!middle.is_empty() && !middle.contains(js::is_line_terminator))
     }
     check(name).unwrap_or(false)
 }

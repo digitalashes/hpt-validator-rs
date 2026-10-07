@@ -5,20 +5,10 @@ mod reader;
 mod tall;
 mod wide;
 
-use crate::{Code, FileType, Finding, Mode, Options, Report, js};
+use crate::{Code, FileType, Finding, Mode, Options, Report, VERSIONS, Version, js};
 use reader::Reader;
+use std::collections::{HashMap, VecDeque};
 use std::io::{self, Read};
-
-/// Data dictionary versions upstream accepts for CSV, after `semver.coerce`.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-enum Version {
-    V2_0,
-    V2_1,
-    V2_2,
-    V3_0,
-}
-
-const VERSIONS: &[&str] = &["2.0.0", "2.1.0", "2.2.0", "3.0.0"];
 
 const AFFIRMATION: &str = "To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated.";
 
@@ -46,11 +36,13 @@ const SHARED_COLUMNS: [&str; 7] = [
     "additional_generic_notes",
 ];
 
-enum Shape {
-    Tall,
-    /// Payer/plan keys, lower-cased, in discovery order.
-    Wide(Vec<String>),
-}
+/// A charge group's charge columns.
+const CHARGES: [&str; 4] = [
+    "negotiated_dollar",
+    "negotiated_percentage",
+    "negotiated_algorithm",
+    "methodology",
+];
 
 pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Result<Report> {
     let max = options.max_errors;
@@ -60,8 +52,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
         file_type: (options.mode == Mode::Extended).then_some(file_type),
         extended: Vec::new(),
     };
-    let coerced = js::coerce(version);
-    let Some(v) = VERSIONS.iter().position(|&v| v == coerced) else {
+    let Some(v) = Version::parse(version) else {
         let message = format!(
             "Invalid version supplied. Allowed versions are: {}",
             VERSIONS.join(", ")
@@ -72,7 +63,6 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
         };
         return Ok(done(vec![error], Vec::new(), FileType::Unknown));
     };
-    let v = [Version::V2_0, Version::V2_1, Version::V2_2, Version::V3_0][v];
 
     let mut reader = Reader::new(input);
     let (mut errors, mut alerts) = (Vec::new(), Vec::new());
@@ -100,19 +90,14 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             1 => {
                 let (found, header_errors) = header(v, &names, &row);
                 // A header error suppresses every header alert (F-16).
-                let clean = header_errors.is_empty();
-                add(&mut errors, header_errors, max);
-                if clean {
+                if header_errors.is_empty() {
                     add(&mut alerts, header_alerts(v, &found, &row), max);
                 }
+                add(&mut errors, header_errors, max);
             }
             2 => {
-                let (shape, column_errors) = columns(v, &row);
-                file_type = match shape {
-                    Some(Shape::Tall) => FileType::Tall,
-                    Some(Shape::Wide(_)) => FileType::Wide,
-                    None => FileType::Unknown,
-                };
+                let (shape, column_errors, column_alerts) = columns(v, &row);
+                file_type = shape;
                 if !column_errors.is_empty() {
                     add(&mut errors, column_errors, max);
                     // Added after the limit is applied (F-14).
@@ -120,13 +105,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                     errors.push(at(Code::CsvProblemsInHeader, 0, Some(0), message.into()));
                     return Ok(done(errors, alerts, file_type));
                 }
-                if v == Version::V3_0 {
-                    let column_alerts = match &shape {
-                        Some(Shape::Wide(payers_plans)) => wide::alerts(&row, payers_plans),
-                        _ => tall::alerts(&row),
-                    };
-                    add(&mut alerts, column_alerts, max);
-                }
+                add(&mut alerts, column_alerts, max);
             }
             // Data rows: roadmap Phase 3.
             _ => {}
@@ -184,8 +163,8 @@ fn header<'a>(
             if expected != LICENSE {
                 return sep_eq(name, expected);
             }
-            let parts: Vec<&str> = name.split('|').map(js::trim).collect();
-            let [license, state] = parts[..] else {
+            let split: Vec<&str> = parts(name).collect();
+            let [license, state] = split[..] else {
                 return false;
             };
             if !sep_eq(license, "license_number") {
@@ -258,17 +237,12 @@ fn is_license_skipped(name: &str) -> bool {
     let Some(rest) = js::trim_start(rest).strip_prefix('|') else {
         return false;
     };
-    let (mut units, mut cut) = (0, rest.len());
-    for (i, c) in rest.char_indices().rev() {
-        if units >= 2 {
-            break;
-        }
-        units += c.len_utf16();
-        cut = i;
-    }
-    units == 2
-        && rest[..cut].chars().all(js::is_space)
-        && !rest[cut..].contains(['\n', '\r', '\u{2028}', '\u{2029}'])
+    let units: Vec<u16> = rest.encode_utf16().collect();
+    let Some((head, tail)) = units.split_last_chunk::<2>() else {
+        return false;
+    };
+    char::decode_utf16(head.iter().copied()).all(|c| c.is_ok_and(js::is_space))
+        && char::decode_utf16(tail.iter().copied()).all(|c| !c.is_ok_and(js::is_line_terminator))
 }
 
 /// Upstream's `alertHeaderRow`, anchored at row 3 (F-23).
@@ -312,47 +286,36 @@ fn header_alerts(v: Version, found: &[Option<&str>], values: &[&str]) -> Vec<Fin
     alerts
 }
 
-/// Row 3, upstream's `validateColumns`: the shape, unless the columns fit both or neither,
-/// and the errors.
-fn columns(v: Version, row: &[&str]) -> (Option<Shape>, Vec<Finding>) {
+/// Row 3, upstream's `validateColumns` and `alertColumns`: the file type, the errors and
+/// the alerts, which count only without errors.
+fn columns(v: Version, row: &[&str]) -> (FileType, Vec<Finding>, Vec<Finding>) {
     let tall = tall::detect(row);
-    let mut payers_plans = wide::payers_plans(v, row);
-    let mut errors = Vec::new();
-    if v == Version::V3_0 {
-        errors.extend(wide::placeholders(v, row));
-        payers_plans.retain(|pp| !wide::is_placeholder(pp));
-    }
-    let codes = row
-        .iter()
-        .filter_map(|c| code_index(c))
-        .map(|n| {
-            let digits: String = n.chars().filter(char::is_ascii_digit).collect();
-            // ponytail: unbounded like upstream, which throws above 2^32 - 1 code pairs;
-            // bound it with the fuzzing in roadmap Phase 7
-            if digits.is_empty() {
-                0
-            } else {
-                digits.parse().unwrap_or(u64::MAX)
-            }
-        })
-        .max()
-        .unwrap_or(0);
-    if v == Version::V3_0 {
-        for (i, c) in row.iter().enumerate() {
-            if code_index(c).is_some_and(|n| same(n, "[i]")) {
-                errors.push(placeholder(i, c));
-            }
+    let (payers_plans, mut errors) = wide::payers_plans(v, row);
+    let mut codes = 0;
+    for (i, column) in row.iter().enumerate() {
+        let Some(n) = code_index(column) else {
+            continue;
+        };
+        let digits: String = n.chars().filter(char::is_ascii_digit).collect();
+        // ponytail: unbounded like upstream, which throws above 2^32 - 1 code pairs;
+        // bound it with the fuzzing in roadmap Phase 7
+        codes = codes.max(js::number(&digits) as u64);
+        if v == Version::V3_0 && same(n, "[i]") {
+            errors.push(placeholder(i, column));
         }
     }
     if tall == !payers_plans.is_empty() {
         let message = "Required payer-specific information data element headers are missing or miscoded from the MRF that does not follow the specifications for the CSV \"Tall\" or CSV \"Wide\" format.";
         errors.push(at(Code::CsvAmbiguousFormat, 2, None, message.into()));
-        return (None, errors);
+        return (FileType::Unknown, errors, Vec::new());
     }
-    let shape = if tall {
-        Shape::Tall
+    // Group column names end in the group's suffix: none for tall's one group, the
+    // payer/plan for each wide one.
+    let (file_type, groups) = if tall {
+        (FileType::Tall, vec![String::new()])
     } else {
-        Shape::Wide(payers_plans)
+        let groups = payers_plans.iter().map(|pp| format!(" | {pp}"));
+        (FileType::Wide, groups.collect())
     };
 
     // upstream's getExpectedDataColumns
@@ -361,9 +324,15 @@ fn columns(v: Version, row: &[&str]) -> (Option<Shape>, Vec<Finding>) {
         expected.push(format!("code | {i}"));
         expected.push(format!("code | {i} | type"));
     }
-    match &shape {
-        Shape::Tall => expected.extend(tall::COLUMNS.map(String::from)),
-        Shape::Wide(payers_plans) => expected.extend(wide::columns(payers_plans)),
+    if tall {
+        expected.extend(tall::COLUMNS.map(String::from));
+    }
+    for g in &groups {
+        expected.extend(CHARGES.map(|c| format!("standard_charge{g} | {c}")));
+        // Tall's notes are the shared additional_generic_notes.
+        if !tall {
+            expected.push(format!("additional_payer_notes{g}"));
+        }
     }
     if v >= Version::V2_2 {
         expected.extend(
@@ -375,35 +344,43 @@ fn columns(v: Version, row: &[&str]) -> (Option<Shape>, Vec<Finding>) {
             .map(String::from),
         );
     }
-    match &shape {
-        Shape::Tall => expected.extend(amounts(v).iter().map(|a| a.to_string())),
-        Shape::Wide(payers_plans) => expected.extend(wide::amount_columns(v, payers_plans)),
+    for g in &groups {
+        expected.extend(amounts(v).iter().map(|a| format!("{a}{g}")));
     }
 
-    let mut keys: Vec<String> = expected.iter().map(|c| key(c)).collect();
-    let mut seen = Vec::new();
-    for (i, &column) in row.iter().enumerate() {
-        if column.is_empty() {
+    // Each key's expected positions, earliest first: names can share a key (F-27).
+    let mut slots: HashMap<String, VecDeque<usize>> = HashMap::new();
+    for (j, name) in expected.iter().enumerate() {
+        slots.entry(key(name)).or_default().push_back(j);
+    }
+    let mut matched = vec![false; expected.len()];
+    let keys: Vec<String> = row.iter().map(|c| key(c)).collect();
+    // The first column with each key, recognised or not.
+    let mut seen: HashMap<&str, usize> = HashMap::new();
+    for (i, k) in keys.iter().enumerate() {
+        if row[i].is_empty() {
             continue;
         }
-        let k = key(column);
-        if let Some(m) = keys.iter().position(|e| *e == k) {
-            keys.remove(m);
-            expected.remove(m);
-        } else if seen.contains(&k) {
+        if let Some(j) = slots.get_mut(k).and_then(VecDeque::pop_front) {
+            matched[j] = true;
+        } else if seen.contains_key(k.as_str()) {
             // Recognised or not: two identical unknown columns abort the run too.
             let message = format!(
-                "Column {column} duplicated in header. You must review and revise your column headers so that each header appears only once in the third row."
+                "Column {} duplicated in header. You must review and revise your column headers so that each header appears only once in the third row.",
+                row[i]
             );
             errors.push(Finding {
-                column_name: Some(column.into()),
+                column_name: Some(row[i].into()),
                 ..at(Code::CsvDuplicateColumn, 2, Some(i), message)
             });
             continue;
         }
-        seen.push(k);
+        seen.entry(k).or_insert(i);
     }
-    for name in expected {
+    for (name, matched) in expected.into_iter().zip(matched) {
+        if matched {
+            continue;
+        }
         let message = format!(
             "Column {name} is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary."
         );
@@ -412,7 +389,20 @@ fn columns(v: Version, row: &[&str]) -> (Option<Shape>, Vec<Finding>) {
             ..at(Code::CsvColumnMissing, 2, None, message)
         });
     }
-    (Some(shape), errors)
+
+    let mut alerts = Vec::new();
+    if v == Version::V3_0 {
+        for g in &groups {
+            if let Some(&i) = seen.get(key(&format!("estimated_amount{g}")).as_str()) {
+                let message = format!(
+                    "Column {} found in column headers. The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts.",
+                    row[i]
+                );
+                alerts.push(at(Code::CsvEstimatedAmountDeprecated, 2, Some(i), message));
+            }
+        }
+    }
+    (file_type, errors, alerts)
 }
 
 /// Per-group amount columns: `estimated_amount` only in 2.2, replaced by four in 3.0.
@@ -432,11 +422,7 @@ fn amounts(v: Version) -> &'static [&'static str] {
 /// The index part of a `code | N` or `code | N | type` column, as upstream's
 /// `getCodeCount` splits it: trimmed parts, empty ones dropped.
 fn code_index(column: &str) -> Option<&str> {
-    let parts: Vec<&str> = column
-        .split('|')
-        .map(js::trim)
-        .filter(|p| !p.is_empty())
-        .collect();
+    let parts: Vec<&str> = parts(column).filter(|p| !p.is_empty()).collect();
     match parts[..] {
         [code, n] if same(code, "code") => Some(n),
         [code, n, ty] if same(code, "code") && same(ty, "type") => Some(n),
@@ -444,16 +430,23 @@ fn code_index(column: &str) -> Option<&str> {
     }
 }
 
+/// A column name's `|`-separated parts, trimmed, as upstream splits names everywhere.
+fn parts(name: &str) -> impl Iterator<Item = &str> {
+    name.split('|').map(js::trim)
+}
+
 /// Upstream's `matchesString`.
 fn same(a: &str, b: &str) -> bool {
+    if a.is_ascii() && b.is_ascii() {
+        return a.eq_ignore_ascii_case(b);
+    }
     js::to_upper(a) == js::to_upper(b)
 }
 
 /// Upstream's `sepColumnsEqual` holds exactly when the keys are equal: parts trimmed and
 /// upper-cased, and no upper-cased part contains `|`.
 fn key(name: &str) -> String {
-    let parts: Vec<String> = name.split('|').map(|p| js::to_upper(js::trim(p))).collect();
-    parts.join("|")
+    parts(name).map(js::to_upper).collect::<Vec<_>>().join("|")
 }
 
 fn sep_eq(a: &str, b: &str) -> bool {
@@ -465,16 +458,15 @@ fn cell(row: u64, column: Option<usize>) -> String {
     let Some(mut c) = column else {
         return format!("row {}", row + 1);
     };
-    let mut letters = Vec::new();
+    let mut name = String::new();
     loop {
-        letters.push(b'A' + (c % 26) as u8);
+        name.insert(0, (b'A' + (c % 26) as u8) as char);
         if c < 26 {
             break;
         }
         c = c / 26 - 1;
     }
-    letters.reverse();
-    format!("{}{}", String::from_utf8(letters).unwrap(), row + 1)
+    format!("{name}{}", row + 1)
 }
 
 fn at(code: Code, row: u64, column: Option<usize>, message: String) -> Finding {
@@ -519,11 +511,4 @@ fn placeholder(column: usize, name: &str) -> Finding {
         column: Some(column as i64),
         ..at(Code::CsvPlaceholder, 2, Some(column), message)
     }
-}
-
-fn estimated_amount(column: usize, name: &str) -> Finding {
-    let message = format!(
-        "Column {name} found in column headers. The 'estimated amount' is no longer a required data element as of January 1, 2026. It has been replaced by the 10th percentile, median, 90th percentile, and count of allowed amounts."
-    );
-    at(Code::CsvEstimatedAmountDeprecated, 2, Some(column), message)
 }

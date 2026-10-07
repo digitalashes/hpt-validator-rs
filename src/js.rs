@@ -14,6 +14,11 @@ pub fn trim_start(s: &str) -> &str {
     s.trim_start_matches(is_space)
 }
 
+/// What `.` in a regular expression does not match.
+pub fn is_line_terminator(c: char) -> bool {
+    matches!(c, '\n' | '\r' | '\u{2028}' | '\u{2029}')
+}
+
 /// Letters Node 20 does not know: its case tables are Unicode 16, Rust's std is on Unicode 17.
 fn newer_than_node(c: char) -> bool {
     matches!(
@@ -57,10 +62,6 @@ pub fn to_lower(s: &str) -> String {
 }
 
 /// `Number(s)`.
-#[cfg_attr(
-    not(test),
-    expect(dead_code, reason = "data-row rules, roadmap Phase 3")
-)]
 pub fn number(s: &str) -> f64 {
     let s = trim(s);
     if s.is_empty() {
