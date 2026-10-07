@@ -27,8 +27,9 @@ for (const [cp, s] of chars) {
   if (s.toLocaleUpperCase() !== s.toUpperCase()) throw new Error(`locale upper case differs at ${cp}`);
   if (s.toLocaleLowerCase() !== s.toLowerCase()) throw new Error(`locale lower case differs at ${cp}`);
 }
-const upper = Object.fromEntries(chars.filter(([, s]) => s.toUpperCase() !== s).map(([cp, s]) => [cp, s.toUpperCase()]));
-const lower = Object.fromEntries(chars.filter(([, s]) => s.toLowerCase() !== s).map(([cp, s]) => [cp, s.toLowerCase()]));
+const caseMap = (f) => Object.fromEntries(chars.filter(([, s]) => f(s) !== s).map(([cp, s]) => [cp, f(s)]));
+const upper = caseMap((s) => s.toUpperCase());
+const lower = caseMap((s) => s.toLowerCase());
 // Lower-casing a string is not per character: a final capital sigma becomes ς.
 const LOWER = ["Σ", "ΑΣ", "ΑΣ Β", "ΑΣ.Β", "Α.Σ", "ΑΣ'", "ΑΣ'Β", "ΑΣ\u00adΒ", "Σ Α", "Payer Σ | PLAN ΑΣ", "1Σ", "ΑΣ1",
   "ΑΣ\u{16ea0}", "ΑΣ\u{16ebb}Β", "\u{16ebb}Σ", "ΑΣ\ua7d3"]; // Unicode 17 letters are unassigned to Node 20

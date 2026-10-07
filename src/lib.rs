@@ -4,9 +4,9 @@
 use std::fmt::{self, Write as _};
 use std::io;
 
-#[allow(dead_code)] // not wired to a validator yet
+#[expect(dead_code, reason = "not wired to a validator yet")]
 mod csv;
-#[allow(dead_code)]
+#[cfg_attr(not(test), expect(dead_code, reason = "not wired to a validator yet"))]
 mod js;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -33,13 +33,19 @@ pub struct Options {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Report {
-    pub valid: bool,
     pub errors: Vec<Finding>,
     pub alerts: Vec<Finding>,
     /// Extended only.
     pub file_type: Option<FileType>,
     /// Extended only.
     pub extended: Vec<Finding>,
+}
+
+impl Report {
+    /// Upstream's `valid`, which is always "no errors".
+    pub fn valid(&self) -> bool {
+        self.errors.is_empty()
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -251,31 +257,21 @@ pub fn validate_filename(name: &str) -> bool {
         let d = s.get(..n)?;
         d.bytes().all(|b| b.is_ascii_digit()).then(|| &s[n..])
     }
-    let Some(mut rest) = digits(name, 2) else {
-        return false;
-    };
-    rest = rest.strip_prefix('-').unwrap_or(rest);
-    let Some(mut rest) = digits(rest, 7) else {
-        return false;
-    };
-    if let Some(r) = rest.strip_prefix('-') {
-        match digits(r, 10) {
-            Some(r) => rest = r,
-            None => return false,
-        }
+    fn check(name: &str) -> Option<bool> {
+        let rest = digits(name, 2)?;
+        let rest = digits(rest.strip_prefix('-').unwrap_or(rest), 7)?;
+        let rest = match rest.strip_prefix('-') {
+            Some(r) => digits(r, 10)?,
+            None => rest,
+        };
+        let lower = rest.strip_prefix('_')?.to_ascii_lowercase();
+        let middle = [".csv", ".json"]
+            .iter()
+            .find_map(|ext| lower.strip_suffix(ext)?.strip_suffix("_standardcharges"))?;
+        // `.+` matches anything but line terminators
+        Some(!middle.is_empty() && !middle.contains(['\n', '\r', '\u{2028}', '\u{2029}']))
     }
-    let Some(rest) = rest.strip_prefix('_') else {
-        return false;
-    };
-    let lower = rest.to_ascii_lowercase();
-    let Some(middle) = [".csv", ".json"]
-        .iter()
-        .find_map(|ext| lower.strip_suffix(ext)?.strip_suffix("_standardcharges"))
-    else {
-        return false;
-    };
-    // `.+` matches anything but line terminators
-    !middle.is_empty() && !middle.contains(['\n', '\r', '\u{2028}', '\u{2029}'])
+    check(name).unwrap_or(false)
 }
 
 #[cfg(test)]

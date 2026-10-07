@@ -14,8 +14,8 @@ pub fn trim_start(s: &str) -> &str {
     s.trim_start_matches(is_space)
 }
 
-/// Letters added in Unicode 17: Rust's case tables have them, Node 20's do not.
-fn unicode_17(c: char) -> bool {
+/// Letters Node 20 does not know: its case tables are Unicode 16, Rust's std is on Unicode 17.
+fn newer_than_node(c: char) -> bool {
     matches!(
         c,
         '\u{a7ce}' | '\u{a7cf}' | '\u{a7d2}' | '\u{a7d4}' | '\u{16ea0}'..='\u{16edf}'
@@ -24,32 +24,36 @@ fn unicode_17(c: char) -> bool {
 
 /// `toUpperCase` / `toLocaleUpperCase`.
 pub fn to_upper(s: &str) -> String {
+    if s.is_ascii() {
+        return s.to_ascii_uppercase();
+    }
     let mut out = String::with_capacity(s.len());
     for c in s.chars() {
-        // ꟓ and ꟕ are older, their capitals are not
-        if unicode_17(c) || c == '\u{a7d3}' || c == '\u{a7d5}' {
+        let upper = c.to_uppercase();
+        // An older letter whose capital is newer (ꟓ, ꟕ) stays as it is too.
+        if newer_than_node(c) || upper.clone().any(newer_than_node) {
             out.push(c);
         } else {
-            out.extend(c.to_uppercase());
+            out.extend(upper);
         }
     }
     out
 }
 
 /// `toLowerCase` / `toLocaleLowerCase`, final sigma included.
-// ponytail: a combining mark new in Unicode 17 between Σ and a letter still reads as
-// case-ignorable here; split on it too if it ever matters
+// ponytail: final sigma uses std's Unicode 17 cased and case-ignorable classes, which differ
+// from Node's at a few dozen code points ("ʕΣ" lowers to "ʕσ", Node says "ʕς"); carry Node's
+// classes if that ever matters
 pub fn to_lower(s: &str) -> String {
-    // Node sees Unicode 17 letters as unassigned: kept as they are, and a final-sigma boundary.
+    // To Node the newer letters are unassigned: kept as they are, and a final-sigma boundary.
     let mut out = String::with_capacity(s.len());
-    let mut rest = s;
-    while let Some(i) = rest.find(unicode_17) {
-        let c = rest[i..].chars().next().unwrap();
-        out += &rest[..i].to_lowercase();
-        out.push(c);
-        rest = &rest[i + c.len_utf8()..];
+    let mut last = 0;
+    for (i, c) in s.match_indices(newer_than_node) {
+        out += &s[last..i].to_lowercase();
+        out += c;
+        last = i + c.len();
     }
-    out + &rest.to_lowercase()
+    out + &s[last..].to_lowercase()
 }
 
 /// `Number(s)`.
@@ -58,34 +62,24 @@ pub fn number(s: &str) -> f64 {
     if s.is_empty() {
         return 0.0;
     }
-    for (prefix, radix) in [
-        ("0x", 16),
-        ("0X", 16),
-        ("0o", 8),
-        ("0O", 8),
-        ("0b", 2),
-        ("0B", 2),
-    ] {
-        if let Some(digits) = s.strip_prefix(prefix) {
-            if digits.is_empty() || !digits.chars().all(|c| c.is_digit(radix)) {
-                return f64::NAN;
-            }
-            // ponytail: not correctly rounded above 2^53, which no caller can tell apart
-            return digits.chars().fold(0.0, |n, c| {
-                n * radix as f64 + c.to_digit(radix).unwrap() as f64
-            });
-        }
+    let radix = match s.get(..2) {
+        Some("0x" | "0X") => Some(16),
+        Some("0o" | "0O") => Some(8),
+        Some("0b" | "0B") => Some(2),
+        _ => None,
+    };
+    if let Some(radix) = radix {
+        let digits = &s[2..];
+        // ponytail: not correctly rounded above 2^53, which no caller can tell apart
+        let n = (digits.chars()).try_fold(0.0, |n, c| {
+            Some(n * radix as f64 + c.to_digit(radix)? as f64)
+        });
+        return n.filter(|_| !digits.is_empty()).unwrap_or(f64::NAN);
     }
+    // Rust's grammar is JS's StrDecimalLiteral plus `inf`, `nan` and `infinity` in any case,
+    // where JS has only `Infinity`.
     let unsigned = s.strip_prefix(['+', '-']).unwrap_or(s);
-    if unsigned == "Infinity" {
-        return if s.starts_with('-') {
-            f64::NEG_INFINITY
-        } else {
-            f64::INFINITY
-        };
-    }
-    // Rust's grammar is JS's StrDecimalLiteral plus `inf`, `infinity` and `nan` in any case.
-    if unsigned.starts_with(|c: char| c.is_ascii_alphabetic()) {
+    if unsigned != "Infinity" && unsigned.starts_with(|c: char| c.is_ascii_alphabetic()) {
         return f64::NAN;
     }
     s.parse().unwrap_or(f64::NAN)
@@ -128,10 +122,8 @@ fn is_real_date(y: u32, m: u32, d: u32) -> bool {
 /// Upstream's positive-number rule for a non-empty value:
 /// `/^(?:\d+|\d+\.\d+|\d+\.|\.\d+)$/` and `parseFloat(value) > 0`.
 pub fn is_positive_number(s: &str) -> bool {
-    s.bytes().all(|b| b.is_ascii_digit() || b == b'.')
-        && s.bytes().filter(|&b| b == b'.').count() <= 1
-        && s.bytes().any(|b| b.is_ascii_digit())
-        && s.parse::<f64>().is_ok_and(|n| n > 0.0)
+    // Rust's float grammar rejects the rest: no digit, or a second dot.
+    s.bytes().all(|b| b.is_ascii_digit() || b == b'.') && s.parse::<f64>().is_ok_and(|n| n > 0.0)
 }
 
 /// `semver.coerce(v)?.toString() ?? v`, as upstream normalises the version argument.
@@ -144,30 +136,30 @@ pub fn coerce(v: &str) -> String {
     };
     // semver's COERCE regex: (^|[^\d])(\d{1,16})(?:\.(\d{1,16}))?(?:\.(\d{1,16}))?(?:$|[^\d])
     // The leftmost start whose digit run is 1–16 long matches; a longer run fails there.
-    for start in 0..=b.len() {
-        let n = run(start);
-        if (start > 0 && b[start - 1].is_ascii_digit()) || !(1..=16).contains(&n) {
-            continue;
+    let starts = |&i: &usize| (i == 0 || !b[i - 1].is_ascii_digit()) && (1..=16).contains(&run(i));
+    let Some(start) = (0..b.len()).find(starts) else {
+        return v.to_string();
+    };
+    let mut i = start + run(start);
+    let mut parts = vec![&v[start..i]];
+    while parts.len() < 3 && b.get(i) == Some(&b'.') {
+        let n = run(i + 1);
+        if !(1..=16).contains(&n) {
+            break;
         }
-        let mut parts = vec![&v[start..start + n]];
-        let mut i = start + n;
-        while parts.len() < 3 && b.get(i) == Some(&b'.') && (1..=16).contains(&run(i + 1)) {
-            let n = run(i + 1);
-            parts.push(&v[i + 1..i + 1 + n]);
-            i += 1 + n;
-        }
-        parts.resize(3, "0");
-        // semver.parse then rejects leading zeros and unsafe integers
-        let valid = parts.iter().all(|p| {
-            (*p == "0" || !p.starts_with('0')) && p.parse::<u64>().unwrap() <= MAX_SAFE_INTEGER
-        });
-        return if valid {
-            parts.join(".")
-        } else {
-            v.to_string()
-        };
+        parts.push(&v[i + 1..i + 1 + n]);
+        i += 1 + n;
     }
-    v.to_string()
+    parts.resize(3, "0");
+    // semver.parse then rejects leading zeros and unsafe integers
+    let valid = parts.iter().all(|p| {
+        (*p == "0" || !p.starts_with('0')) && p.parse::<u64>().unwrap() <= MAX_SAFE_INTEGER
+    });
+    if valid {
+        parts.join(".")
+    } else {
+        v.to_string()
+    }
 }
 
 #[cfg(test)]
@@ -190,6 +182,12 @@ mod tests {
 
     #[test]
     fn whitespace_and_case() {
+        let unicode = char::UNICODE_VERSION;
+        assert_eq!(
+            unicode,
+            (17, 0, 0),
+            "recheck newer_than_node against Node's Unicode 16"
+        );
         let t = table();
         let trim: Vec<u64> = t["trim"]
             .as_array()
