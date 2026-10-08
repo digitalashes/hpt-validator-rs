@@ -23,7 +23,8 @@ impl Row {
     pub fn fields(&self) -> impl Iterator<Item = &str> {
         let mut start = 0;
         self.ends.iter().map(move |&end| {
-            let field = &self.text[start..end];
+            // Most cells of a wide file are empty.
+            let field = if end == start { "" } else { &self.text[start..end] };
             start = end;
             field
         })

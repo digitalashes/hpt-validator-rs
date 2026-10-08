@@ -91,7 +91,8 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 add(&mut extended, lined(vec![finding]), max);
             }
             let mut cells = recycle(std::mem::take(&mut spare));
-            cells.extend(row.fields().map(js::trim));
+            // Most cells of a wide file are empty, and an empty cell needs no trim.
+            cells.extend(row.fields().map(|f| if f.is_empty() { f } else { js::trim(f) }));
             let row = cells;
             let blank = row.iter().all(|f| f.is_empty());
             if blank && (index == 0 || index == 2) {
