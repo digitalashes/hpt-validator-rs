@@ -58,7 +58,7 @@ pub enum End {
 pub fn parse(
     input: impl Read,
     paths: &[&[&str]],
-    on_value: impl FnMut(Key, Value) -> ControlFlow<()>,
+    on_value: impl FnMut(Key, &Value) -> ControlFlow<()>,
 ) -> io::Result<End> {
     let mut parser = Parser {
         paths,
@@ -71,6 +71,7 @@ pub fn parse(
         key: None,
         value: None,
         stack: Vec::new(),
+        spare: Spare::default(),
     };
     let mut stream = js::Stream::new(input, js::CHUNK);
     let mut text = String::new();
@@ -90,7 +91,7 @@ pub fn document(text: &str) -> Value {
     let mut members = Vec::new();
     let end = parse(text.as_bytes(), &[&["*"]], |key, value| {
         if let Key::Name(name) = key {
-            set(&mut members, name, value);
+            set(&mut members, name, value.clone());
         }
         ControlFlow::Continue(())
     });
@@ -186,6 +187,36 @@ impl Token {
     }
 }
 
+/// The buffers of values `on_value` is done with, for the values built next: without them
+/// every string, array and object of every charge item is allocated and freed. Strings are
+/// emptied when the tokenizer takes them.
+#[derive(Default)]
+struct Spare {
+    strings: Vec<String>,
+    arrays: Vec<Vec<Value>>,
+    objects: Vec<Vec<(String, Value)>>,
+}
+
+impl Spare {
+    fn keep(&mut self, value: Value) {
+        match value {
+            Value::String(s) => self.strings.push(s),
+            Value::Array(mut items) => {
+                items.drain(..).for_each(|v| self.keep(v));
+                self.arrays.push(items);
+            }
+            Value::Object(mut members) => {
+                for (name, v) in members.drain(..) {
+                    self.strings.push(name);
+                    self.keep(v);
+                }
+                self.objects.push(members);
+            }
+            _ => {}
+        }
+    }
+}
+
 /// An open container's parent, as `push` saves it.
 struct Frame {
     key: Option<Key>,
@@ -213,9 +244,10 @@ struct Parser<'p, F> {
     /// `keepStack: false` deletes each member once it is complete.
     value: Option<Value>,
     stack: Vec<Frame>,
+    spare: Spare,
 }
 
-impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
+impl<F: FnMut(Key, &Value) -> ControlFlow<()>> Parser<'_, F> {
     /// The tokenizer's `write` loop over one chunk.
     #[expect(clippy::too_many_lines, reason = "one state machine, as upstream's")]
     fn write(&mut self, chunk: &str) -> Step {
@@ -271,7 +303,8 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
                 STRING_DEFAULT => match n {
                     b'"' => {
                         self.state = START;
-                        let s = Value::String(self.buffer.as_str().into());
+                        let spare = self.spare.strings.pop().unwrap_or_default();
+                        let s = Value::String(std::mem::replace(&mut self.buffer, spare));
                         self.token(Token::Value(s))?;
                     }
                     b'\\' => self.state = STRING_AFTER_BACKSLASH,
@@ -441,10 +474,12 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
                 self.stack.push(Frame { key: self.key.take(), value: self.value.take(), emit });
                 if matches!(token, Token::LeftBracket) {
                     self.key = Some(Key::Index(0));
-                    self.value = build.then(|| Value::Array(Vec::new()));
+                    let spare = &mut self.spare.arrays;
+                    self.value = build.then(|| Value::Array(spare.pop().unwrap_or_default()));
                 } else {
                     self.expect = Expect::KEY;
-                    self.value = build.then(|| Value::Object(Vec::new()));
+                    let spare = &mut self.spare.objects;
+                    self.value = build.then(|| Value::Object(spare.pop().unwrap_or_default()));
                 }
                 Ok(())
             }
@@ -506,9 +541,10 @@ impl<F: FnMut(Key, Value) -> ControlFlow<()>> Parser<'_, F> {
             let (Some(key), Some(value)) = (key, value) else {
                 unreachable!("emitted values are built and have keys")
             };
-            if (self.on_value)(key, value).is_break() {
+            if (self.on_value)(key, &value).is_break() {
                 return Err(End::Stopped);
             }
+            self.spare.keep(value);
         } else if let (Some(parent), Some(value)) = (&mut self.value, value) {
             match (parent, key) {
                 (Value::Array(items), _) => items.push(value),

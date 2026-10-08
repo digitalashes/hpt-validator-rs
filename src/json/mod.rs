@@ -90,15 +90,15 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
     let end = parse::parse(input, PATHS, |key, value| {
         match key {
             Key::Name(name) if name == CHARGES => {}
-            Key::Name(name) => parse::set(&mut metadata, name, value),
+            Key::Name(name) => parse::set(&mut metadata, name, value.clone()),
             Key::Index(i) => {
                 charges = true;
-                let found = ajv::validate(&schemas.item, &value);
+                let found = ajv::validate(&schemas.item, value);
                 add(&mut errors, found.into_iter().map(|e| error(e, Some(i))), max);
                 if let Some(schema) = &schemas.alerts
                     && !full(&alerts, max)
                 {
-                    let found = ajv::validate(schema, &value);
+                    let found = ajv::validate(schema, value);
                     add(&mut alerts, found.into_iter().filter_map(|e| alert(e, i)), max);
                 }
                 // Resolved here, so reaching the limit skips metadata and file-level alerts.
