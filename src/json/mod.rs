@@ -29,11 +29,13 @@ const PATHS: &[&[&str]] = &[
 const CHARGES: &str = "standard_charge_information";
 
 struct Schemas {
-    full: Value,
+    full: ajv::Schema<'static>,
     /// The full schema without the charge items (`buildMetadataSchema`, without
     /// changing the shared schema as upstream does).
-    metadata: Value,
-    alerts: Option<Value>,
+    metadata: ajv::Schema<'static>,
+    /// A charge item, the full schema's `definitions.standard_charge_information`.
+    item: ajv::Schema<'static>,
+    alerts: Option<ajv::Schema<'static>>,
 }
 
 fn schemas(v: Version) -> &'static Schemas {
@@ -51,7 +53,9 @@ fn schemas(v: Version) -> &'static Schemas {
                 Some(include_str!("../../schemas/alerts/v3.0.0.json")),
             ),
         };
-        let full = parse::document(full);
+        // Kept for the life of the program: the compiled schemas borrow from them.
+        let keep = |schema| &*Box::leak(Box::new(schema));
+        let full = keep(parse::document(full));
         let mut metadata = full.clone();
         if let Value::Object(members) = &mut metadata {
             for (name, value) in members {
@@ -64,7 +68,15 @@ fn schemas(v: Version) -> &'static Schemas {
                 }
             }
         }
-        Schemas { full, metadata, alerts: alerts.map(parse::document) }
+        let item = (full.get("definitions").and_then(|d| d.get(CHARGES)))
+            .expect("the schema defines a charge item");
+        let alerts = alerts.map(|a| keep(parse::document(a)));
+        Schemas {
+            full: ajv::Schema::new(full, full),
+            metadata: ajv::Schema::new(full, keep(metadata)),
+            item: ajv::Schema::new(full, item),
+            alerts: alerts.map(|a| ajv::Schema::new(a, a)),
+        }
     })
 }
 
@@ -72,8 +84,6 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
     // Upstream throws where CSV returns a finding.
     let v = Version::parse(version).ok_or_else(|| Error::UnknownJsonVersion(version.into()))?;
     let schemas = schemas(v);
-    let item = (schemas.full.get("definitions").and_then(|d| d.get(CHARGES)))
-        .expect("the schema defines a charge item");
     let max = options.max_errors;
     let (mut errors, mut alerts, mut metadata) = (Vec::new(), Vec::new(), Vec::new());
     let mut charges = false;
@@ -83,12 +93,12 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
             Key::Name(name) => parse::set(&mut metadata, name, value),
             Key::Index(i) => {
                 charges = true;
-                let found = ajv::validate(&schemas.full, item, &value);
+                let found = ajv::validate(&schemas.item, &value);
                 add(&mut errors, found.into_iter().map(|e| error(e, Some(i))), max);
                 if let Some(schema) = &schemas.alerts
                     && !full(&alerts, max)
                 {
-                    let found = ajv::validate(schema, schema, &value);
+                    let found = ajv::validate(schema, &value);
                     add(&mut alerts, found.into_iter().filter_map(|e| alert(e, i)), max);
                 }
                 // Resolved here, so reaching the limit skips metadata and file-level alerts.
@@ -104,7 +114,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
             let metadata = Value::Object(metadata);
             // With no charge items the full schema reports them missing.
             let schema = if charges { &schemas.metadata } else { &schemas.full };
-            let found = ajv::validate(&schemas.full, schema, &metadata);
+            let found = ajv::validate(schema, &metadata);
             add(&mut errors, found.into_iter().map(|e| error(e, None)), max);
             add(&mut alerts, file_alerts(v, &metadata), max);
             Vec::new()

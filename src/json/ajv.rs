@@ -16,74 +16,87 @@ pub struct Error<'s> {
     pub schema: Option<&'s Value>,
 }
 
-/// Validates `data` against `schema`; `root` holds the `definitions` that `$ref`s name.
-pub fn validate<'s>(root: &'s Value, schema: &'s Value, data: &Value) -> Vec<Error<'s>> {
-    let mut run = Run {
-        definitions: root.get("definitions"),
-        path: String::new(),
-        errors: Vec::new(),
-        failed: 0,
-        quiet: 0,
-    };
+/// Validates `data` against `schema`.
+pub fn validate<'s>(schema: &Schema<'s>, data: &Value) -> Vec<Error<'s>> {
+    let mut run = Run { path: String::new(), errors: Vec::new(), failed: 0, quiet: 0 };
     run.check(schema, data);
     run.errors
 }
 
-/// A schema's keywords, read in one pass over its members.
-#[derive(Default)]
-struct Keywords<'s> {
-    r#ref: Option<&'s str>,
-    ty: Option<&'s str>,
-    r#const: Option<&'s Value>,
-    r#enum: Option<&'s [Value]>,
-    not: Option<&'s Value>,
-    any_of: Option<&'s [Value]>,
-    all_of: Option<&'s [Value]>,
-    r#if: Option<&'s Value>,
-    then: Option<&'s Value>,
-    exclusive_minimum: Option<f64>,
-    min_length: Option<f64>,
-    pattern: Option<&'s str>,
-    format: bool,
-    min_items: Option<f64>,
-    items: Option<&'s Value>,
-    contains: Option<&'s Value>,
-    required: Option<&'s [Value]>,
-    properties: Option<&'s [(String, Value)]>,
+/// A schema compiled once: its keywords read, its subschemas compiled, its `$ref`s replaced
+/// by the definitions they name.
+pub struct Schema<'s> {
+    /// The schema itself, where errors find their keyword's value.
+    value: &'s Value,
+    k: Keywords<'s>,
 }
 
-impl<'s> Keywords<'s> {
-    // ponytail: read again on every check; compile the schemas into a tree of these once
-    // if JSON validation matters more.
-    fn of(s: &'s Value) -> Self {
+impl<'s> Schema<'s> {
+    /// Compiles `s`, taking `$ref`s from `root`'s `definitions`. A definition is compiled
+    /// again for every `$ref` to it, which the vendored schemas allow: none refers back to
+    /// itself.
+    pub fn new(root: &'s Value, s: &'s Value) -> Self {
+        let sub = |s| Box::new(Schema::new(root, s));
+        let all = |a: &'s [Value]| a.iter().map(|s| Schema::new(root, s)).collect();
         let mut k = Keywords::default();
-        let Value::Object(members) = s else { return k };
+        let Value::Object(members) = s else { return Schema { value: s, k } };
         for (name, v) in members {
             match (name.as_str(), v) {
-                ("$ref", Value::String(r)) => k.r#ref = Some(r),
+                ("$ref", Value::String(r)) => {
+                    let name = r.strip_prefix("#/definitions/").expect("local refs only");
+                    let target = root.get("definitions").and_then(|d| d.get(name));
+                    return Schema::new(root, target.expect("defined"));
+                }
                 ("type", Value::String(t)) => k.ty = Some(t),
                 ("const", v) => k.r#const = Some(v),
                 ("enum", Value::Array(a)) => k.r#enum = Some(a),
-                ("not", v) => k.not = Some(v),
-                ("anyOf", Value::Array(a)) => k.any_of = Some(a),
-                ("allOf", Value::Array(a)) => k.all_of = Some(a),
-                ("if", v) => k.r#if = Some(v),
-                ("then", v) => k.then = Some(v),
+                ("not", v) => k.not = Some(sub(v)),
+                ("anyOf", Value::Array(a)) => k.any_of = Some(all(a)),
+                ("allOf", Value::Array(a)) => k.all_of = Some(all(a)),
+                ("if", v) => k.r#if = Some(sub(v)),
+                ("then", v) => k.then = Some(sub(v)),
                 ("exclusiveMinimum", Value::Number(n)) => k.exclusive_minimum = Some(*n),
                 ("minLength", Value::Number(n)) => k.min_length = Some(*n),
                 ("pattern", Value::String(p)) => k.pattern = Some(p),
                 ("format", _) => k.format = true,
                 ("minItems", Value::Number(n)) => k.min_items = Some(*n),
-                ("items", v) => k.items = Some(v),
-                ("contains", v) => k.contains = Some(v),
+                ("items", v) => k.items = Some(sub(v)),
+                ("contains", v) => k.contains = Some(sub(v)),
                 ("required", Value::Array(a)) => k.required = Some(a),
-                ("properties", Value::Object(m)) => k.properties = Some(m),
+                ("properties", Value::Object(m)) => {
+                    let compiled = m.iter().map(|(name, s)| (name.as_str(), Schema::new(root, s)));
+                    k.properties = Some(compiled.collect());
+                }
                 _ => {}
             }
         }
-        k
+        Schema { value: s, k }
     }
+}
 
+/// A schema's keywords.
+#[derive(Default)]
+struct Keywords<'s> {
+    ty: Option<&'s str>,
+    r#const: Option<&'s Value>,
+    r#enum: Option<&'s [Value]>,
+    not: Option<Box<Schema<'s>>>,
+    any_of: Option<Vec<Schema<'s>>>,
+    all_of: Option<Vec<Schema<'s>>>,
+    r#if: Option<Box<Schema<'s>>>,
+    then: Option<Box<Schema<'s>>>,
+    exclusive_minimum: Option<f64>,
+    min_length: Option<f64>,
+    pattern: Option<&'s str>,
+    format: bool,
+    min_items: Option<f64>,
+    items: Option<Box<Schema<'s>>>,
+    contains: Option<Box<Schema<'s>>>,
+    required: Option<&'s [Value]>,
+    properties: Option<Vec<(&'s str, Schema<'s>)>>,
+}
+
+impl Keywords<'_> {
     /// Whether any keyword of each data type is set, in Ajv's rule order.
     fn typed(&self) -> [(&'static str, bool); 4] {
         [
@@ -96,7 +109,6 @@ impl<'s> Keywords<'s> {
 }
 
 struct Run<'s> {
-    definitions: Option<&'s Value>,
     path: String,
     errors: Vec<Error<'s>>,
     /// Errors found, kept or not: a subschema is valid when it adds none.
@@ -106,20 +118,20 @@ struct Run<'s> {
 }
 
 impl<'s> Run<'s> {
-    fn error(&mut self, s: &'s Value, keyword: &'static str, message: impl FnOnce() -> String) {
+    fn error(&mut self, s: &Schema<'s>, keyword: &'static str, message: impl FnOnce() -> String) {
         self.failed += 1;
         if self.quiet == 0 {
             self.errors.push(Error {
                 path: self.path.clone(),
                 keyword,
                 message: message(),
-                schema: s.get(keyword),
+                schema: s.value.get(keyword),
             });
         }
     }
 
     /// Whether `data` is valid against `schema`, without errors.
-    fn valid(&mut self, schema: &'s Value, data: &Value) -> bool {
+    fn valid(&mut self, schema: &Schema<'s>, data: &Value) -> bool {
         let failed = self.failed;
         self.quiet += 1;
         self.check(schema, data);
@@ -127,13 +139,8 @@ impl<'s> Run<'s> {
         std::mem::replace(&mut self.failed, failed) == failed
     }
 
-    fn check(&mut self, s: &'s Value, data: &Value) {
-        let k = Keywords::of(s);
-        if let Some(r) = k.r#ref {
-            let name = r.strip_prefix("#/definitions/").expect("local refs only");
-            let target = self.definitions.and_then(|d| d.get(name));
-            return self.check(target.expect("defined"), data);
-        }
+    fn check(&mut self, s: &Schema<'s>, data: &Value) {
+        let k = &s.k;
         let typed = k.typed();
         // The type is checked up front only if no keyword of that type does it.
         let up_front = k.ty.is_some_and(|t| !typed.iter().any(|&(g, has)| g == t && has));
@@ -154,13 +161,13 @@ impl<'s> Run<'s> {
         {
             self.error(s, "enum", || "must be equal to one of the allowed values".into());
         }
-        if let Some(not) = k.not
+        if let Some(not) = &k.not
             && self.valid(not, data)
         {
             self.error(s, "not", || "must NOT be valid".into());
         }
         // One passing branch discards the others' errors; with none, all of them stay.
-        if let Some(branches) = k.any_of
+        if let Some(branches) = &k.any_of
             && !branches.iter().any(|b| self.valid(b, data))
         {
             for b in branches {
@@ -168,10 +175,10 @@ impl<'s> Run<'s> {
             }
             self.error(s, "anyOf", || "must match a schema in anyOf".into());
         }
-        for b in k.all_of.unwrap_or_default() {
+        for b in k.all_of.iter().flatten() {
             self.check(b, data);
         }
-        if let (Some(cond), Some(then)) = (k.r#if, k.then)
+        if let (Some(cond), Some(then)) = (&k.r#if, &k.then)
             && self.valid(cond, data)
         {
             let failed = self.failed;
@@ -192,17 +199,17 @@ impl<'s> Run<'s> {
                 continue;
             }
             match data {
-                Value::Number(n) => self.number(s, &k, *n),
-                Value::String(v) => self.string(s, &k, v),
-                Value::Array(items) => self.array(s, &k, items),
-                Value::Object(_) => self.object(s, &k, data),
+                Value::Number(n) => self.number(s, *n),
+                Value::String(v) => self.string(s, v),
+                Value::Array(items) => self.array(s, items),
+                Value::Object(_) => self.object(s, data),
                 _ => unreachable!(),
             }
         }
     }
 
-    fn number(&mut self, s: &'s Value, k: &Keywords<'s>, n: f64) {
-        if let Some(min) = k.exclusive_minimum
+    fn number(&mut self, s: &Schema<'s>, n: f64) {
+        if let Some(min) = s.k.exclusive_minimum
             && n <= min
         {
             self.error(s, "exclusiveMinimum", || format!("must be > {}", js::number_string(min)));
@@ -211,7 +218,8 @@ impl<'s> Run<'s> {
     }
 
     #[expect(clippy::cast_precision_loss, reason = "lengths stay far below 2^52")]
-    fn string(&mut self, s: &'s Value, k: &Keywords<'s>, v: &str) {
+    fn string(&mut self, s: &Schema<'s>, v: &str) {
+        let k = &s.k;
         if let Some(min) = k.min_length
             && (v.chars().count() as f64) < min
         {
@@ -229,19 +237,20 @@ impl<'s> Run<'s> {
     }
 
     #[expect(clippy::cast_precision_loss, reason = "lengths stay far below 2^52")]
-    fn array(&mut self, s: &'s Value, k: &Keywords<'s>, items: &[Value]) {
+    fn array(&mut self, s: &Schema<'s>, items: &[Value]) {
+        let k = &s.k;
         if let Some(min) = k.min_items
             && (items.len() as f64) < min
         {
             let min = js::number_string(min);
             self.error(s, "minItems", || format!("must NOT have fewer than {min} items"));
         }
-        if let Some(schema) = k.items {
+        if let Some(schema) = &k.items {
             for (i, item) in items.iter().enumerate() {
                 self.at(|path| push_index(path, i), schema, item);
             }
         }
-        if let Some(schema) = k.contains
+        if let Some(schema) = &k.contains
             && !items.iter().any(|item| self.valid(schema, item))
         {
             self.error(s, "contains", || "must contain at least 1 valid item(s)".into());
@@ -250,7 +259,7 @@ impl<'s> Run<'s> {
 
     /// Checks `data` found at the segment that `segment` writes below the current path. No
     /// property name in the schemas needs JSON Pointer escaping.
-    fn at(&mut self, segment: impl FnOnce(&mut String), schema: &'s Value, data: &Value) {
+    fn at(&mut self, segment: impl FnOnce(&mut String), schema: &Schema<'s>, data: &Value) {
         let len = self.path.len();
         self.path.push('/');
         segment(&mut self.path);
@@ -258,7 +267,8 @@ impl<'s> Run<'s> {
         self.path.truncate(len);
     }
 
-    fn object(&mut self, s: &'s Value, k: &Keywords<'s>, data: &Value) {
+    fn object(&mut self, s: &Schema<'s>, data: &Value) {
+        let k = &s.k;
         if let Some(required) = k.required {
             for name in required {
                 let Value::String(name) = name else { continue };
@@ -267,7 +277,7 @@ impl<'s> Run<'s> {
                 }
             }
         }
-        if let Some(properties) = k.properties {
+        if let Some(properties) = &k.properties {
             for (name, schema) in properties {
                 if let Some(value) = data.get(name) {
                     self.at(|path| path.push_str(name), schema, value);
@@ -340,8 +350,8 @@ mod tests {
         }
         for v in [Version::V2_0, Version::V2_1, Version::V2_2, Version::V3_0] {
             let schemas = crate::json::schemas(v);
-            walk(&schemas.full);
-            schemas.alerts.iter().for_each(walk);
+            walk(schemas.full.value);
+            schemas.alerts.iter().for_each(|a| walk(a.value));
         }
     }
 }
