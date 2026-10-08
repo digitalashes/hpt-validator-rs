@@ -87,14 +87,18 @@ impl<R: Read> Reader<R> {
 
     pub fn next_row(&mut self) -> io::Result<Option<&Row>> {
         loop {
-            // Before the end of input a row ends only at a newline.
+            // Before the end of input a row ends only at a newline; a row not tried yet needs
+            // no search for one, as parse_row finds out.
             // ponytail: a quoted field spanning chunks with newlines is parsed again per chunk,
             // as papaparse does; make parse_row resumable if such files show up
-            if (self.eof || self.text.as_bytes()[self.scanned..].contains(&b'\n'))
-                && let Some(len) = parse_row(&self.text[self.pos..], self.eof, &mut self.row)
+            if (self.eof
+                || self.scanned == self.pos
+                || self.text.as_bytes()[self.scanned..].contains(&b'\n'))
+                && let Some((len, lines)) =
+                    parse_row(&self.text[self.pos..], self.eof, &mut self.row)
             {
                 self.row.line = self.line;
-                self.line += self.text[self.pos..self.pos + len].matches('\n').count() as u64;
+                self.line += lines;
                 self.pos += len;
                 self.scanned = self.pos;
                 return Ok(Some(&self.row));
@@ -124,9 +128,10 @@ impl<R: Read> Reader<R> {
 }
 
 /// One row of papaparse's parse loop at the start of `s`, into `row`: its fields and quote
-/// problems. Returns the row's length in bytes, or `None` when `s` is empty, or when the row
-/// may continue past the end of `s` and more input is coming (papaparse's `ignoreLastRow`).
-fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
+/// problems. Returns the row's length in bytes and the newlines in it, or `None` when `s` is
+/// empty, or when the row may continue past the end of `s` and more input is coming
+/// (papaparse's `ignoreLastRow`).
+fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
     if s.is_empty() {
         return None;
     }
@@ -138,7 +143,11 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
     row.ends.clear();
     row.quotes.clear();
     let mut cursor = 0;
-    let mut newline = newline_from(0);
+    let first = newline_from(0);
+    let mut newline = first;
+    // The first newline ends the row, unless a quoted field holds it.
+    let counted =
+        |len: usize| (len, first.map_or(0, |n| 1 + s[n + 1..len].matches('\n').count() as u64));
     loop {
         if b.get(cursor) == Some(&b'"') {
             let start = cursor + 1;
@@ -153,7 +162,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                     // No closing quote: the rest of the input is the field, quotes as written.
                     row.quotes.push((Code::XCsvMissingQuotes, row.ends.len()));
                     row.push(&s[start..]);
-                    return Some(s.len());
+                    return Some(counted(s.len()));
                 };
                 q = next;
                 if q == s.len() - 1 {
@@ -161,7 +170,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                         return None;
                     }
                     row.push_quoted(&s[start..q], doubled);
-                    return Some(s.len());
+                    return Some(counted(s.len()));
                 }
                 if b[q + 1] == b'"' {
                     q += 1;
@@ -180,7 +189,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                     Some(&c @ (b',' | b'\n')) => {
                         row.push_quoted(&s[start..q], doubled);
                         if c == b'\n' {
-                            return Some(end + 1);
+                            return Some(counted(end + 1));
                         }
                         cursor = end + 1;
                         break;
@@ -207,13 +216,13 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
         }
         if let Some(n) = newline {
             row.push(&s[cursor..n]);
-            return Some(n + 1);
+            return Some(counted(n + 1));
         }
         if !eof {
             return None;
         }
         row.push(&s[cursor..]);
-        return Some(s.len());
+        return Some(counted(s.len()));
     }
 }
 
