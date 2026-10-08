@@ -47,7 +47,10 @@ impl<'s> Schema<'s> {
                     let target = root.get("definitions").and_then(|d| d.get(name));
                     return Schema::new(root, target.expect("defined"));
                 }
-                ("type", Value::String(t)) => k.ty = Some(t),
+                ("type", Value::String(t)) => {
+                    let mut all = Type::GROUPS.into_iter().chain([Type::Boolean, Type::Null]);
+                    k.ty = Some(all.find(|ty| ty.name() == t).expect("a JSON type"));
+                }
                 ("const", v) => k.r#const = Some(v),
                 ("enum", Value::Array(a)) => k.r#enum = Some(a),
                 ("not", v) => k.not = Some(sub(v)),
@@ -70,6 +73,15 @@ impl<'s> Schema<'s> {
                 _ => {}
             }
         }
+        k.typed = [
+            k.exclusive_minimum.is_some() || k.format,
+            k.min_length.is_some() || k.pattern.is_some() || k.format,
+            k.min_items.is_some() || k.items.is_some() || k.contains.is_some(),
+            k.required.is_some() || k.properties.is_some(),
+        ];
+        // The type is checked up front only if no keyword of that type does it.
+        let mut groups = Type::GROUPS.into_iter().zip(k.typed);
+        k.up_front = k.ty.is_some_and(|t| !groups.any(|(g, has)| g == t && has));
         Schema { value: s, k }
     }
 }
@@ -77,7 +89,10 @@ impl<'s> Schema<'s> {
 /// A schema's keywords.
 #[derive(Default)]
 struct Keywords<'s> {
-    ty: Option<&'s str>,
+    ty: Option<Type>,
+    /// Whether any keyword of each of `Type::GROUPS` is set.
+    typed: [bool; 4],
+    up_front: bool,
     r#const: Option<&'s Value>,
     r#enum: Option<&'s [Value]>,
     not: Option<Box<Schema<'s>>>,
@@ -96,15 +111,43 @@ struct Keywords<'s> {
     properties: Option<Vec<(&'s str, Schema<'s>)>>,
 }
 
-impl Keywords<'_> {
-    /// Whether any keyword of each data type is set, in Ajv's rule order.
-    fn typed(&self) -> [(&'static str, bool); 4] {
-        [
-            ("number", self.exclusive_minimum.is_some() || self.format),
-            ("string", self.min_length.is_some() || self.pattern.is_some() || self.format),
-            ("array", self.min_items.is_some() || self.items.is_some() || self.contains.is_some()),
-            ("object", self.required.is_some() || self.properties.is_some()),
-        ]
+/// The JSON types the schemas name.
+#[derive(Clone, Copy, PartialEq)]
+enum Type {
+    Number,
+    String,
+    Array,
+    Object,
+    Boolean,
+    Null,
+}
+
+impl Type {
+    /// The types with keywords of their own, in Ajv's rule order.
+    const GROUPS: [Type; 4] = [Type::Number, Type::String, Type::Array, Type::Object];
+
+    fn name(self) -> &'static str {
+        match self {
+            Type::Number => "number",
+            Type::String => "string",
+            Type::Array => "array",
+            Type::Object => "object",
+            Type::Boolean => "boolean",
+            Type::Null => "null",
+        }
+    }
+
+    /// Ajv's type of `v`, `strictNumbers` included: NaN and the infinities have none.
+    fn of(v: &Value) -> Option<Type> {
+        match v {
+            Value::Number(n) if !n.is_finite() => None,
+            Value::Number(_) => Some(Type::Number),
+            Value::String(_) => Some(Type::String),
+            Value::Array(_) => Some(Type::Array),
+            Value::Object(_) => Some(Type::Object),
+            Value::Bool(_) => Some(Type::Boolean),
+            Value::Null => Some(Type::Null),
+        }
     }
 }
 
@@ -141,14 +184,12 @@ impl<'s> Run<'s> {
 
     fn check(&mut self, s: &Schema<'s>, data: &Value) {
         let k = &s.k;
-        let typed = k.typed();
-        // The type is checked up front only if no keyword of that type does it.
-        let up_front = k.ty.is_some_and(|t| !typed.iter().any(|&(g, has)| g == t && has));
+        let ty = Type::of(data);
         if let Some(t) = k.ty
-            && up_front
-            && !is(t, data)
+            && k.up_front
+            && ty != Some(t)
         {
-            self.error(s, "type", || format!("must be {t}"));
+            self.error(s, "type", || format!("must be {}", t.name()));
         }
 
         if let Some(c) = k.r#const
@@ -188,13 +229,13 @@ impl<'s> Run<'s> {
             }
         }
 
-        for (group, has) in typed {
+        for (group, has) in Type::GROUPS.into_iter().zip(k.typed) {
             if !has {
                 continue;
             }
-            if !is(group, data) {
+            if ty != Some(group) {
                 if k.ty == Some(group) {
-                    self.error(s, "type", || format!("must be {group}"));
+                    self.error(s, "type", || format!("must be {}", group.name()));
                 }
                 continue;
             }
@@ -284,19 +325,6 @@ impl<'s> Run<'s> {
                 }
             }
         }
-    }
-}
-
-/// Ajv's type check, `strictNumbers` included.
-fn is(ty: &str, v: &Value) -> bool {
-    match (ty, v) {
-        ("number", Value::Number(n)) => n.is_finite(),
-        ("object", Value::Object(_))
-        | ("array", Value::Array(_))
-        | ("string", Value::String(_))
-        | ("boolean", Value::Bool(_))
-        | ("null", Value::Null) => true,
-        _ => false,
     }
 }
 
