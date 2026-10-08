@@ -68,6 +68,8 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
     let mut file_type = FileType::Unknown;
     let mut layout = None;
     let mut index = 0;
+    // The last row's cells, emptied: its buffer outlives the row it borrowed from.
+    let mut spare = Vec::new();
     let errors = 'rows: {
         let mut errors = Vec::new();
         while let Some(row) = reader.next_row()? {
@@ -86,7 +88,9 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 let finding = at(code, index, Some(column), message.into());
                 add(&mut extended, lined(vec![finding]), max);
             }
-            let row: Vec<&str> = row.fields().map(js::trim).collect();
+            let mut cells = recycle(std::mem::take(&mut spare));
+            cells.extend(row.fields().map(js::trim));
+            let row = cells;
             let blank = row.iter().all(|f| f.is_empty());
             if blank && (index == 0 || index == 2) {
                 // Upstream drops the errors found so far and keeps the alerts; Extended
@@ -101,6 +105,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             }
             if blank && index != 1 {
                 index += 1;
+                spare = recycle(row);
                 continue;
             }
             match index {
@@ -143,6 +148,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 break 'rows errors;
             }
             index += 1;
+            spare = recycle(row);
         }
         if index < 4 {
             // Upstream drops the errors found so far and keeps the alerts; Extended keeps
@@ -168,6 +174,13 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
         }
     }
     Ok(Report { errors, alerts, file_type: Some(file_type), extended })
+}
+
+/// `cells` emptied, its buffer kept for cells that borrow from another row. Collecting an
+/// emptied `Vec` into one of the same element size reuses its buffer.
+fn recycle<'b>(mut cells: Vec<&str>) -> Vec<&'b str> {
+    cells.clear();
+    cells.into_iter().map(|_| "").collect()
 }
 
 /// Rows 1 and 2, upstream's `validateHeaderColumns` then `validateHeaderRow`: the recognised
