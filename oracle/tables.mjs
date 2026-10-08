@@ -124,6 +124,8 @@ const CORPUS = {
   // 1024-byte chunks split these; 1-byte chunks split every input everywhere.
   "quoted-across-chunk": b('"' + "x".repeat(1100) + '",b\nc,d\n'),
   "field-across-chunk": b("a".repeat(1100) + ",b\nc,d\n"),
+  // A quoted field longer than 128 bytes, with a char across its 128th byte.
+  "quoted-long-utf8": b('"' + "x".repeat(127) + "\u00e9" + "y".repeat(10) + '",b\n'),
   "utf8-split-at-chunk": b("a".repeat(1023) + "\u00e9,b\n"),
   "utf8-4byte-split-at-chunk": b("a".repeat(1022) + "\u{1f600},b\n"),
   "invalid-utf8": Buffer.from([0x61, 0xff, 0x2c, 0x62, 0x0a, 0xc3, 0x28, 0x0a, 0xe2, 0x82, 0x2c, 0xc0, 0xaf, 0x0a]),
