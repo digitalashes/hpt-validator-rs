@@ -168,32 +168,35 @@ fn parse_row(s: &str, eof: bool, row: &mut Parsed) -> Option<(usize, u64)> {
     row.unescaped.clear();
     row.quotes.clear();
     let mut cursor = 0;
-    let first = s.find('\n');
-    // The first newline ends the row, unless a quoted field holds it.
-    let counted =
-        |len: usize| (len, first.map_or(0, |n| 1 + s[n + 1..len].matches('\n').count() as u64));
+    // The newlines in quoted fields so far: any other newline ends the row.
+    let mut lines = 0;
     loop {
         if b.get(cursor) == Some(&b'"') {
             let start = cursor + 1;
             let mut q = cursor;
             let mut doubled = false;
             loop {
-                let Some(next) = scan(b, q + 1, |v| eq(v, b'"')) else {
+                let Some(next) = scan(b, q + 1, |v| eq(v, b'"') | eq(v, b'\n')) else {
                     if !eof {
                         return None;
                     }
                     // No closing quote: the rest of the input is the field, quotes as written.
                     row.quotes.push((Code::XCsvMissingQuotes, row.fields));
                     row.push(start, s.len());
-                    return Some(counted(s.len()));
+                    return Some((s.len(), lines));
                 };
                 q = next;
+                // A newline before the closing quote is the field's.
+                if b[q] == b'\n' {
+                    lines += 1;
+                    continue;
+                }
                 if q == s.len() - 1 {
                     if !eof {
                         return None;
                     }
                     row.push_quoted(s, start, q, doubled);
-                    return Some(counted(s.len()));
+                    return Some((s.len(), lines));
                 }
                 if b[q + 1] == b'"' {
                     q += 1;
@@ -212,7 +215,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Parsed) -> Option<(usize, u64)> {
                     Some(&c @ (b',' | b'\n')) => {
                         row.push_quoted(s, start, q, doubled);
                         if c == b'\n' {
-                            return Some(counted(end + 1));
+                            return Some((end + 1, lines + 1));
                         }
                         cursor = end + 1;
                         break;
@@ -236,12 +239,12 @@ fn parse_row(s: &str, eof: bool, row: &mut Parsed) -> Option<(usize, u64)> {
             }
             Some(n) => {
                 row.push(cursor, n);
-                return Some(counted(n + 1));
+                return Some((n + 1, lines + 1));
             }
             None if !eof => return None,
             None => {
                 row.push(cursor, s.len());
-                return Some(counted(s.len()));
+                return Some((s.len(), lines));
             }
         }
     }
