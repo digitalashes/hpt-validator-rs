@@ -39,8 +39,8 @@ impl<'s> Schema<'s> {
         let sub = |s| Box::new(Schema::new(root, s));
         let all = |a: &'s [Value]| a.iter().map(|s| Schema::new(root, s)).collect();
         let mut k = Keywords::default();
-        let Value::Object(members) = s else { return Schema { value: s, k } };
-        for (name, v) in members {
+        let Value::Object(o) = s else { return Schema { value: s, k } };
+        for (name, v) in &o.members {
             match (name.as_str(), v) {
                 ("$ref", Value::String(r)) => {
                     let name = r.strip_prefix("#/definitions/").expect("local refs only");
@@ -67,7 +67,8 @@ impl<'s> Schema<'s> {
                 ("contains", v) => k.contains = Some(sub(v)),
                 ("required", Value::Array(a)) => k.required = Some(a),
                 ("properties", Value::Object(m)) => {
-                    let compiled = m.iter().map(|(name, s)| (name.as_str(), Schema::new(root, s)));
+                    let compiled =
+                        m.members.iter().map(|(name, s)| (name.as_str(), Schema::new(root, s)));
                     k.properties = Some(compiled.collect());
                 }
                 _ => {}
@@ -353,11 +354,11 @@ mod tests {
     #[test]
     fn schemas_stay_in_the_subset() {
         fn walk(s: &Value) {
-            let Value::Object(members) = s else { panic!("schemas are objects") };
-            for (keyword, v) in members {
+            let Value::Object(o) = s else { panic!("schemas are objects") };
+            for (keyword, v) in &o.members {
                 match (keyword.as_str(), v) {
                     ("$ref", Value::String(r)) => {
-                        assert!(r.starts_with("#/definitions/") && members.len() == 1);
+                        assert!(r.starts_with("#/definitions/") && o.members.len() == 1);
                     }
                     ("type", Value::String(_))
                     | ("const" | "enum" | "required" | "$schema" | "$message", _)
@@ -365,7 +366,7 @@ mod tests {
                     ("pattern", Value::String(p)) => assert_eq!(p, COUNT),
                     ("format", Value::String(f)) => assert_eq!(f, "date"),
                     ("properties" | "definitions", Value::Object(m)) => {
-                        for (name, s) in m {
+                        for (name, s) in &m.members {
                             assert!(!name.contains(['~', '/']), "{name} needs escaping");
                             walk(s);
                         }

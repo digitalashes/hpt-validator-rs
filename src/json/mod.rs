@@ -5,7 +5,7 @@ mod ajv;
 mod parse;
 
 use crate::{Code, Error, FileType, Finding, Options, Report, Version, add, full};
-use parse::{End, Key, Value};
+use parse::{End, Key, Object, Value};
 use std::io::Read;
 use std::ops::ControlFlow;
 use std::sync::OnceLock;
@@ -57,10 +57,10 @@ fn schemas(v: Version) -> &'static Schemas {
         let keep = |schema| &*Box::leak(Box::new(schema));
         let full = keep(parse::document(full));
         let mut metadata = full.clone();
-        if let Value::Object(members) = &mut metadata {
-            for (name, value) in members {
+        if let Value::Object(o) = &mut metadata {
+            for (name, value) in &mut o.members {
                 match (name.as_str(), value) {
-                    ("properties", Value::Object(p)) => p.retain(|(k, _)| k != CHARGES),
+                    ("properties", Value::Object(p)) => p.members.retain(|(k, _)| k != CHARGES),
                     ("required", Value::Array(r)) => {
                         r.retain(|k| *k != Value::String(CHARGES.into()));
                     }
@@ -85,12 +85,12 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> Result<Re
     let v = Version::parse(version).ok_or_else(|| Error::UnknownJsonVersion(version.into()))?;
     let schemas = schemas(v);
     let max = options.max_errors;
-    let (mut errors, mut alerts, mut metadata) = (Vec::new(), Vec::new(), Vec::new());
+    let (mut errors, mut alerts, mut metadata) = (Vec::new(), Vec::new(), Object::default());
     let mut charges = false;
     let end = parse::parse(input, PATHS, |key, value| {
         match key {
             Key::Name(name) if name == CHARGES => {}
-            Key::Name(name) => parse::set(&mut metadata, name, value.clone()),
+            Key::Name(name) => metadata.set(name, value.clone()),
             Key::Index(i) => {
                 charges = true;
                 let found = ajv::validate(&schemas.item, value);

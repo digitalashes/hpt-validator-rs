@@ -14,25 +14,49 @@ pub enum Value {
     Number(f64),
     String(String),
     Array(Vec<Value>),
-    /// Members in first-seen order (see `set`).
-    Object(Vec<(String, Value)>),
+    Object(Object),
 }
 
 impl Value {
     pub fn get(&self, name: &str) -> Option<&Value> {
         match self {
-            Value::Object(members) => members.iter().find(|(k, _)| k == name).map(|(_, v)| v),
+            // Most lookups are of optional members that are not there.
+            Value::Object(o) if o.lengths & length_bit(name) != 0 => {
+                o.members.iter().find(|(k, _)| k == name).map(|(_, v)| v)
+            }
             _ => None,
         }
     }
 }
 
-/// Assigns an object member: a repeated name replaces the value in place, as JS does.
-pub fn set(members: &mut Vec<(String, Value)>, name: String, value: Value) {
-    match members.iter_mut().find(|(k, _)| *k == name) {
-        Some(member) => member.1 = value,
-        None => members.push((name, value)),
+#[derive(Clone, Debug, Default)]
+pub struct Object {
+    /// In first-seen order (see `set`). Removing members leaves `lengths` as it is.
+    pub members: Vec<(String, Value)>,
+    /// A bit for each name length among the members, modulo 64.
+    lengths: u64,
+}
+
+impl Object {
+    /// Assigns a member: a repeated name replaces the value in place, as JS does.
+    pub fn set(&mut self, name: String, value: Value) {
+        if let Some(member) = self.members.iter_mut().find(|(k, _)| *k == name) {
+            member.1 = value;
+        } else {
+            self.lengths |= length_bit(&name);
+            self.members.push((name, value));
+        }
     }
+}
+
+impl PartialEq for Object {
+    fn eq(&self, other: &Self) -> bool {
+        self.members == other.members
+    }
+}
+
+fn length_bit(name: &str) -> u64 {
+    1 << (name.len() % 64)
 }
 
 /// Where a value sits in its parent.
@@ -88,10 +112,10 @@ pub fn parse(
 
 /// A whole document, for the vendored schemas: an object read as its `$.*` members.
 pub fn document(text: &str) -> Value {
-    let mut members = Vec::new();
+    let mut members = Object::default();
     let end = parse(text.as_bytes(), &[&["*"]], |key, value| {
         if let Key::Name(name) = key {
-            set(&mut members, name, value.clone());
+            members.set(name, value.clone());
         }
         ControlFlow::Continue(())
     });
@@ -194,7 +218,7 @@ impl Token {
 struct Spare {
     strings: Vec<String>,
     arrays: Vec<Vec<Value>>,
-    objects: Vec<Vec<(String, Value)>>,
+    objects: Vec<Object>,
 }
 
 impl Spare {
@@ -205,12 +229,13 @@ impl Spare {
                 items.drain(..).for_each(|v| self.keep(v));
                 self.arrays.push(items);
             }
-            Value::Object(mut members) => {
-                for (name, v) in members.drain(..) {
+            Value::Object(mut o) => {
+                for (name, v) in o.members.drain(..) {
                     self.strings.push(name);
                     self.keep(v);
                 }
-                self.objects.push(members);
+                o.lengths = 0;
+                self.objects.push(o);
             }
             _ => {}
         }
@@ -495,7 +520,7 @@ impl<F: FnMut(Key, &Value) -> ControlFlow<()>> Parser<'_, F> {
                 if self
                     .value
                     .as_ref()
-                    .is_none_or(|v| matches!(v, Value::Object(m) if m.is_empty())) =>
+                    .is_none_or(|v| matches!(v, Value::Object(o) if o.members.is_empty())) =>
             {
                 self.pop()
             }
@@ -548,7 +573,7 @@ impl<F: FnMut(Key, &Value) -> ControlFlow<()>> Parser<'_, F> {
         } else if let (Some(parent), Some(value)) = (&mut self.value, value) {
             match (parent, key) {
                 (Value::Array(items), _) => items.push(value),
-                (Value::Object(members), Some(Key::Name(name))) => set(members, name, value),
+                (Value::Object(o), Some(Key::Name(name))) => o.set(name, value),
                 _ => unreachable!("object members have names"),
             }
         }
