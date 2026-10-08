@@ -200,7 +200,10 @@ impl<'a> Check<'a> {
     /// An `AllowedValuesError` for a present value outside `allowed`.
     fn one_of(&mut self, slot: usize, allowed: &'static [&'static str]) {
         let value = self.value(slot);
-        if !value.is_empty() && !allowed.iter().any(|a| same(value, a)) {
+        // Allowed values are ASCII, so an ASCII value is compared without case mapping.
+        let ascii = value.is_ascii();
+        let known = |a: &&str| if ascii { a.eq_ignore_ascii_case(value) } else { same(value, a) };
+        if !value.is_empty() && !allowed.iter().any(known) {
             let (i, name) = self.column(slot);
             self.found.push(allowed_values(self.row, i, name, value, allowed));
         }
