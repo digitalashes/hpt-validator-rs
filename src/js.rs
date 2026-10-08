@@ -140,8 +140,17 @@ fn is_real_date(y: u32, m: u32, d: u32) -> bool {
 /// Upstream's positive-number rule for a non-empty value:
 /// `/^(?:\d+|\d+\.\d+|\d+\.|\.\d+)$/` and `parseFloat(value) > 0`.
 pub fn is_positive_number(s: &str) -> bool {
+    let b = s.as_bytes();
+    if !b.iter().all(|b| b.is_ascii_digit() || *b == b'.') {
+        return false;
+    }
+    // Too short to round to zero: one dot at most and a digit above 0.
+    if b.len() <= 64 {
+        let one_dot = s.split_once('.').is_none_or(|(_, rest)| !rest.contains('.'));
+        return one_dot && b.iter().any(|b| (b'1'..=b'9').contains(b));
+    }
     // Rust's float grammar rejects the rest: no digit, or a second dot.
-    s.bytes().all(|b| b.is_ascii_digit() || b == b'.') && s.parse::<f64>().is_ok_and(|n| n > 0.0)
+    s.parse::<f64>().is_ok_and(|n| n > 0.0)
 }
 
 /// `semver.coerce(v)?.toString() ?? v`, as upstream normalises the version argument.
