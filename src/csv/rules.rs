@@ -53,6 +53,24 @@ pub struct Group {
     /// Tall only: `payer_name`, `plan_name`.
     pub payer_plan: Option<[usize; 2]>,
     pub amounts: Amounts,
+    /// The row-3 columns of all the slots above: a row with each of them empty passes every
+    /// rule on the group.
+    pub columns: Vec<usize>,
+}
+
+impl Group {
+    /// Every slot above.
+    pub fn slots(&self) -> impl Iterator<Item = usize> + '_ {
+        let amounts: &[usize] = match &self.amounts {
+            Amounts::None => &[],
+            Amounts::Estimated(estimated) => std::slice::from_ref(estimated),
+            Amounts::Allowed(allowed) => allowed,
+        };
+        [self.dollar, self.percentage, self.algorithm, self.methodology, self.notes]
+            .into_iter()
+            .chain(self.payer_plan.into_iter().flatten())
+            .chain(amounts.iter().copied())
+    }
 }
 
 /// A group's allowed-amount columns, which the version decides.
@@ -68,14 +86,26 @@ pub enum Amounts {
 /// One data row being checked.
 struct Check<'a> {
     l: &'a Layout,
+    /// The row's groups with a value (see `live`).
+    live: &'a [usize],
     row: u64,
     values: &'a [&'a str],
     found: Vec<Finding>,
 }
 
+/// The groups with a value in a row, by index, for `errors` and `alerts` on that row: the
+/// rules pass a group without one, and a wide row leaves most of its groups empty.
+pub fn live(l: &Layout, values: &[&str], groups: &mut Vec<usize>) {
+    let has = |&i: &usize| values.get(i).is_some_and(|v| !v.is_empty());
+    groups.clear();
+    groups.extend(
+        (l.groups.iter().enumerate()).filter(|(_, g)| g.columns.iter().any(has)).map(|(i, _)| i),
+    );
+}
+
 /// Upstream's `rowValidators` on one data row.
-pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
-    let mut c = Check::new(l, row, values);
+pub fn errors(l: &Layout, live: &[usize], row: u64, values: &[&str]) -> Vec<Finding> {
+    let mut c = Check::new(l, live, row, values);
     c.required(l.description, "");
     let billing_codes = if l.v == Version::V3_0 {
         BILLING_CODES
@@ -94,7 +124,7 @@ pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
     for i in l.standard {
         c.positive(i);
     }
-    for g in &l.groups {
+    for g in c.groups() {
         c.positive(g.dollar);
         c.positive(g.percentage);
         c.one_of(g.methodology, METHODOLOGIES);
@@ -138,9 +168,9 @@ pub fn errors(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
 }
 
 /// Upstream's `rowAlerters` on one data row: nine 9s in an allowed amount.
-pub fn alerts(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
-    let mut c = Check::new(l, row, values);
-    for g in &l.groups {
+pub fn alerts(l: &Layout, live: &[usize], row: u64, values: &[&str]) -> Vec<Finding> {
+    let mut c = Check::new(l, live, row, values);
+    for g in c.groups() {
         let amounts: &[_] = match g.amounts {
             Amounts::None => &[],
             Amounts::Estimated(estimated) => &[(estimated, "estimated amount")],
@@ -163,8 +193,13 @@ pub fn alerts(l: &Layout, row: u64, values: &[&str]) -> Vec<Finding> {
 }
 
 impl<'a> Check<'a> {
-    fn new(l: &'a Layout, row: u64, values: &'a [&'a str]) -> Self {
-        Check { l, row, values, found: Vec::new() }
+    fn new(l: &'a Layout, live: &'a [usize], row: u64, values: &'a [&'a str]) -> Self {
+        Check { l, live, row, values, found: Vec::new() }
+    }
+
+    fn groups(&self) -> impl Iterator<Item = &'a Group> + use<'a> {
+        let (groups, live) = (&self.l.groups, self.live);
+        live.iter().map(move |&i| &groups[i])
     }
 
     /// The slot's cell; missing cells read as empty.
@@ -250,7 +285,7 @@ impl<'a> Check<'a> {
         if l.v < Version::V2_1 {
             return;
         }
-        for g in &l.groups {
+        for g in self.groups() {
             if self.charged(g) {
                 if let Some([payer, plan]) = g.payer_plan {
                     self.required(payer, PAYER_SPECIFIC);
@@ -264,17 +299,17 @@ impl<'a> Check<'a> {
             }
         }
         let [gross, discounted, min, max] = l.standard;
-        if !self.has(gross) && !self.has(discounted) && !l.groups.iter().any(|g| self.charged(g)) {
+        if !self.has(gross) && !self.has(discounted) && !self.groups().any(|g| self.charged(g)) {
             let message = "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\".";
             self.error(Code::CsvItemRequiresCharge, Some(gross), message);
         }
-        if l.groups.iter().any(|g| self.has(g.dollar))
+        if self.groups().any(|g| self.has(g.dollar))
             && let Some(i) = [min, max].into_iter().find(|&i| !self.has(i))
         {
             let message = "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data.";
             self.error(Code::CsvDollarNeedsMinMax, Some(i), message);
         }
-        for g in &l.groups {
+        for g in self.groups() {
             let ratio = self.has(g.percentage) || self.has(g.algorithm);
             match g.amounts {
                 Amounts::None => {}
@@ -325,8 +360,7 @@ impl<'a> Check<'a> {
     /// Upstream's `modifierChecks`: a modifier row needs notes or a payer-specific charge.
     fn modifier(&mut self) {
         let l = self.l;
-        let info =
-            self.has(l.notes) || (l.groups.iter()).any(|g| self.charged(g) || self.has(g.notes));
+        let info = self.has(l.notes) || self.groups().any(|g| self.charged(g) || self.has(g.notes));
         if !info {
             let message = "If a modifier is encoded without an item or service, then a description and one of the following is the minimum information required: additional_payer_notes, standard_charge | negotiated_dollar, standard_charge | negotiated_percentage, or standard_charge | negotiated_algorithm.";
             self.error(Code::CsvModifierMissingInfo, Some(l.notes), message);

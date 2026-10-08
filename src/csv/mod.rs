@@ -70,6 +70,8 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
     let mut index = 0;
     // The last row's cells, emptied: its buffer outlives the row it borrowed from.
     let mut spare = Vec::new();
+    // The data row's groups with a value, refilled per row.
+    let mut live_groups = Vec::new();
     let errors = 'rows: {
         let mut errors = Vec::new();
         while let Some(row) = reader.next_row()? {
@@ -138,9 +140,14 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 }
                 _ => {
                     let layout = layout.as_ref().expect("data rows follow a valid row 3");
-                    add(&mut errors, lined(rules::errors(layout, index, &row)), max);
+                    rules::live(layout, &row, &mut live_groups);
+                    add(&mut errors, lined(rules::errors(layout, &live_groups, index, &row)), max);
                     if !full(&alerts, max) {
-                        add(&mut alerts, lined(rules::alerts(layout, index, &row)), max);
+                        add(
+                            &mut alerts,
+                            lined(rules::alerts(layout, &live_groups, index, &row)),
+                            max,
+                        );
                     }
                 }
             }
@@ -379,6 +386,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
                 notes: if tall { notes } else { want(format!("additional_payer_notes{g}")) },
                 payer_plan,
                 amounts: Amounts::None,
+                columns: Vec::new(),
             }
         })
         .collect();
@@ -457,6 +465,10 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
 
     let columns: Vec<usize> =
         (matched.into_iter().collect::<Option<_>>()).expect("no error, so every slot matched");
+    for g in &mut groups {
+        let resolved = g.slots().map(|slot| columns[slot]).collect();
+        g.columns = resolved;
+    }
     let layout = Layout {
         v,
         names: columns.iter().map(|&i| row[i].to_string()).collect(),
