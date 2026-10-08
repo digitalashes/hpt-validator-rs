@@ -130,7 +130,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                     add(&mut errors, lined(header_errors), max);
                 }
                 2 => {
-                    let (shape, result) = columns(v, &row);
+                    let (shape, result) = columns(v, &row, max);
                     file_type = shape;
                     match result {
                         Ok((resolved, column_alerts)) => {
@@ -334,7 +334,7 @@ type Columns = Result<(Layout, Vec<Finding>), Vec<Finding>>;
 
 /// Row 3, upstream's `validateColumns` and `alertColumns`.
 #[expect(clippy::too_many_lines, reason = "builds upstream's expected column list in its order")]
-fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
+fn columns(v: Version, row: &[&str], max: usize) -> (FileType, Columns) {
     let tall = tall::detect(row);
     let (payers_plans, mut errors) = wide::payers_plans(v, row);
     let mut codes = 0;
@@ -343,8 +343,6 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
             continue;
         };
         let digits: String = n.chars().filter(char::is_ascii_digit).collect();
-        // ponytail: unbounded like upstream, which throws above 2^32 - 1 code pairs;
-        // bound it with the fuzzing in roadmap Phase 7
         #[expect(
             clippy::cast_possible_truncation,
             clippy::cast_sign_loss,
@@ -356,6 +354,13 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
             errors.push(placeholder(i, column));
         }
     }
+    // Only the code numbers named in this row can match a column; every other one up to the
+    // count is a pair missing from it, two errors. So `row.len() + max` numbers fill the
+    // limit. Without one, upstream returns no result once a batch passes about 121,000
+    // errors (pushing them at once overflows its call stack) or the count passes 2^32 - 1
+    // (too long an array); 2^16 numbers past the row's columns are always beyond that.
+    let limit = if max > 0 { max } else { 1 << 16 };
+    let codes = codes.min(row.len().saturating_add(limit) as u64);
     if tall != payers_plans.is_empty() {
         let message = "Required payer-specific information data element headers are missing or miscoded from the MRF that does not follow the specifications for the CSV \"Tall\" or CSV \"Wide\" format.";
         errors.push(at(Code::CsvAmbiguousFormat, 2, None, message.into()));

@@ -30,4 +30,6 @@ exclude_re = [
     'replace \* with / in parse_row',
     'replace > with < in parse_row',
     'replace < with <= in scan',
+    # Capping the code count at the error limit, not 2^16 past the columns, only saves work.
+    'mod\.rs:362:24: replace > with < in columns',
 ]

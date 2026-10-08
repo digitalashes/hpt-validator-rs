@@ -171,6 +171,13 @@ write("findings/license-newline-ligature.csv", csv(tall("2.0.0", [{}],
   rows[3].push("");
   write("findings/four-part-unknown-charge.csv", csv(rows));
 }
+// A code count past row 3's columns: the pairs missing from it fill any error limit.
+{
+  const rows = tall("2.0.0");
+  rows[2].push("code | 3 | type", "code | 40");
+  rows[3].push("", "");
+  write("findings/code-count-past-columns.csv", csv(rows));
+}
 // Real CRLF and mixed line endings.
 write("findings/crlf.csv", csv(tall("2.0.0", [{}, {}])).replaceAll("\n", "\r\n"));
 write("findings/mixed-line-endings.csv", csv(tall("2.0.0", [{}, {}])).split("\n").map((l, i) => (l && i % 2 ? l + "\r" : l)).join("\n"));

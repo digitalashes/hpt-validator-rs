@@ -15,7 +15,7 @@ validator for CMS Hospital Price Transparency machine-readable files. It checks 
 
 - **Same result as upstream.** By default the report is what `@cmsgov/hpt-validator` 2.6.0
   returns through its CLI: the same findings in the same order with the same messages,
-  upstream's quirks included. The test suite checks this against 2,120 results produced
+  upstream's quirks included. The test suite checks this against 2,184 results produced
   by upstream itself.
 - **Streaming.** Rows and charge items are checked as they are read, so memory does not
   grow with the file.
@@ -173,6 +173,12 @@ results to `tests/golden`, along with JavaScript semantics tables (`tests/js.jso
 the CSV parser's rows (`tests/reader`). `cargo test` compares the port with all of them in
 both modes. Upstream cannot produce the Extended additions, so `tests/extended.json` pins
 them for a set of those inputs, reviewed by hand.
+
+`tests/fuzz.rs` mutates every input at random and checks that the validator does not panic
+and that Extended only adds to Default; `fuzz/` runs the same check under
+[cargo-fuzz](https://github.com/rust-fuzz/cargo-fuzz) on a nightly toolchain:
+`mkdir -p fuzz/corpus/csv`, then
+`cargo +nightly fuzz run -s none csv fuzz/corpus/csv tests/cases` (or `json`).
 
 To regenerate the expected results, put Node 20.19.4 on `PATH` and run `oracle/run.sh`;
 it clones and builds upstream under `target/upstream`.

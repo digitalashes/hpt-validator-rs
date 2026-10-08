@@ -1,0 +1,28 @@
+[package]
+name = "hpt-validator-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.hpt-validator]
+path = ".."
+
+[[bin]]
+name = "csv"
+path = "fuzz_targets/csv.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "json"
+path = "fuzz_targets/json.rs"
+test = false
+doc = false
+bench = false

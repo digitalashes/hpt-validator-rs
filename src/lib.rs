@@ -80,7 +80,9 @@ pub enum Mode {
 #[derive(Clone, Debug, Default)]
 pub struct Options {
     /// The most errors to collect before stopping, as upstream's `maxErrors`; alerts and
-    /// Extended findings are capped at the same number separately. `0` means unlimited.
+    /// Extended findings are capped at the same number separately. `0` means unlimited, except
+    /// that a CSV code count far past row 3's columns (`code | 99999999`) lists the missing
+    /// code columns for at most 2^16 numbers past them, where upstream throws instead.
     pub max_errors: usize,
     /// Default or Extended.
     pub mode: Mode,

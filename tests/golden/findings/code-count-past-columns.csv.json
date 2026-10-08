@@ -1,0 +1,1713 @@
+{
+  "v2.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Column code | 2 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 3 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 3"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 40 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 40 | type"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Column code | 2 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2 | type"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Column code | 2 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 3 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 3"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 40 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 40 | type"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.1.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Column code | 2 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2 | type"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Column code | 2 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 3 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 3"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 40 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 40 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column drug_unit_of_measurement is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "drug_unit_of_measurement"
+      },
+      {
+        "path": "row 3",
+        "message": "Column drug_type_of_measurement is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "drug_type_of_measurement"
+      },
+      {
+        "path": "row 3",
+        "message": "Column modifiers is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "modifiers"
+      },
+      {
+        "path": "row 3",
+        "message": "Column estimated_amount is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "estimated_amount"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v2.2.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 3",
+        "message": "Column code | 2 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2 | type"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=0": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"location_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "location_name"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"type_2_npi\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "type_2_npi"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula.\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "To the best of its knowledge and belief, this hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date in the file. This hospital has included all payer-specific negotiated charges in dollars that can be expressed as a dollar amount. For payer-specific negotiated charges that cannot be expressed as a dollar amount in the machine-readable file or not knowable in advance, the hospital attests that the payer-specific negotiated charge is based on a contractual algorithm, percentage or formula that precludes the provision of a dollar amount and has provided all necessary information available to the hospital for the public to be able to derive the dollar amount, including, but not limited to, the specific fee schedule or components referenced in such percentage, algorithm or formula."
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"attester_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "attester_name"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 2 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 2 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 3 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 3"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 4 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 4 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 5 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 5 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 6 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 6 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 7 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 7 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 8 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 8 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 9 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 9 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 10 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 10 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 11 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 11 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 12 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 12 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 13 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 13 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 14 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 14 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 15 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 15 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 16 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 16 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 17 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 17 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 18 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 18 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 19 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 19 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 20 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 20 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 21 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 21 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 22 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 22 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 23 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 23 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 24 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 24 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 25 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 25 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 26 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 26 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 27 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 27 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 28 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 28 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 29 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 29 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 30 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 30 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 31 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 31 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 32 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 32 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 33 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 33 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 34 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 34 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 35 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 35 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 36 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 36 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 37 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 37 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 38 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 38 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 39 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 39 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column code | 40 | type is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "code | 40 | type"
+      },
+      {
+        "path": "row 3",
+        "message": "Column drug_unit_of_measurement is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "drug_unit_of_measurement"
+      },
+      {
+        "path": "row 3",
+        "message": "Column drug_type_of_measurement is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "drug_type_of_measurement"
+      },
+      {
+        "path": "row 3",
+        "message": "Column modifiers is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "modifiers"
+      },
+      {
+        "path": "row 3",
+        "message": "Column median_amount is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "median_amount"
+      },
+      {
+        "path": "row 3",
+        "message": "Column 10th_percentile is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "10th_percentile"
+      },
+      {
+        "path": "row 3",
+        "message": "Column 90th_percentile is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "90th_percentile"
+      },
+      {
+        "path": "row 3",
+        "message": "Column count is miscoded or missing from row 3. You must include this column and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "count"
+      },
+      {
+        "path": "A1",
+        "message": "Errors were found in the headers in row 3, so the remaining rows were not evaluated."
+      }
+    ],
+    "alerts": []
+  },
+  "v3.0.0 maxErrors=2": {
+    "valid": false,
+    "errors": [
+      {
+        "path": "row 1",
+        "message": "Header column \"location_name\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "location_name"
+      },
+      {
+        "path": "row 1",
+        "message": "Header column \"type_2_npi\" is miscoded or missing. You must include this header and confirm that it is encoded as specified in the data dictionary.",
+        "columnName": "type_2_npi"
+      }
+    ],
+    "alerts": []
+  }
+}
