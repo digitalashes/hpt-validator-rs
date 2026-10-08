@@ -165,8 +165,12 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                 }
                 // A closing quote is followed by optional JS whitespace and `,` or `\n`.
                 let after = &s[q + 1..];
-                let end = q + 1 + after.len()
-                    - after.trim_start_matches(|c| c != '\n' && js::is_space(c)).len();
+                let end = if matches!(b[q + 1], b',' | b'\n') {
+                    q + 1
+                } else {
+                    q + 1 + after.len()
+                        - after.trim_start_matches(|c| c != '\n' && js::is_space(c)).len()
+                };
                 match b.get(end) {
                     Some(&c @ (b',' | b'\n')) => {
                         row.push_quoted(&s[start..q], doubled);
