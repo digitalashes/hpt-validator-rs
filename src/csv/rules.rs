@@ -189,8 +189,11 @@ pub fn alerts(l: &Layout, live: &[usize], row: u64, values: &[&str]) -> Vec<Find
             ],
         };
         for &(i, name) in amounts {
+            let value = c.value(i);
+            // Most amounts are empty or short, and `Number` reads 999999999 only from nine
+            // characters or more: its shortest form has nine digits.
             #[expect(clippy::float_cmp, reason = "JavaScript's ===")]
-            let nines = js::number(c.value(i)) == 999_999_999.0;
+            let nines = value.len() >= 9 && js::number(value) == 999_999_999.0;
             if nines {
                 c.error(Code::CsvNineNines, Some(i), &format!("Nine 9s used for {name}."));
             }
