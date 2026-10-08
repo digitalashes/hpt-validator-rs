@@ -163,15 +163,12 @@ fn parse_row(s: &str, eof: bool, row: &mut Parsed) -> Option<(usize, u64)> {
         return None;
     }
     let b = s.as_bytes();
-    // `str::find` with a char runs std's memchr, which wins on rows and long fields.
-    let newline_from = |from: usize| s[from..].find('\n').map(|i| from + i);
     row.fields = 0;
     row.spans.clear();
     row.unescaped.clear();
     row.quotes.clear();
     let mut cursor = 0;
-    let first = newline_from(0);
-    let mut newline = first;
+    let first = s.find('\n');
     // The first newline ends the row, unless a quoted field holds it.
     let counted =
         |len: usize| (len, first.map_or(0, |n| 1 + s[n + 1..len].matches('\n').count() as u64));
@@ -181,7 +178,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Parsed) -> Option<(usize, u64)> {
             let mut q = cursor;
             let mut doubled = false;
             loop {
-                let Some(next) = quote_from(s, q + 1) else {
+                let Some(next) = scan(b, q + 1, |v| eq(v, b'"')) else {
                     if !eof {
                         return None;
                     }
@@ -226,45 +223,55 @@ fn parse_row(s: &str, eof: bool, row: &mut Parsed) -> Option<(usize, u64)> {
             continue;
         }
         // Most cells of a wide file are empty, many of them in a row.
-        let empty = b[cursor..].iter().take_while(|&&c| c == b',').count();
+        let empty = scan(b, cursor, |v| v ^ (ONES * u64::from(b','))).unwrap_or(b.len()) - cursor;
         if empty > 0 {
             row.fields += empty;
             cursor += empty;
             continue;
         }
-        if newline.is_some_and(|n| n < cursor) {
-            newline = newline_from(cursor);
+        match scan(b, cursor, |v| eq(v, b',') | eq(v, b'\n')) {
+            Some(comma) if b[comma] == b',' => {
+                row.push(cursor, comma);
+                cursor = comma + 1;
+            }
+            Some(n) => {
+                row.push(cursor, n);
+                return Some(counted(n + 1));
+            }
+            None if !eof => return None,
+            None => {
+                row.push(cursor, s.len());
+                return Some(counted(s.len()));
+            }
         }
-        let field_end = newline.unwrap_or(b.len());
-        if let Some(comma) = s[cursor..field_end].find(',') {
-            row.push(cursor, cursor + comma);
-            cursor += comma + 1;
-            continue;
-        }
-        if let Some(n) = newline {
-            row.push(cursor, n);
-            return Some(counted(n + 1));
-        }
-        if !eof {
-            return None;
-        }
-        row.push(cursor, s.len());
-        return Some(counted(s.len()));
     }
 }
 
-/// The first `"` in `s` from byte `from` on. Most quoted fields are short, and a plain loop
-/// finds their closing quote sooner; std's memchr wins on notes of a kilobyte.
-fn quote_from(s: &str, from: usize) -> Option<usize> {
-    let b = s.as_bytes();
-    let near = (from + 128).min(b.len());
-    if let Some(i) = b[from..near].iter().position(|&x| x == b'"') {
-        return Some(from + i);
+/// A byte in each of a word's eight bytes.
+const ONES: u64 = u64::from_le_bytes([1; 8]);
+
+/// The bytes of `v` equal to `c`, as their top bit: exact at the lowest one, which is all
+/// `scan` reads (a borrow can mark a byte above a match).
+fn eq(v: u64, c: u8) -> u64 {
+    let x = v ^ (ONES * u64::from(c));
+    x.wrapping_sub(ONES) & !x & (ONES << 7)
+}
+
+/// The first byte of `b` from `from` on that `hit` marks, eight bytes at a time: `hit` maps
+/// eight bytes, the first lowest, to a word whose lowest set bit is in the first marked
+/// byte. Std's memchr reads byte by byte up to its alignment, and most fields are shorter.
+fn scan(b: &[u8], from: usize, hit: impl Fn(u64) -> u64) -> Option<usize> {
+    let mut i = from;
+    while let Some(word) = b.get(i..i + 8) {
+        let m = hit(u64::from_le_bytes(word.try_into().expect("eight bytes")));
+        if m != 0 {
+            return Some(i + m.trailing_zeros() as usize / 8);
+        }
+        i += 8;
     }
-    // The quote is ASCII, so the bytes of a char split at `near` are none.
-    let far =
-        (near..=b.len()).find(|&i| s.is_char_boundary(i)).expect("the end is a char boundary");
-    s[far..].find('"').map(|i| far + i)
+    let mut last = [0; 8];
+    last[..b.len() - i].copy_from_slice(&b[i..]);
+    Some(i + hit(u64::from_le_bytes(last)).trailing_zeros() as usize / 8).filter(|&p| p < b.len())
 }
 
 #[cfg(test)]
