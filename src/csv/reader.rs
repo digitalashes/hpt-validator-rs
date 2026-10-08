@@ -136,8 +136,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
         return None;
     }
     let b = s.as_bytes();
-    // `str::find` with a char runs std's memchr, which wins on rows and long fields. Quoted
-    // fields are mostly short, and a plain loop finds their closing quote sooner.
+    // `str::find` with a char runs std's memchr, which wins on rows and long fields.
     let newline_from = |from: usize| s[from..].find('\n').map(|i| from + i);
     row.text.clear();
     row.ends.clear();
@@ -154,8 +153,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
             let mut q = cursor;
             let mut doubled = false;
             loop {
-                let Some(next) = b[q + 1..].iter().position(|&x| x == b'"').map(|i| q + 1 + i)
-                else {
+                let Some(next) = quote_from(s, q + 1) else {
                     if !eof {
                         return None;
                     }
@@ -224,6 +222,20 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
         row.push(&s[cursor..]);
         return Some(counted(s.len()));
     }
+}
+
+/// The first `"` in `s` from byte `from` on. Most quoted fields are short, and a plain loop
+/// finds their closing quote sooner; std's memchr wins on notes of a kilobyte.
+fn quote_from(s: &str, from: usize) -> Option<usize> {
+    let b = s.as_bytes();
+    let near = (from + 128).min(b.len());
+    if let Some(i) = b[from..near].iter().position(|&x| x == b'"') {
+        return Some(from + i);
+    }
+    // The quote is ASCII, so the bytes of a char split at `near` are none.
+    let far =
+        (near..=b.len()).find(|&i| s.is_char_boundary(i)).expect("the end is a char boundary");
+    s[far..].find('"').map(|i| far + i)
 }
 
 #[cfg(test)]
