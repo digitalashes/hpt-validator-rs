@@ -30,16 +30,72 @@ pub fn validate<'s>(root: &'s Value, schema: &'s Value, data: &Value) -> Vec<Err
     run.errors
 }
 
-/// Keywords by the data type they apply to, in Ajv's rule order.
-const TYPED: [(&str, &[&str]); 4] = [
-    ("number", &["exclusiveMinimum", "format"]),
-    ("string", &["minLength", "pattern", "format"]),
-    ("array", &["minItems", "items", "contains"]),
-    ("object", &["required", "properties"]),
-];
+/// A schema's keywords, read in one pass over its members.
+#[derive(Default)]
+struct Keywords<'s> {
+    r#ref: Option<&'s str>,
+    ty: Option<&'s str>,
+    r#const: Option<&'s Value>,
+    r#enum: Option<&'s [Value]>,
+    not: Option<&'s Value>,
+    any_of: Option<&'s [Value]>,
+    all_of: Option<&'s [Value]>,
+    r#if: Option<&'s Value>,
+    then: Option<&'s Value>,
+    exclusive_minimum: Option<f64>,
+    min_length: Option<f64>,
+    pattern: Option<&'s str>,
+    format: bool,
+    min_items: Option<f64>,
+    items: Option<&'s Value>,
+    contains: Option<&'s Value>,
+    required: Option<&'s [Value]>,
+    properties: Option<&'s [(String, Value)]>,
+}
 
-// ponytail: keywords are looked up by name on every check, about a third of the run time on
-// large files; compile each schema object into a struct of keyword fields if that matters.
+impl<'s> Keywords<'s> {
+    // ponytail: read again on every check; compile the schemas into a tree of these once
+    // if JSON validation matters more.
+    fn of(s: &'s Value) -> Self {
+        let mut k = Keywords::default();
+        let Value::Object(members) = s else { return k };
+        for (name, v) in members {
+            match (name.as_str(), v) {
+                ("$ref", Value::String(r)) => k.r#ref = Some(r),
+                ("type", Value::String(t)) => k.ty = Some(t),
+                ("const", v) => k.r#const = Some(v),
+                ("enum", Value::Array(a)) => k.r#enum = Some(a),
+                ("not", v) => k.not = Some(v),
+                ("anyOf", Value::Array(a)) => k.any_of = Some(a),
+                ("allOf", Value::Array(a)) => k.all_of = Some(a),
+                ("if", v) => k.r#if = Some(v),
+                ("then", v) => k.then = Some(v),
+                ("exclusiveMinimum", Value::Number(n)) => k.exclusive_minimum = Some(*n),
+                ("minLength", Value::Number(n)) => k.min_length = Some(*n),
+                ("pattern", Value::String(p)) => k.pattern = Some(p),
+                ("format", _) => k.format = true,
+                ("minItems", Value::Number(n)) => k.min_items = Some(*n),
+                ("items", v) => k.items = Some(v),
+                ("contains", v) => k.contains = Some(v),
+                ("required", Value::Array(a)) => k.required = Some(a),
+                ("properties", Value::Object(m)) => k.properties = Some(m),
+                _ => {}
+            }
+        }
+        k
+    }
+
+    /// Whether any keyword of each data type is set, in Ajv's rule order.
+    fn typed(&self) -> [(&'static str, bool); 4] {
+        [
+            ("number", self.exclusive_minimum.is_some() || self.format),
+            ("string", self.min_length.is_some() || self.pattern.is_some() || self.format),
+            ("array", self.min_items.is_some() || self.items.is_some() || self.contains.is_some()),
+            ("object", self.required.is_some() || self.properties.is_some()),
+        ]
+    }
+}
+
 struct Run<'s> {
     definitions: Option<&'s Value>,
     path: String,
@@ -73,42 +129,39 @@ impl<'s> Run<'s> {
     }
 
     fn check(&mut self, s: &'s Value, data: &Value) {
-        if let Some(Value::String(r)) = s.get("$ref") {
+        let k = Keywords::of(s);
+        if let Some(r) = k.r#ref {
             let name = r.strip_prefix("#/definitions/").expect("local refs only");
             let target = self.definitions.and_then(|d| d.get(name));
             return self.check(target.expect("defined"), data);
         }
-        let has = |keywords: &[&str]| keywords.iter().any(|k| s.get(k).is_some());
-        let ty = s.get("type").map(|t| match t {
-            Value::String(t) => t.as_str(),
-            _ => unreachable!("one type per schema"),
-        });
+        let typed = k.typed();
         // The type is checked up front only if no keyword of that type does it.
-        let up_front = ty.is_some_and(|t| !TYPED.iter().any(|&(g, k)| g == t && has(k)));
-        if let Some(t) = ty
+        let up_front = k.ty.is_some_and(|t| !typed.iter().any(|&(g, has)| g == t && has));
+        if let Some(t) = k.ty
             && up_front
             && !is(t, data)
         {
             self.error(s, "type", || format!("must be {t}"));
         }
 
-        if let Some(c) = s.get("const")
+        if let Some(c) = k.r#const
             && data != c
         {
             self.error(s, "const", || "must be equal to constant".into());
         }
-        if let Some(Value::Array(allowed)) = s.get("enum")
+        if let Some(allowed) = k.r#enum
             && !allowed.contains(data)
         {
             self.error(s, "enum", || "must be equal to one of the allowed values".into());
         }
-        if let Some(not) = s.get("not")
+        if let Some(not) = k.not
             && self.valid(not, data)
         {
             self.error(s, "not", || "must NOT be valid".into());
         }
         // One passing branch discards the others' errors; with none, all of them stay.
-        if let Some(Value::Array(branches)) = s.get("anyOf")
+        if let Some(branches) = k.any_of
             && !branches.iter().any(|b| self.valid(b, data))
         {
             for b in branches {
@@ -116,12 +169,10 @@ impl<'s> Run<'s> {
             }
             self.error(s, "anyOf", || "must match a schema in anyOf".into());
         }
-        if let Some(Value::Array(all)) = s.get("allOf") {
-            for b in all {
-                self.check(b, data);
-            }
+        for b in k.all_of.unwrap_or_default() {
+            self.check(b, data);
         }
-        if let (Some(cond), Some(then)) = (s.get("if"), s.get("then"))
+        if let (Some(cond), Some(then)) = (k.r#if, k.then)
             && self.valid(cond, data)
         {
             let failed = self.failed;
@@ -131,67 +182,67 @@ impl<'s> Run<'s> {
             }
         }
 
-        for (group, keywords) in TYPED {
-            if !has(keywords) {
+        for (group, has) in typed {
+            if !has {
                 continue;
             }
             if !is(group, data) {
-                if ty == Some(group) {
+                if k.ty == Some(group) {
                     self.error(s, "type", || format!("must be {group}"));
                 }
                 continue;
             }
             match data {
-                Value::Number(n) => self.number(s, *n),
-                Value::String(v) => self.string(s, v),
-                Value::Array(items) => self.array(s, items),
-                Value::Object(_) => self.object(s, data),
+                Value::Number(n) => self.number(s, &k, *n),
+                Value::String(v) => self.string(s, &k, v),
+                Value::Array(items) => self.array(s, &k, items),
+                Value::Object(_) => self.object(s, &k, data),
                 _ => unreachable!(),
             }
         }
     }
 
-    fn number(&mut self, s: &'s Value, n: f64) {
-        if let Some(Value::Number(min)) = s.get("exclusiveMinimum")
-            && n <= *min
+    fn number(&mut self, s: &'s Value, k: &Keywords<'s>, n: f64) {
+        if let Some(min) = k.exclusive_minimum
+            && n <= min
         {
-            self.error(s, "exclusiveMinimum", || format!("must be > {}", js::number_string(*min)));
+            self.error(s, "exclusiveMinimum", || format!("must be > {}", js::number_string(min)));
         }
         // `format` has no number formats here.
     }
 
     #[expect(clippy::cast_precision_loss, reason = "lengths stay far below 2^52")]
-    fn string(&mut self, s: &'s Value, v: &str) {
-        if let Some(Value::Number(min)) = s.get("minLength")
-            && (v.chars().count() as f64) < *min
+    fn string(&mut self, s: &'s Value, k: &Keywords<'s>, v: &str) {
+        if let Some(min) = k.min_length
+            && (v.chars().count() as f64) < min
         {
-            let min = js::number_string(*min);
+            let min = js::number_string(min);
             self.error(s, "minLength", || format!("must NOT have fewer than {min} characters"));
         }
-        if let Some(Value::String(p)) = s.get("pattern")
+        if let Some(p) = k.pattern
             && !is_count(v)
         {
             self.error(s, "pattern", || format!("must match pattern \"{p}\""));
         }
-        if s.get("format").is_some() && !js::is_iso_date(v) {
+        if k.format && !js::is_iso_date(v) {
             self.error(s, "format", || "must match format \"date\"".into());
         }
     }
 
     #[expect(clippy::cast_precision_loss, reason = "lengths stay far below 2^52")]
-    fn array(&mut self, s: &'s Value, items: &[Value]) {
-        if let Some(Value::Number(min)) = s.get("minItems")
-            && (items.len() as f64) < *min
+    fn array(&mut self, s: &'s Value, k: &Keywords<'s>, items: &[Value]) {
+        if let Some(min) = k.min_items
+            && (items.len() as f64) < min
         {
-            let min = js::number_string(*min);
+            let min = js::number_string(min);
             self.error(s, "minItems", || format!("must NOT have fewer than {min} items"));
         }
-        if let Some(schema) = s.get("items") {
+        if let Some(schema) = k.items {
             for (i, item) in items.iter().enumerate() {
                 self.at(i, schema, item);
             }
         }
-        if let Some(schema) = s.get("contains")
+        if let Some(schema) = k.contains
             && !items.iter().any(|item| self.valid(schema, item))
         {
             self.error(s, "contains", || "must contain at least 1 valid item(s)".into());
@@ -207,8 +258,8 @@ impl<'s> Run<'s> {
         self.path.truncate(len);
     }
 
-    fn object(&mut self, s: &'s Value, data: &Value) {
-        if let Some(Value::Array(required)) = s.get("required") {
+    fn object(&mut self, s: &'s Value, k: &Keywords<'s>, data: &Value) {
+        if let Some(required) = k.required {
             for name in required {
                 let Value::String(name) = name else { continue };
                 if data.get(name).is_none() {
@@ -216,7 +267,7 @@ impl<'s> Run<'s> {
                 }
             }
         }
-        if let Some(Value::Object(properties)) = s.get("properties") {
+        if let Some(properties) = k.properties {
             for (name, schema) in properties {
                 if let Some(value) = data.get(name) {
                     self.at(name, schema, value);
