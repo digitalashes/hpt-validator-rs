@@ -30,8 +30,11 @@ impl Row {
         self.ends.push(self.text.len());
     }
 
-    /// A quoted field's text, `""` read as `"`.
-    fn push_quoted(&mut self, mut field: &str) {
+    /// A quoted field's text, `""` read as `"`; `doubled` tells whether it holds any `""`.
+    fn push_quoted(&mut self, mut field: &str, doubled: bool) {
+        if !doubled {
+            return self.push(field);
+        }
         // A char search: splitting on `""` would set up a substring search for every field.
         while let Some(i) = field.find('"') {
             self.text.push_str(&field[..=i]);
@@ -135,6 +138,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
         if b.get(cursor) == Some(&b'"') {
             let start = cursor + 1;
             let mut q = cursor;
+            let mut doubled = false;
             loop {
                 let Some(next) = b[q + 1..].iter().position(|&x| x == b'"').map(|i| q + 1 + i)
                 else {
@@ -151,11 +155,12 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                     if !eof {
                         return None;
                     }
-                    row.push_quoted(&s[start..q]);
+                    row.push_quoted(&s[start..q], doubled);
                     return Some(s.len());
                 }
                 if b[q + 1] == b'"' {
                     q += 1;
+                    doubled = true;
                     continue;
                 }
                 // A closing quote is followed by optional JS whitespace and `,` or `\n`.
@@ -164,7 +169,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                     - after.trim_start_matches(|c| c != '\n' && js::is_space(c)).len();
                 match b.get(end) {
                     Some(&c @ (b',' | b'\n')) => {
-                        row.push_quoted(&s[start..q]);
+                        row.push_quoted(&s[start..q], doubled);
                         if c == b'\n' {
                             return Some(end + 1);
                         }
@@ -174,6 +179,12 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
                     _ => row.quotes.push((Code::XCsvInvalidQuotes, row.ends.len())),
                 }
             }
+            continue;
+        }
+        // Most cells of a wide file are empty.
+        if b.get(cursor) == Some(&b',') {
+            row.push("");
+            cursor += 1;
             continue;
         }
         if newline.is_some_and(|n| n < cursor) {
