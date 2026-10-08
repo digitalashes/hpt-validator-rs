@@ -21,8 +21,12 @@ pub struct Row {
 
 impl Row {
     pub fn fields(&self) -> impl Iterator<Item = &str> {
-        let starts = std::iter::once(0).chain(self.ends.iter().copied());
-        starts.zip(&self.ends).map(|(start, &end)| &self.text[start..end])
+        let mut start = 0;
+        self.ends.iter().map(move |&end| {
+            let field = &self.text[start..end];
+            start = end;
+            field
+        })
     }
 
     fn push(&mut self, field: &str) {
