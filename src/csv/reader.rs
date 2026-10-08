@@ -197,10 +197,11 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
             }
             continue;
         }
-        // Most cells of a wide file are empty.
-        if b.get(cursor) == Some(&b',') {
-            row.push("");
-            cursor += 1;
+        // Most cells of a wide file are empty, many of them in a row.
+        let empty = b[cursor..].iter().take_while(|&&c| c == b',').count();
+        if empty > 0 {
+            row.ends.extend(std::iter::repeat_n(row.text.len(), empty));
+            cursor += empty;
             continue;
         }
         if newline.is_some_and(|n| n < cursor) {
