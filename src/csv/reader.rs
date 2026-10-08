@@ -123,18 +123,21 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
         return None;
     }
     let b = s.as_bytes();
-    let find = |c: u8, from: usize| b[from..].iter().position(|&x| x == c).map(|i| from + i);
+    // `str::find` with a char runs std's memchr, which wins on rows and long fields. Quoted
+    // fields are mostly short, and a plain loop finds their closing quote sooner.
+    let newline_from = |from: usize| s[from..].find('\n').map(|i| from + i);
     row.text.clear();
     row.ends.clear();
     row.quotes.clear();
     let mut cursor = 0;
-    let mut newline = find(b'\n', 0);
+    let mut newline = newline_from(0);
     loop {
         if b.get(cursor) == Some(&b'"') {
             let start = cursor + 1;
             let mut q = cursor;
             loop {
-                let Some(next) = find(b'"', q + 1) else {
+                let Some(next) = b[q + 1..].iter().position(|&x| x == b'"').map(|i| q + 1 + i)
+                else {
                     if !eof {
                         return None;
                     }
@@ -174,10 +177,10 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<usize> {
             continue;
         }
         if newline.is_some_and(|n| n < cursor) {
-            newline = find(b'\n', cursor);
+            newline = newline_from(cursor);
         }
         let field_end = newline.unwrap_or(b.len());
-        if let Some(comma) = b[cursor..field_end].iter().position(|&x| x == b',') {
+        if let Some(comma) = s[cursor..field_end].find(',') {
             row.push(&s[cursor..cursor + comma]);
             cursor += comma + 1;
             continue;
