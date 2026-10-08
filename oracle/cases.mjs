@@ -195,6 +195,8 @@ write("findings/dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])));
     [{ "standard_charge | min": "" }],
     [{ "standard_charge | max": "" }, { negotiated_dollar: "" }],
     [{ payer_name: "", plan_name: "" }],
+    // A wide group with nothing but a count of zero still needs notes.
+    [{}, { negotiated_dollar: "", methodology: "", count: "0" }],
     [{ "code | 1 | type": "ndc" }],
     [{ "code | 1 | type": "CMG" }],
     [{ "code | 1": "", "code | 1 | type": "", modifiers: "25" }],

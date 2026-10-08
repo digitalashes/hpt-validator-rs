@@ -3,7 +3,7 @@
     "valid": false,
     "errors": [
       {
-        "path": "C31",
+        "path": "C32",
         "message": "\"code | 1 | type\" value \"CMG\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
         "columnName": "code | 1 | type",
         "value": "CMG",
@@ -28,10 +28,6 @@
           "CDM",
           "TRIS-DRG"
         ]
-      },
-      {
-        "path": "row 32",
-        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
       },
       {
         "path": "row 33",
@@ -46,12 +42,16 @@
         "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
       },
       {
-        "path": "A38",
+        "path": "row 36",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "A39",
         "message": "A value is required for \"description\". You must encode the missing information.",
         "columnName": "description"
       },
       {
-        "path": "D41",
+        "path": "D42",
         "message": "A value is required for \"setting\". You must encode the missing information.",
         "columnName": "setting"
       }
@@ -62,7 +62,7 @@
     "valid": false,
     "errors": [
       {
-        "path": "C31",
+        "path": "C32",
         "message": "\"code | 1 | type\" value \"CMG\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
         "columnName": "code | 1 | type",
         "value": "CMG",
@@ -89,7 +89,7 @@
         ]
       },
       {
-        "path": "row 32",
+        "path": "row 33",
         "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
       }
     ],
@@ -120,7 +120,7 @@
         "message": "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data."
       },
       {
-        "path": "C31",
+        "path": "C32",
         "message": "\"code | 1 | type\" value \"CMG\" is not one of the allowed valid values. You must encode one of these valid values: CPT, HCPCS, ICD, DRG, MS-DRG, R-DRG, S-DRG, APS-DRG, AP-DRG, APR-DRG, APC, NDC, HIPPS, LOCAL, EAPG, CDT, RC, CDM, TRIS-DRG",
         "columnName": "code | 1 | type",
         "value": "CMG",
@@ -147,10 +147,6 @@
         ]
       },
       {
-        "path": "row 32",
-        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
-      },
-      {
         "path": "row 33",
         "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
       },
@@ -163,17 +159,21 @@
         "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
       },
       {
-        "path": "A38",
+        "path": "row 36",
+        "message": "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type)."
+      },
+      {
+        "path": "A39",
         "message": "A value is required for \"description\". You must encode the missing information.",
         "columnName": "description"
       },
       {
-        "path": "D41",
+        "path": "D42",
         "message": "A value is required for \"setting\". You must encode the missing information.",
         "columnName": "setting"
       },
       {
-        "path": "E41",
+        "path": "E42",
         "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
       }
     ],
