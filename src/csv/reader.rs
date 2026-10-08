@@ -31,13 +31,14 @@ impl Row {
     }
 
     /// A quoted field's text, `""` read as `"`.
-    fn push_quoted(&mut self, field: &str) {
-        for (i, part) in field.split("\"\"").enumerate() {
-            if i > 0 {
-                self.text.push('"');
-            }
-            self.text.push_str(part);
+    fn push_quoted(&mut self, mut field: &str) {
+        // A char search: splitting on `""` would set up a substring search for every field.
+        while let Some(i) = field.find('"') {
+            self.text.push_str(&field[..=i]);
+            let rest = &field[i + 1..];
+            field = rest.strip_prefix('"').unwrap_or(rest);
         }
+        self.text.push_str(field);
         self.ends.push(self.text.len());
     }
 }
