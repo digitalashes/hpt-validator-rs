@@ -61,7 +61,7 @@
         "columnName": "description"
       },
       {
-        "path": "D40",
+        "path": "D41",
         "message": "A value is required for \"setting\". You must encode the missing information.",
         "columnName": "setting"
       }
@@ -172,12 +172,12 @@
         "columnName": "description"
       },
       {
-        "path": "D40",
+        "path": "D41",
         "message": "A value is required for \"setting\". You must encode the missing information.",
         "columnName": "setting"
       },
       {
-        "path": "H40",
+        "path": "H41",
         "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
       }
     ],
@@ -412,16 +412,16 @@
         "columnName": "description"
       },
       {
-        "path": "D40",
+        "path": "D41",
         "message": "A value is required for \"setting\". You must encode the missing information.",
         "columnName": "setting"
       },
       {
-        "path": "H40",
+        "path": "H41",
         "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
       },
       {
-        "path": "S41",
+        "path": "S42",
         "message": "\"count\" value \"10\" is not a valid count of allowed amounts. You must encode 0, an integer 11 or greater, or \"1 through 10\".",
         "columnName": "count",
         "value": "10"

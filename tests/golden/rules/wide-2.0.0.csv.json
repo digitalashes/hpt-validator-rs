@@ -51,7 +51,7 @@
         "columnName": "description"
       },
       {
-        "path": "D40",
+        "path": "D41",
         "message": "A value is required for \"setting\". You must encode the missing information.",
         "columnName": "setting"
       }
@@ -168,12 +168,12 @@
         "columnName": "description"
       },
       {
-        "path": "D40",
+        "path": "D41",
         "message": "A value is required for \"setting\". You must encode the missing information.",
         "columnName": "setting"
       },
       {
-        "path": "E40",
+        "path": "E41",
         "message": "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\"."
       }
     ],

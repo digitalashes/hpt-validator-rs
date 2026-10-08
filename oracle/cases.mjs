@@ -206,6 +206,8 @@ write("findings/dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])));
     [{ drug_unit_of_measurement: "0", drug_type_of_measurement: "ml" }],
     [{ drug_type_of_measurement: "GR" }],
     [{ setting: "BOTH", description: "" }],
+    // Dotless i upper-cases to I, so this is an allowed setting.
+    [{ setting: "ınpatient" }],
   ];
   const PAYERS = ["Payer A | PPO", "Payer B | HMO"];
   const values = (row, payers) =>

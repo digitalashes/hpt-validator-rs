@@ -36,6 +36,7 @@ Hip replacement,,,inpatient,25000,20000,18000,,,case rate,,18000,,,case rate,,18
 Hip replacement,470,MS-DRG,inpatient,25000,20000,18000,,,case rate,,18000,,,case rate,,18000,18000,
 Hip replacement,470,MS-DRG,inpatient,25000,20000,18000,,,case rate,,18000,,,case rate,,18000,18000,
 ,470,MS-DRG,BOTH,25000,20000,18000,,,case rate,,18000,,,case rate,,18000,18000,
+Hip replacement,470,MS-DRG,ınpatient,25000,20000,18000,,,case rate,,18000,,,case rate,,18000,18000,
 
 Hip replacement,470,MS-DRG
 Hip replacement,470,MS-DRG,inpatient,25000,20000,18000,,,case rate,,18000,,,case rate,,18000,18000,,extra
