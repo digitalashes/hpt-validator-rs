@@ -97,6 +97,12 @@ write("findings/bom-blank-row1.csv", "﻿\n" + csv(tall("2.0.0")));
   const [h, v, ...rest] = tall("2.0.0", [{}], header("2.0.0", { last_updated_on: "July 1 2024" }));
   write("findings/blank-row3.csv", csv([h, v]) + "\n" + csv(rest.slice(1)));
 }
+// A data row of whitespace only is blank.
+{
+  const rows = tall("2.0.0", [{}, {}]);
+  rows.splice(4, 0, [" ", "\t", " "]);
+  write("findings/whitespace-row.csv", csv(rows));
+}
 // A CSV declaring 2.2.0 gets VersionMismatchAlert anchored at row 3; JSON does not.
 write("findings/version-2.2.0.csv", csv(tall("2.2.0", [{}], header("2.2.0"))));
 write("findings/version-2.2.0.json", json({ ...fixture("sample-valid.json"), version: "2.2.0" }));
@@ -226,6 +232,14 @@ write("findings/dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])));
       write(`rules/${shape}-${version}.csv`, csv(rows));
     }
   }
+  // Row 3 may interleave the wide groups' columns; the groups keep their order.
+  const KINDS = ["negotiated_dollar", "negotiated_percentage", "negotiated_algorithm", "methodology"];
+  const cols = [...BASE, ...drug("3.0.0"), ...AMOUNTS,
+    ...KINDS.flatMap((k) => PAYERS.map((p) => `standard_charge | ${p} | ${k}`)),
+    ...PAYERS.flatMap((p) => [`additional_payer_notes | ${p}`, ...extra("3.0.0", ` | ${p}`)]), ...TAIL];
+  const row = item(cols, values([{ negotiated_dollar: "", negotiated_percentage: "x" }, { negotiated_dollar: "-5" }],
+    PAYERS));
+  write("rules/wide-interleaved-3.0.0.csv", csv([...header("3.0.0"), cols, row]));
 }
 
 // --- JSON ---------------------------------------------------------------------------

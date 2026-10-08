@@ -36,6 +36,9 @@ pub struct Layout {
     /// `additional_generic_notes`.
     pub notes: usize,
     pub groups: Vec<Group>,
+    /// Each row-3 column's group, by index in `groups`, if it is in one: a row with each of a
+    /// group's columns empty passes every rule on the group.
+    pub column_group: Vec<Option<usize>>,
     /// 2.2 and later: `drug_unit_of_measurement`, `drug_type_of_measurement`.
     pub drug: Option<[usize; 2]>,
     /// 2.2 and later.
@@ -53,9 +56,6 @@ pub struct Group {
     /// Tall only: `payer_name`, `plan_name`.
     pub payer_plan: Option<[usize; 2]>,
     pub amounts: Amounts,
-    /// The row-3 columns of all the slots above: a row with each of them empty passes every
-    /// rule on the group.
-    pub columns: Vec<usize>,
 }
 
 impl Group {
@@ -94,13 +94,20 @@ struct Check<'a> {
 }
 
 /// The groups with a value in a row, by index, for `errors` and `alerts` on that row: the
-/// rules pass a group without one, and a wide row leaves most of its groups empty.
-pub fn live(l: &Layout, values: &[&str], groups: &mut Vec<usize>) {
-    let has = |&i: &usize| values.get(i).is_some_and(|v| !v.is_empty());
+/// rules pass a group without one, and a wide row leaves most of its groups empty. `filled`
+/// is the row's non-empty cells, ascending.
+pub fn live(l: &Layout, filled: &[usize], groups: &mut Vec<usize>) {
     groups.clear();
-    groups.extend(
-        (l.groups.iter().enumerate()).filter(|(_, g)| g.columns.iter().any(has)).map(|(i, _)| i),
-    );
+    for g in filled.iter().filter_map(|&i| l.column_group.get(i).copied().flatten()) {
+        if groups.last() != Some(&g) {
+            groups.push(g);
+        }
+    }
+    // Row 3 need not keep a group's columns together.
+    if !groups.is_sorted() {
+        groups.sort_unstable();
+        groups.dedup();
+    }
 }
 
 /// Upstream's `rowValidators` on one data row.

@@ -70,8 +70,8 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
     let mut index = 0;
     // The last row's cells, emptied: its buffer outlives the row it borrowed from.
     let mut spare = Vec::new();
-    // The data row's groups with a value, refilled per row.
-    let mut live_groups = Vec::new();
+    // The row's non-empty cells, and a data row's groups with a value, refilled per row.
+    let (mut filled, mut live_groups) = (Vec::new(), Vec::new());
     let errors = 'rows: {
         let mut errors = Vec::new();
         while let Some(row) = reader.next_row()? {
@@ -92,12 +92,17 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
             }
             let mut cells = recycle(std::mem::take(&mut spare));
             // Trailing empty cells are left out: every rule reads a missing cell as empty.
+            filled.clear();
             for (i, field) in row.non_empty() {
                 cells.resize(i, "");
-                cells.push(js::trim(field));
+                let cell = js::trim(field);
+                if !cell.is_empty() {
+                    filled.push(i);
+                }
+                cells.push(cell);
             }
             let row = cells;
-            let blank = row.iter().all(|f| f.is_empty());
+            let blank = filled.is_empty();
             if blank && (index == 0 || index == 2) {
                 // Upstream drops the errors found so far and keeps the alerts; Extended
                 // keeps the errors.
@@ -144,7 +149,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 }
                 _ => {
                     let layout = layout.as_ref().expect("data rows follow a valid row 3");
-                    rules::live(layout, &row, &mut live_groups);
+                    rules::live(layout, &filled, &mut live_groups);
                     add(&mut errors, lined(rules::errors(layout, &live_groups, index, &row)), max);
                     if !full(&alerts, max) {
                         add(
@@ -390,7 +395,6 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
                 notes: if tall { notes } else { want(format!("additional_payer_notes{g}")) },
                 payer_plan,
                 amounts: Amounts::None,
-                columns: Vec::new(),
             }
         })
         .collect();
@@ -469,9 +473,11 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
 
     let columns: Vec<usize> =
         (matched.into_iter().collect::<Option<_>>()).expect("no error, so every slot matched");
-    for g in &mut groups {
-        let resolved = g.slots().map(|slot| columns[slot]).collect();
-        g.columns = resolved;
+    let mut column_group = vec![None; row.len()];
+    for (i, g) in groups.iter().enumerate() {
+        for slot in g.slots() {
+            column_group[columns[slot]] = Some(i);
+        }
     }
     let layout = Layout {
         v,
@@ -483,6 +489,7 @@ fn columns(v: Version, row: &[&str]) -> (FileType, Columns) {
         standard: [gross, discounted, min, max],
         notes,
         groups,
+        column_group,
         drug,
         modifiers,
     };
