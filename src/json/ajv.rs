@@ -5,7 +5,6 @@
 
 use super::parse::Value;
 use crate::js;
-use std::fmt::{Display, Write as _};
 
 /// Ajv's `ErrorObject`, as far as upstream reads it.
 pub struct Error<'s> {
@@ -239,7 +238,7 @@ impl<'s> Run<'s> {
         }
         if let Some(schema) = k.items {
             for (i, item) in items.iter().enumerate() {
-                self.at(i, schema, item);
+                self.at(|path| push_index(path, i), schema, item);
             }
         }
         if let Some(schema) = k.contains
@@ -249,11 +248,12 @@ impl<'s> Run<'s> {
         }
     }
 
-    /// Checks `data` found at `segment` below the current path. No property name in the
-    /// schemas needs JSON Pointer escaping.
-    fn at(&mut self, segment: impl Display, schema: &'s Value, data: &Value) {
+    /// Checks `data` found at the segment that `segment` writes below the current path. No
+    /// property name in the schemas needs JSON Pointer escaping.
+    fn at(&mut self, segment: impl FnOnce(&mut String), schema: &'s Value, data: &Value) {
         let len = self.path.len();
-        write!(self.path, "/{segment}").expect("a String write cannot fail");
+        self.path.push('/');
+        segment(&mut self.path);
         self.check(schema, data);
         self.path.truncate(len);
     }
@@ -270,7 +270,7 @@ impl<'s> Run<'s> {
         if let Some(properties) = k.properties {
             for (name, schema) in properties {
                 if let Some(value) = data.get(name) {
-                    self.at(name, schema, value);
+                    self.at(|path| path.push_str(name), schema, value);
                 }
             }
         }
@@ -288,6 +288,14 @@ fn is(ty: &str, v: &Value) -> bool {
         | ("null", Value::Null) => true,
         _ => false,
     }
+}
+
+/// `i` in decimal, without `fmt`.
+fn push_index(path: &mut String, i: usize) {
+    if i >= 10 {
+        push_index(path, i / 10);
+    }
+    path.push(char::from(b"0123456789"[i % 10]));
 }
 
 /// The one `pattern` in the schemas, v3.0's count of allowed amounts (`COUNT` in the
