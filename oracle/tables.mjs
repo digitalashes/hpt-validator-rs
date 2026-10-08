@@ -58,7 +58,7 @@ const POSITIVE = ["1", "0", "0.0", "00", "0.", ".0", ".5", "5.", "1.5", "01", "1
 
 const COERCE = ["v2.0.0", "2.0.0", "2.0", "2", "3.0.0", "3.0", "3", "v3", "V3.0.0", " 3.0.0 ", "=3.0.0", "3.0.0-beta",
   "3.0.0+build", "3.0.0.0", "version3.0.0", "x.y.z", "", "3.1", "2.2.1", "03.0.0", "3.00.0", "3.0.0x",
-  "a3b", "3.0.0 2.0.0", "2.0.0.3.0.0", "99999999999999999.0.0", "3.١.0"];
+  "a3b", "3.0.0 2.0.0", "2.0.0.3.0.0", "99999999999999999.0.0", "3.١.0", "9007199254740992", "3-4"];
 
 const FILENAMES = ["123456789_hospital_standardcharges.json", "12-3456789_x_standardcharges.csv",
   "123456789-1234567890_x_standardcharges.csv", "123456789_x_standardcharges.CSV", "123456789_x_STANDARDCHARGES.Json",
@@ -109,6 +109,8 @@ const CORPUS = {
   "quote-then-cr": b('"a"\r\n"b"\r'),
   "quote-unclosed": b('a,"b\nc,d\n'),
   "quote-unclosed-eof": b('a,"b'),
+  "quote-closed-eof": b('a,"b"'),
+  "quoted-doubled-twice": b('"a""b","c""d"\n'),
   "quote-doubled-unclosed": b('"a""\nb\n'),
   "quote-only": b('"\n'),
   "quotes-many-bad": b('"a"x"b"y,c\n"d"e\n'),
@@ -131,6 +133,8 @@ const CORPUS = {
   "invalid-utf8": Buffer.from([0x61, 0xff, 0x2c, 0x62, 0x0a, 0xc3, 0x28, 0x0a, 0xe2, 0x82, 0x2c, 0xc0, 0xaf, 0x0a]),
   "invalid-utf8-surrogate": Buffer.from([0xed, 0xa0, 0x80, 0x2c, 0x61, 0x0a]),
   "invalid-utf8-truncated-eof": Buffer.from([0x61, 0x2c, 0xe2, 0x82]),
+  // An invalid byte, then a char cut by the 1024-byte chunk.
+  "invalid-utf8-then-split": Buffer.concat([b("a".repeat(1022)), Buffer.from([0xff, 0xc3, 0xa9]), b(",b\n")]),
   "nul-and-controls": b("a\u0000,b\u0001\n\u000b,\u000c\n"),
   "semicolon-tab": b("a;b\tc\n"),
 };

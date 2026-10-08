@@ -101,7 +101,7 @@ fn extended() {
         let (case, key) = name.split_once(' ').unwrap();
         let report = run(&tests.join("cases").join(case), key, Mode::Extended).unwrap();
         let got = json!({
-            "file_type": format!("{:?}", report.file_type.unwrap()),
+            "file_type": report.file_type.unwrap().as_str(),
             "errors": list(&report.errors, true),
             "alerts": list(&report.alerts, true),
             "extended": list(&report.extended, true),

@@ -154,6 +154,23 @@ write("findings/license-upper.csv", csv(tall("2.0.0", [{}],
   header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "LICENSE_NUMBER | MD" }))));
 write("findings/license-lower.csv", csv(tall("2.0.0", [{}],
   header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "license_number | MD" }))));
+// ... and its two characters after the bar exclude line terminators (\uFB02 upper-cases to FL).
+write("findings/license-newline-ligature.csv", csv(tall("2.0.0", [{}],
+  header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "license_number |\n\uFB02" }))));
+// Only `code | N` and `code | N | type` count as code columns, and a four-part column is a
+// charge column only with a known charge.
+{
+  const rows = tall("2.0.0");
+  rows[2].push("notes | 2", "notes | 3 | type");
+  rows[3].push("", "");
+  write("findings/code-like-columns.csv", csv(rows));
+}
+{
+  const rows = wide("3.0.0", ["Payer A | PPO"]);
+  rows[2].push("standard_charge | Payer Z | Plan Z | bogus");
+  rows[3].push("");
+  write("findings/four-part-unknown-charge.csv", csv(rows));
+}
 // Real CRLF and mixed line endings.
 write("findings/crlf.csv", csv(tall("2.0.0", [{}, {}])).replaceAll("\n", "\r\n"));
 write("findings/mixed-line-endings.csv", csv(tall("2.0.0", [{}, {}])).split("\n").map((l, i) => (l && i % 2 ? l + "\r" : l)).join("\n"));
@@ -166,6 +183,7 @@ write("findings/dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])));
   const at = (i, text) => lines.map((l, j) => (j === i ? text : l)).join("\n");
   write("findings/invalid-quotes.csv", at(4, '"Hip" replacement' + lines[4].slice("Hip replacement".length)));
   write("findings/missing-quotes.csv", at(4, '"Hip replacement' + lines[4].slice("Hip replacement".length)));
+  write("findings/bom-invalid-quotes.csv", "\ufeff\n" + at(4, '"Hip" replacement' + lines[4].slice("Hip replacement".length)));
 }
 
 // --- data-row rules: edges the fixtures and unit tests leave out ----------------------
@@ -356,6 +374,7 @@ write("findings/dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])));
     "bom-twice": "﻿﻿{}",
     "bom-only": "﻿",
     "bom-not-first": " ﻿{}",
+    "number-two-exponents": '{"a": 1e5e5}',
   };
   for (const [name, text] of Object.entries(SYNTAX)) write(`json/syntax/${name}.json`, text);
 

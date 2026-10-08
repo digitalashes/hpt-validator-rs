@@ -1,0 +1,7 @@
+﻿
+hospital_name,last_updated_on,version,hospital_location,hospital_address,license_number | CA,"To the best of its knowledge and belief, the hospital has included all applicable standard charge information in accordance with the requirements of 45 CFR 180.50, and the information encoded is true, accurate, and complete as of the date indicated."
+West Mercy Hospital,2024-07-01,2.0.0,West Mercy Hospital,12 Main Street,50056,true
+description,code | 1,code | 1 | type,setting,standard_charge | gross,standard_charge | discounted_cash,payer_name,plan_name,standard_charge | negotiated_dollar,standard_charge | negotiated_percentage,standard_charge | negotiated_algorithm,standard_charge | methodology,standard_charge | min,standard_charge | max,additional_generic_notes
+Hip replacement,470,MS-DRG,inpatient,25000,20000,Payer A,PPO,18000,,,case rate,18000,18000,
+"Hip" replacement,470,MS-DRG,inpatient,25000,20000,Payer A,PPO,18000,,,case rate,18000,18000,
+Hip replacement,470,MS-DRG,inpatient,25000,20000,Payer A,PPO,18000,,,case rate,18000,18000,

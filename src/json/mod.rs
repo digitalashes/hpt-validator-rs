@@ -56,15 +56,13 @@ fn schemas(v: Version) -> &'static Schemas {
         // Kept for the life of the program: the compiled schemas borrow from them.
         let keep = |schema| &*Box::leak(Box::new(schema));
         let full = keep(parse::document(full));
+        // The metadata is collected without the charge items, so the schema for it only
+        // stops requiring them.
         let mut metadata = full.clone();
         if let Value::Object(o) = &mut metadata {
             for (name, value) in &mut o.members {
-                match (name.as_str(), value) {
-                    ("properties", Value::Object(p)) => p.members.retain(|(k, _)| k != CHARGES),
-                    ("required", Value::Array(r)) => {
-                        r.retain(|k| *k != Value::String(CHARGES.into()));
-                    }
-                    _ => {}
+                if let ("required", Value::Array(r)) = (name.as_str(), value) {
+                    r.retain(|k| *k != Value::String(CHARGES.into()));
                 }
             }
         }

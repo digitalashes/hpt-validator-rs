@@ -197,7 +197,7 @@ pub fn number_string(n: f64) -> String {
     if n == 0.0 {
         return "0".into();
     }
-    let sign = if n < 0.0 { "-" } else { "" };
+    let sign = if n.is_sign_negative() { "-" } else { "" };
     if n.is_infinite() {
         return format!("{sign}Infinity");
     }

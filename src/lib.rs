@@ -424,7 +424,7 @@ mod tests {
         let f = Finding {
             code: Code::CsvAllowedValues,
             path: "G2".into(),
-            message: "\"x\"\\\u{1}\u{8}\n\té".into(),
+            message: "\"x\" \\\u{1}\u{8}\n\té".into(),
             field: None,
             column_name: Some("setting".into()),
             value: Some(String::new()),
@@ -436,7 +436,7 @@ mod tests {
         };
         assert_eq!(
             f.to_json(),
-            r#"{"path":"G2","message":"\"x\"\\\u0001\b\n\té","columnName":"setting","value":"","allowedValues":["a","b"],"column":3,"code":"HPT_CSV_ALLOWED_VALUES","line":7}"#
+            r#"{"path":"G2","message":"\"x\" \\\u0001\b\n\té","columnName":"setting","value":"","allowedValues":["a","b"],"column":3,"code":"HPT_CSV_ALLOWED_VALUES","line":7}"#
         );
     }
 }
