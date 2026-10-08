@@ -1,0 +1,33 @@
+# The JS tables test every Unicode code point: unoptimised, it outruns the test timeout
+# when several mutants build and test at once.
+profile = "mutants"
+
+# Mutants that change no output, only speed or buffer reuse.
+exclude_re = [
+    # Buffer reuse: a fresh Vec, or one blank that the next row's first cell overwrites.
+    'replace recycle -> Vec<&.b str> with vec!\[(""|)\]',
+    'Spare::keep',
+    # The member-name length filter only saves comparisons.
+    'replace match guard o.lengths & length_bit\(name\) != 0 with true in Value::get',
+    'replace & with \| in Value::get',
+    'replace length_bit -> u64 with 1',
+    'replace % with / in length_bit',
+    # The vendored schemas hold no object in `const` or `enum`.
+    'PartialEq for Object>::eq',
+    # The lossy pass gives the same text for an input cut short.
+    'replace match guard e.error_len\(\).is_none\(\) with false in decode',
+    # A fourth part is cut by the resize to three.
+    'replace < with <= in coerce',
+    # Empty spans read as empty fields.
+    'replace < with <= in Parsed::push',
+    # Searching for a newline before parse_row only saves parse attempts.
+    'replace == with != in Reader<R>::next_row',
+    'reader\.rs:118:17: replace \|\| with && in Reader<R>::next_row',
+    # Two masks never share their lowest set bit, and the empty-run fast path and the
+    # past-the-end filter only save work.
+    'replace \| with \^ in parse_row',
+    'replace \^ with \| in parse_row',
+    'replace \* with / in parse_row',
+    'replace > with < in parse_row',
+    'replace < with <= in scan',
+]

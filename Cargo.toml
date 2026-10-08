@@ -13,6 +13,11 @@ include = ["/src", "/schemas", "/README.md", "/LICENSE", "/UPSTREAM.lock"]
 [dev-dependencies]
 serde_json = { version = "1", features = ["preserve_order"] }
 
+[profile.mutants]
+inherits = "test"
+opt-level = 1
+debug = "none"
+
 [lints.rust]
 unsafe_code = "forbid"
 
