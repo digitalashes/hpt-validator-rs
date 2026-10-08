@@ -6,48 +6,63 @@
 use crate::{Code, js};
 use std::io::{self, Read};
 
-/// One row, its buffers reused for the next, so reading allocates only for a longer row.
-#[derive(Clone, Debug, Default)]
-pub struct Row {
-    /// The fields back to back; field `i` ends at `ends[i]`.
-    text: String,
-    ends: Vec<usize>,
+/// One row as `Reader::next_row` lends it, its fields borrowed from the reader's text.
+pub struct Row<'a> {
     /// Physical line where the row starts, 1-based, counting lines removed with the BOM.
     pub line: u64,
     /// Quote problems papaparse reports for this row, in its order, with the field each
     /// quoted field starts at.
-    pub quotes: Vec<(Code, usize)>,
+    pub quotes: &'a [(Code, usize)],
+    /// The text from the row's start on.
+    text: &'a str,
+    spans: &'a [(usize, usize)],
+    unescaped: &'a str,
 }
 
-impl Row {
-    pub fn fields(&self) -> impl Iterator<Item = &str> {
-        let mut start = 0;
-        self.ends.iter().map(move |&end| {
+impl<'a> Row<'a> {
+    pub fn fields(self) -> impl Iterator<Item = &'a str> {
+        let (text, unescaped) = (self.text, self.unescaped);
+        self.spans.iter().map(move |&(start, end)| {
             // Most cells of a wide file are empty.
-            let field = if end == start { "" } else { &self.text[start..end] };
-            start = end;
-            field
+            if start == end {
+                ""
+            } else if end <= text.len() {
+                &text[start..end]
+            } else {
+                &unescaped[start - text.len()..end - text.len()]
+            }
         })
     }
+}
 
-    fn push(&mut self, field: &str) {
-        self.text.push_str(field);
-        self.ends.push(self.text.len());
-    }
+/// A row's fields and quote problems, the buffers reused for the next row, so reading
+/// allocates only for a longer row.
+#[derive(Default)]
+struct Parsed {
+    /// Each field's byte range in the text from the row's start on; past the text's end, in
+    /// `unescaped` after the text's length.
+    spans: Vec<(usize, usize)>,
+    /// Quoted fields with `""`, read as `"`, back to back.
+    unescaped: String,
+    quotes: Vec<(Code, usize)>,
+}
 
-    /// A quoted field's text, `""` read as `"`; `doubled` tells whether it holds any `""`.
-    fn push_quoted(&mut self, mut field: &str, doubled: bool) {
+impl Parsed {
+    /// The quoted field `s[start..end]`; `doubled` tells whether it holds any `""`.
+    fn push_quoted(&mut self, s: &str, start: usize, end: usize, doubled: bool) {
         if !doubled {
-            return self.push(field);
+            return self.spans.push((start, end));
         }
+        let from = s.len() + self.unescaped.len();
+        let mut field = &s[start..end];
         // A char search: splitting on `""` would set up a substring search for every field.
         while let Some(i) = field.find('"') {
-            self.text.push_str(&field[..=i]);
+            self.unescaped.push_str(&field[..=i]);
             let rest = &field[i + 1..];
             field = rest.strip_prefix('"').unwrap_or(rest);
         }
-        self.text.push_str(field);
-        self.ends.push(self.text.len());
+        self.unescaped.push_str(field);
+        self.spans.push((from, s.len() + self.unescaped.len()));
     }
 }
 
@@ -63,7 +78,7 @@ pub struct Reader<R> {
     line: u64,
     /// Newlines removed together with the BOM.
     pub bom_lines: u64,
-    row: Row,
+    parsed: Parsed,
 }
 
 impl<R: Read> Reader<R> {
@@ -81,11 +96,11 @@ impl<R: Read> Reader<R> {
             eof: false,
             line: 1,
             bom_lines: 0,
-            row: Row::default(),
+            parsed: Parsed::default(),
         }
     }
 
-    pub fn next_row(&mut self) -> io::Result<Option<&Row>> {
+    pub fn next_row(&mut self) -> io::Result<Option<Row<'_>>> {
         loop {
             // Before the end of input a row ends only at a newline; a row not tried yet needs
             // no search for one, as parse_row finds out.
@@ -95,13 +110,19 @@ impl<R: Read> Reader<R> {
                 || self.scanned == self.pos
                 || self.text.as_bytes()[self.scanned..].contains(&b'\n'))
                 && let Some((len, lines)) =
-                    parse_row(&self.text[self.pos..], self.eof, &mut self.row)
+                    parse_row(&self.text[self.pos..], self.eof, &mut self.parsed)
             {
-                self.row.line = self.line;
+                let (line, start) = (self.line, self.pos);
                 self.line += lines;
                 self.pos += len;
                 self.scanned = self.pos;
-                return Ok(Some(&self.row));
+                return Ok(Some(Row {
+                    line,
+                    quotes: &self.parsed.quotes,
+                    text: &self.text[start..],
+                    spans: &self.parsed.spans,
+                    unescaped: &self.parsed.unescaped,
+                }));
             }
             self.scanned = self.text.len();
             if self.eof {
@@ -127,19 +148,18 @@ impl<R: Read> Reader<R> {
     }
 }
 
-/// One row of papaparse's parse loop at the start of `s`, into `row`: its fields and quote
-/// problems. Returns the row's length in bytes and the newlines in it, or `None` when `s` is
-/// empty, or when the row may continue past the end of `s` and more input is coming
-/// (papaparse's `ignoreLastRow`).
-fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
+/// One row of papaparse's parse loop at the start of `s`, into `row`. Returns the row's
+/// length in bytes and the newlines in it, or `None` when `s` is empty, or when the row may
+/// continue past the end of `s` and more input is coming (papaparse's `ignoreLastRow`).
+fn parse_row(s: &str, eof: bool, row: &mut Parsed) -> Option<(usize, u64)> {
     if s.is_empty() {
         return None;
     }
     let b = s.as_bytes();
     // `str::find` with a char runs std's memchr, which wins on rows and long fields.
     let newline_from = |from: usize| s[from..].find('\n').map(|i| from + i);
-    row.text.clear();
-    row.ends.clear();
+    row.spans.clear();
+    row.unescaped.clear();
     row.quotes.clear();
     let mut cursor = 0;
     let first = newline_from(0);
@@ -158,8 +178,8 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
                         return None;
                     }
                     // No closing quote: the rest of the input is the field, quotes as written.
-                    row.quotes.push((Code::XCsvMissingQuotes, row.ends.len()));
-                    row.push(&s[start..]);
+                    row.quotes.push((Code::XCsvMissingQuotes, row.spans.len()));
+                    row.spans.push((start, s.len()));
                     return Some(counted(s.len()));
                 };
                 q = next;
@@ -167,7 +187,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
                     if !eof {
                         return None;
                     }
-                    row.push_quoted(&s[start..q], doubled);
+                    row.push_quoted(s, start, q, doubled);
                     return Some(counted(s.len()));
                 }
                 if b[q + 1] == b'"' {
@@ -185,14 +205,14 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
                 };
                 match b.get(end) {
                     Some(&c @ (b',' | b'\n')) => {
-                        row.push_quoted(&s[start..q], doubled);
+                        row.push_quoted(s, start, q, doubled);
                         if c == b'\n' {
                             return Some(counted(end + 1));
                         }
                         cursor = end + 1;
                         break;
                     }
-                    _ => row.quotes.push((Code::XCsvInvalidQuotes, row.ends.len())),
+                    _ => row.quotes.push((Code::XCsvInvalidQuotes, row.spans.len())),
                 }
             }
             continue;
@@ -200,7 +220,7 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
         // Most cells of a wide file are empty, many of them in a row.
         let empty = b[cursor..].iter().take_while(|&&c| c == b',').count();
         if empty > 0 {
-            row.ends.extend(std::iter::repeat_n(row.text.len(), empty));
+            row.spans.extend(std::iter::repeat_n((0, 0), empty));
             cursor += empty;
             continue;
         }
@@ -209,18 +229,18 @@ fn parse_row(s: &str, eof: bool, row: &mut Row) -> Option<(usize, u64)> {
         }
         let field_end = newline.unwrap_or(b.len());
         if let Some(comma) = s[cursor..field_end].find(',') {
-            row.push(&s[cursor..cursor + comma]);
+            row.spans.push((cursor, cursor + comma));
             cursor += comma + 1;
             continue;
         }
         if let Some(n) = newline {
-            row.push(&s[cursor..n]);
+            row.spans.push((cursor, n));
             return Some(counted(n + 1));
         }
         if !eof {
             return None;
         }
-        row.push(&s[cursor..]);
+        row.spans.push((cursor, s.len()));
         return Some(counted(s.len()));
     }
 }
@@ -244,11 +264,15 @@ mod tests {
     use super::*;
     use serde_json::{Value, json};
 
-    fn read(bytes: &[u8], chunk: usize) -> (Vec<Row>, u64) {
+    /// Each row's fields, quote problems and line.
+    type Rows = Vec<(Vec<String>, Vec<(Code, usize)>, u64)>;
+
+    fn read(bytes: &[u8], chunk: usize) -> (Rows, u64) {
         let mut reader = Reader::with_chunk(bytes, chunk);
         let mut rows = Vec::new();
         while let Some(row) = reader.next_row().unwrap() {
-            rows.push(row.clone());
+            let (line, quotes) = (row.line, row.quotes.to_vec());
+            rows.push((row.fields().map(String::from).collect(), quotes, line));
         }
         (rows, reader.bom_lines)
     }
@@ -270,7 +294,7 @@ mod tests {
             for chunk in [1, 1024, 65536] {
                 let (rows, _) = read(&bytes, chunk);
                 let errors: Vec<Value> = (rows.iter().enumerate())
-                    .flat_map(|(i, r)| r.quotes.iter().map(move |(c, _)| (i, c)))
+                    .flat_map(|(i, r)| r.1.iter().map(move |(c, _)| (i, c)))
                     .map(|(i, c)| {
                         json!([
                             i,
@@ -282,7 +306,7 @@ mod tests {
                         ])
                     })
                     .collect();
-                let fields: Vec<Vec<&str>> = rows.iter().map(|r| r.fields().collect()).collect();
+                let fields: Vec<&Vec<String>> = rows.iter().map(|r| &r.0).collect();
                 let got = json!({ "rows": fields, "errors": errors });
                 assert!(got == golden[chunk.to_string()], "{} at chunk {chunk}", path.display());
             }
@@ -294,7 +318,7 @@ mod tests {
     #[test]
     fn physical_lines() {
         let lines =
-            |bytes: &[u8], chunk| read(bytes, chunk).0.iter().map(|r| r.line).collect::<Vec<_>>();
+            |bytes: &[u8], chunk| read(bytes, chunk).0.iter().map(|r| r.2).collect::<Vec<_>>();
         assert_eq!(lines(b"a,b\n\n\"c\n\nd\"\ne\n", 65536), [1, 2, 3, 6]);
         assert_eq!(lines("\u{feff}\n\n\na,b\n".as_bytes(), 65536), [4]);
         assert_eq!(lines("\u{feff}\n\n\na,b\n".as_bytes(), 1), [1, 2, 3, 4]);

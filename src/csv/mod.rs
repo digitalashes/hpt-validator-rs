@@ -81,7 +81,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 found.into_iter().map(move |f| Finding { line: Some(line), ..f })
             };
             // Upstream never reads papaparse's quote errors.
-            for &(code, column) in &row.quotes {
+            for &(code, column) in row.quotes {
                 let message = if code == Code::XCsvMissingQuotes {
                     "A quoted field is never closed, so the rest of the file was read as this one field."
                 } else {
