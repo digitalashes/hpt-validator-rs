@@ -9,6 +9,11 @@ pub fn is_space(c: char) -> bool {
 }
 
 pub fn trim(s: &str) -> &str {
+    // ASCII above the space is never JS whitespace, and most values start and end with it.
+    let plain = |c: Option<&u8>| c.is_some_and(|&c| c > b' ' && c.is_ascii());
+    if plain(s.as_bytes().first()) && plain(s.as_bytes().last()) {
+        return s;
+    }
     s.trim_matches(is_space)
 }
 
