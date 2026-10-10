@@ -26,6 +26,9 @@ validator for CMS Hospital Price Transparency machine-readable files. It checks 
 
 ## Usage
 
+To validate files from a shell, use the command-line tool,
+[`hpt-validator-cli`](https://github.com/digitalashes/hpt-validator-cli-rs). As a library:
+
 ```sh
 cargo add hpt-validator
 ```
