@@ -1,0 +1,21 @@
+name: Upstream
+
+# Fails once upstream's default branch moves past the commit in UPSTREAM.lock: run
+# oracle/run.sh at the new commit to see what changed.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  head:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: |
+          pinned=$(awk '$1 == "CMSgov/hpt-validator" { print $2 }' UPSTREAM.lock)
+          head=$(git ls-remote https://github.com/CMSgov/hpt-validator.git HEAD | cut -f1)
+          if [ "$head" != "$pinned" ]; then
+            echo "::error::upstream HEAD is $head, UPSTREAM.lock has $pinned"
+            exit 1
+          fi

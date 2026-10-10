@@ -199,7 +199,8 @@ and that Extended only adds to Default; `fuzz/` runs the same check under
 resident memory stays flat.
 
 To regenerate the expected results, put Node 20.19.4 on `PATH` and run `oracle/run.sh`;
-it clones and builds upstream under `target/upstream`.
+it clones and builds upstream under `target/upstream`. A weekly CI job fails once
+upstream's default branch moves past the commit in `UPSTREAM.lock`.
 
 The suite is run on the latest stable Rust. Case mapping has to match Node 20's Unicode
 tables, so a test fails when a Rust release moves to a new Unicode version.
