@@ -156,11 +156,27 @@ Renaming a code is a breaking change; rewording a message is not.
 | `HPT_X_CSV_MISSING_QUOTES` | Extended: a quoted field that is never closed |
 | `HPT_X_CSV_BOM_SWALLOWED_LINES` | Extended: blank lines removed with the byte order mark |
 
-## Known differences
+## Compatibility
+
+The port is checked against `@cmsgov/hpt-validator` 2.6.0 at commit
+[`5b7c249`](https://github.com/CMSgov/hpt-validator/commit/5b7c249df226c28da62a0d9fa0b0308207ae1aac),
+pinned in `UPSTREAM.lock`, run on Node 20.19.4. For every input in the test suite,
+`Mode::Default` returns the same errors and alerts as upstream, in the same order, with the
+same messages and properties. Upstream's quirks that show in a result are kept, and
+Extended mode adds what some of them hide; those that cannot change a result, such as
+repeated work, are not kept.
+
+Known differences:
 
 - Lower-casing a final Greek sigma follows Rust's Unicode 17 character classes, which
   differ from Node 20's at about 46 code points. It matters only for wide-format payer and
   plan names that contain such text.
+- Upstream reports two missing columns for every code number up to the highest one in a
+  CSV's row 3, so `code | 99999999` asks for 200 million errors. It fails with no result
+  past 2^32 - 1 codes, and when more than about 121,000 of those errors get through
+  `max_errors` at once, which overflows its call stack. The port returns a result there;
+  with `max_errors` at `0`, it lists the missing columns of at most 65,536 code numbers
+  past the row's columns. Whenever upstream returns a result, the port's is the same.
 - Upstream's `onValueCallback` and `onMetadataCallback` are not provided. They do not
   affect the result.
 
