@@ -179,6 +179,8 @@ and that Extended only adds to Default; `fuzz/` runs the same check under
 [cargo-fuzz](https://github.com/rust-fuzz/cargo-fuzz) on a nightly toolchain:
 `mkdir -p fuzz/corpus/csv`, then
 `cargo +nightly fuzz run -s none csv fuzz/corpus/csv tests/cases` (or `json`).
+`tests/memory.rs` validates a generated 32 MiB file of each format and checks that
+resident memory stays flat.
 
 To regenerate the expected results, put Node 20.19.4 on `PATH` and run `oracle/run.sh`;
 it clones and builds upstream under `target/upstream`.
