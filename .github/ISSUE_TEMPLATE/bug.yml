@@ -1,0 +1,46 @@
+name: Bug
+description: A result that differs from upstream, a panic, or a wrong Extended finding.
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: hpt-validator version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: schema
+    attributes:
+      label: Data dictionary version
+      options: ["2.0.0", "2.1.0", "2.2.0", "3.0.0"]
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options: [Default, Extended]
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Input
+      description: The smallest file that shows the problem. Paste it or attach it.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: In Default mode, what `@cmsgov/hpt-validator` 2.6.0 returns for the same input.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: What this crate returns, or the panic message.
+    validations:
+      required: true

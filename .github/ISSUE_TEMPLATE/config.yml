@@ -1,0 +1,4 @@
+contact_links:
+  - name: Rules and messages
+    url: https://github.com/CMSgov/hpt-validator/issues
+    about: The validation rules and their messages come from CMS's validator; raise changes to them there.
