@@ -224,26 +224,24 @@ fn header<'a>(
         if name.is_empty() {
             continue;
         }
+        // The state of a `license_number | [state]` name.
+        let state = match parts(name).collect::<Vec<_>>()[..] {
+            [license, state] if sep_eq(license, "license_number") => Some(state),
+            _ => None,
+        };
+        let known = |state: &str| STATE_CODES.contains(&js::to_upper(state).as_str());
         let matched = remaining.iter().position(|&expected| {
-            if expected != LICENSE {
-                return sep_eq(name, expected);
-            }
-            let split: Vec<&str> = parts(name).collect();
-            let [license, state] = split[..] else {
-                return false;
-            };
-            if !sep_eq(license, "license_number") {
-                return false;
-            }
-            if STATE_CODES.contains(&js::to_upper(state).as_str()) {
-                return true;
-            }
+            if expected == LICENSE { state.is_some_and(known) } else { sep_eq(name, expected) }
+        });
+        if let Some(state) = state
+            && matched.is_none()
+            && remaining.contains(&LICENSE)
+        {
             let message = format!(
                 "{state} is not an allowed value for state abbreviation. You must fill in the state or territory abbreviation even if there is no license number to encode. See the table found here for the list of valid values for state and territory abbreviations https://github.com/CMSgov/hospital-price-transparency/blob/master/documentation/CSV/state_codes.md"
             );
             errors.push(at(Code::CsvInvalidStateCode, 0, Some(i), message));
-            false
-        });
+        }
         if let Some(m) = matched {
             found[i] = Some(name.as_str());
             remaining.remove(m);

@@ -97,8 +97,7 @@ pub fn number(s: &str) -> f64 {
 /// Upstream's `isValidDate`: `M/D/YYYY` through `Date.UTC`, which maps years 0–99 to
 /// 1900–1999 and so rejects them, or `YYYY-MM-DD` through `Date` parsing, which does not.
 pub fn is_valid_date(s: &str) -> bool {
-    let parts: Vec<&str> = s.split('/').collect();
-    if let [m, d, y] = parts[..] {
+    if let Some((m, d, y)) = three(s, '/') {
         return match (digits(m, 1..=2), digits(d, 1..=2), digits(y, 4..=4)) {
             (Some(m), Some(d), Some(y)) => y >= 100 && is_real_date(y, m, d),
             _ => false,
@@ -109,13 +108,21 @@ pub fn is_valid_date(s: &str) -> bool {
 
 /// `YYYY-MM-DD` naming a real day: `isValidDate`'s second form and ajv-formats' `date`.
 pub fn is_iso_date(s: &str) -> bool {
-    let parts: Vec<&str> = s.split('-').collect();
-    match parts[..] {
-        [y, m, d] => match (digits(y, 4..=4), digits(m, 2..=2), digits(d, 2..=2)) {
-            (Some(y), Some(m), Some(d)) => is_real_date(y, m, d),
-            _ => false,
-        },
+    let Some((y, m, d)) = three(s, '-') else {
+        return false;
+    };
+    match (digits(y, 4..=4), digits(m, 2..=2), digits(d, 2..=2)) {
+        (Some(y), Some(m), Some(d)) => is_real_date(y, m, d),
         _ => false,
+    }
+}
+
+/// `s` split at `sep`, if that makes exactly three parts.
+fn three(s: &str, sep: char) -> Option<(&str, &str, &str)> {
+    let mut parts = s.split(sep);
+    match (parts.next(), parts.next(), parts.next(), parts.next()) {
+        (Some(a), Some(b), Some(c), None) => Some((a, b, c)),
+        _ => None,
     }
 }
 
