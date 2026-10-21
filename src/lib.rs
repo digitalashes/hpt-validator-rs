@@ -22,11 +22,14 @@ const VERSIONS: &[&str] = &["2.0.0", "2.1.0", "2.2.0", "3.0.0"];
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 impl Version {
+    /// Every version, in `VERSIONS` order.
+    const ALL: [Version; 4] = [Version::V2_0, Version::V2_1, Version::V2_2, Version::V3_0];
+
     /// `semver.coerce(version)`, then exactly one of `VERSIONS`.
     fn parse(version: &str) -> Option<Version> {
         let coerced = js::coerce(version);
         let i = VERSIONS.iter().position(|&v| v == coerced)?;
-        Some([Version::V2_0, Version::V2_1, Version::V2_2, Version::V3_0][i])
+        Some(Version::ALL[i])
     }
 }
 

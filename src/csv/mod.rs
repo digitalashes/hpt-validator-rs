@@ -76,10 +76,6 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
         let mut errors = Vec::new();
         while let Some(row) = reader.next_row()? {
             let line = row.line;
-            // Every finding gets the physical line of the row it was found on.
-            let lined = move |found: Vec<Finding>| {
-                found.into_iter().map(move |f| Finding { line: Some(line), ..f })
-            };
             // Upstream never reads papaparse's quote errors.
             for &(code, column) in row.quotes {
                 let message = if code == Code::XCsvMissingQuotes {
@@ -88,7 +84,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                     "A quote in a quoted field is neither doubled nor followed by a comma or a line end, so the field runs on to the next closing quote and may have taken in the fields and lines after it."
                 };
                 let finding = at(code, index, Some(column), message.into());
-                add(&mut extended, lined(vec![finding]), max);
+                add(&mut extended, lined(line, [finding]), max);
             }
             let mut cells = recycle(std::mem::take(&mut spare));
             // Trailing empty cells are left out: every rule reads a missing cell as empty.
@@ -112,7 +108,7 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                     index + 1
                 );
                 let error = at(Code::CsvHeaderBlank, index, Some(0), message);
-                break 'rows lined(vec![error]).collect();
+                break 'rows lined(line, [error]).collect();
             }
             if blank && index != 1 {
                 index += 1;
@@ -125,24 +121,24 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                     let (found, header_errors) = header(v, &names, &row);
                     // A header error suppresses every header alert.
                     if header_errors.is_empty() {
-                        add(&mut alerts, lined(header_alerts(v, &found, &row)), max);
+                        add(&mut alerts, lined(line, header_alerts(v, &found, &row)), max);
                     }
-                    add(&mut errors, lined(header_errors), max);
+                    add(&mut errors, lined(line, header_errors), max);
                 }
                 2 => {
                     let (shape, result) = columns(v, &row, max);
                     file_type = shape;
                     match result {
                         Ok((resolved, column_alerts)) => {
-                            add(&mut alerts, lined(column_alerts), max);
+                            add(&mut alerts, lined(line, column_alerts), max);
                             layout = Some(resolved);
                         }
                         Err(column_errors) => {
-                            add(&mut errors, lined(column_errors), max);
+                            add(&mut errors, lined(line, column_errors), max);
                             // Added after the limit is applied, so it can exceed it by one.
                             let message = "Errors were found in the headers in row 3, so the remaining rows were not evaluated.";
                             let error = at(Code::CsvProblemsInHeader, 0, Some(0), message.into());
-                            errors.extend(lined(vec![error]));
+                            errors.extend(lined(line, [error]));
                             break 'rows errors;
                         }
                     }
@@ -150,11 +146,15 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
                 _ => {
                     let layout = layout.as_ref().expect("data rows follow a valid row 3");
                     rules::live(layout, &filled, &mut live_groups);
-                    add(&mut errors, lined(rules::errors(layout, &live_groups, index, &row)), max);
+                    add(
+                        &mut errors,
+                        lined(line, rules::errors(layout, &live_groups, index, &row)),
+                        max,
+                    );
                     if !full(&alerts, max) {
                         add(
                             &mut alerts,
-                            lined(rules::alerts(layout, &live_groups, index, &row)),
+                            lined(line, rules::alerts(layout, &live_groups, index, &row)),
                             max,
                         );
                     }
@@ -190,6 +190,11 @@ pub fn validate(input: impl Read, version: &str, options: &Options) -> io::Resul
         }
     }
     Ok(Report { errors, alerts, file_type: Some(file_type), extended })
+}
+
+/// Every finding gets the physical line of the row it was found on.
+fn lined(line: u64, found: impl IntoIterator<Item = Finding>) -> impl Iterator<Item = Finding> {
+    found.into_iter().map(move |f| Finding { line: Some(line), ..f })
 }
 
 /// `cells` emptied, its buffer kept for cells that borrow from another row. Collecting an

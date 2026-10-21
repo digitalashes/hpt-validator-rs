@@ -48,8 +48,8 @@ impl<'s> Schema<'s> {
                     return Schema::new(root, target.expect("defined"));
                 }
                 ("type", Value::String(t)) => {
-                    let mut all = Type::GROUPS.into_iter().chain([Type::Boolean, Type::Null]);
-                    k.ty = Some(all.find(|ty| ty.name() == t).expect("a JSON type"));
+                    let ty = Type::ALL.into_iter().find(|ty| ty.name() == t);
+                    k.ty = Some(ty.expect("a JSON type"));
                 }
                 ("const", v) => k.r#const = Some(v),
                 ("enum", Value::Array(a)) => k.r#enum = Some(a),
@@ -126,6 +126,9 @@ enum Type {
 impl Type {
     /// The types with keywords of their own, in Ajv's rule order.
     const GROUPS: [Type; 4] = [Type::Number, Type::String, Type::Array, Type::Object];
+
+    const ALL: [Type; 6] =
+        [Type::Number, Type::String, Type::Array, Type::Object, Type::Boolean, Type::Null];
 
     fn name(self) -> &'static str {
         match self {
@@ -377,7 +380,7 @@ mod tests {
                 }
             }
         }
-        for v in [Version::V2_0, Version::V2_1, Version::V2_2, Version::V3_0] {
+        for v in Version::ALL {
             let schemas = crate::json::schemas(v);
             walk(schemas.full.value);
             schemas.alerts.iter().for_each(|a| walk(a.value));

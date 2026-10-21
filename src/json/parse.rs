@@ -127,7 +127,7 @@ pub fn document(text: &str) -> Value {
 type Step = Result<(), End>;
 
 /// The tokenizer's state, named as upstream's are in its error texts.
-#[allow(
+#[expect(
     non_camel_case_types,
     clippy::upper_case_acronyms,
     reason = "upstream's names, printed in its error texts"
@@ -163,11 +163,7 @@ impl State {
 }
 
 /// The token parser's state.
-#[allow(
-    non_camel_case_types,
-    clippy::upper_case_acronyms,
-    reason = "upstream's names, printed in its error texts"
-)]
+#[expect(clippy::upper_case_acronyms, reason = "upstream's names, printed in its error texts")]
 #[derive(Clone, Copy, Debug, PartialEq)]
 enum Expect {
     VALUE,

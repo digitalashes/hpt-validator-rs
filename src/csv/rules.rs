@@ -157,7 +157,7 @@ pub fn errors(l: &Layout, live: &[usize], row: u64, values: &[&str]) -> Vec<Find
             && let Some(i) = [unit, ty].into_iter().find(|&i| !c.has(i))
         {
             let message = "If code type is NDC, then the corresponding drug unit of measure and drug type of measure data element must be encoded.";
-            c.error(Code::CsvDrugInformationRequired, Some(i), message);
+            c.push(Code::CsvDrugInformationRequired, Some(i), message);
         }
     }
     // Before 2.2 a row without codes is an error; from 2.2 it may be a modifier row.
@@ -167,7 +167,7 @@ pub fn errors(l: &Layout, live: &[usize], row: u64, values: &[&str]) -> Vec<Find
     } else {
         if !coded {
             let message = "If a standard charge is encoded, there must be a corresponding code and code type pairing. The code and code type pairing do not need to be in the first code and code type columns (i.e., code|1 and code|1|type).";
-            c.error(Code::CsvCodePairMissing, None, message);
+            c.push(Code::CsvCodePairMissing, None, message);
         }
         c.non_modifier();
     }
@@ -195,7 +195,7 @@ pub fn alerts(l: &Layout, live: &[usize], row: u64, values: &[&str]) -> Vec<Find
             #[expect(clippy::float_cmp, reason = "JavaScript's ===")]
             let nines = value.len() >= 9 && js::number(value) == 999_999_999.0;
             if nines {
-                c.error(Code::CsvNineNines, Some(i), &format!("Nine 9s used for {name}."));
+                c.push(Code::CsvNineNines, Some(i), format!("Nine 9s used for {name}."));
             }
         }
     }
@@ -227,10 +227,9 @@ impl<'a> Check<'a> {
         (self.l.columns[slot], &self.l.names[slot])
     }
 
-    fn error(&mut self, code: Code, slot: Option<usize>, message: &str) {
+    fn push(&mut self, code: Code, slot: Option<usize>, message: impl Into<String>) {
         let column = slot.map(|slot| self.l.columns[slot]);
-        let finding = at(code, self.row, column, message.into());
-        self.found.push(finding);
+        self.found.push(at(code, self.row, column, message.into()));
     }
 
     /// A `RequiredValueError` for a missing value. The other checks pass a missing value,
@@ -305,19 +304,19 @@ impl<'a> Check<'a> {
             }
             if same(self.value(g.methodology), "other") && !self.has(g.notes) {
                 let message = notes_required("standard charge methodology", "other");
-                self.error(Code::CsvOtherMethodologyNotes, Some(g.notes), &message);
+                self.push(Code::CsvOtherMethodologyNotes, Some(g.notes), message);
             }
         }
         let [gross, discounted, min, max] = l.standard;
         if !self.has(gross) && !self.has(discounted) && !self.groups().any(|g| self.charged(g)) {
             let message = "If an item or service is encoded, a corresponding valid value must be encoded for at least one of the following: \"Gross Charge\", \"Discounted Cash Price\", \"Payer-Specific Negotiated Charge: Dollar Amount\", \"Payer-Specific Negotiated Charge: Percentage\", \"Payer-Specific Negotiated Charge: Algorithm\".";
-            self.error(Code::CsvItemRequiresCharge, Some(gross), message);
+            self.push(Code::CsvItemRequiresCharge, Some(gross), message);
         }
         if self.groups().any(|g| self.has(g.dollar))
             && let Some(i) = [min, max].into_iter().find(|&i| !self.has(i))
         {
             let message = "If there is a \"payer specific negotiated charge\" encoded as a dollar amount, there must be a corresponding valid value encoded for the deidentified minimum and deidentified maximum negotiated charge data.";
-            self.error(Code::CsvDollarNeedsMinMax, Some(i), message);
+            self.push(Code::CsvDollarNeedsMinMax, Some(i), message);
         }
         for g in self.groups() {
             let ratio = self.has(g.percentage) || self.has(g.algorithm);
@@ -326,13 +325,13 @@ impl<'a> Check<'a> {
                 Amounts::Estimated(estimated) => {
                     if !self.has(g.dollar) && ratio && !self.has(estimated) {
                         let message = "If a \"payer specific negotiated charge\" can only be expressed as a percentage or algorithm, then a corresponding \"Estimated Allowed Amount\" must also be encoded.";
-                        self.error(Code::CsvPercentageAlgorithmEstimate, Some(estimated), message);
+                        self.push(Code::CsvPercentageAlgorithmEstimate, Some(estimated), message);
                     }
                 }
                 Amounts::Allowed([median, p10, p90, count]) => {
                     if ratio && !self.has(count) {
                         let message = "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, then a corresponding \"Count of Allowed Amounts\" must also be encoded.";
-                        self.error(Code::CsvPercentageAlgorithmCount, Some(count), message);
+                        self.push(Code::CsvPercentageAlgorithmCount, Some(count), message);
                     }
                     let zero = self.value(count) == "0";
                     if ratio && !zero {
@@ -345,13 +344,13 @@ impl<'a> Check<'a> {
                                 let message = format!(
                                     "If a \"payer specific negotiated charge\" is expressed as a percentage or algorithm, and count of allowed amounts is not zero, then a corresponding \"{field}\" must also be encoded."
                                 );
-                                self.error(code, Some(i), &message);
+                                self.push(code, Some(i), message);
                             }
                         }
                     }
                     if zero && !self.has(g.notes) {
                         let message = notes_required("count of allowed amounts", "0");
-                        self.error(Code::CsvAllowedCountZeroNotes, Some(g.notes), &message);
+                        self.push(Code::CsvAllowedCountZeroNotes, Some(g.notes), message);
                     }
                 }
             }
@@ -362,7 +361,7 @@ impl<'a> Check<'a> {
                 && !self.charged(g)
             {
                 let message = "If a payer name and plan name are encoded, a payer-specific charge must also be encoded.";
-                self.error(Code::CsvChargeWithPayerPlan, Some(payer), message);
+                self.push(Code::CsvChargeWithPayerPlan, Some(payer), message);
             }
         }
     }
@@ -373,7 +372,7 @@ impl<'a> Check<'a> {
         let info = self.has(l.notes) || self.groups().any(|g| self.charged(g) || self.has(g.notes));
         if !info {
             let message = "If a modifier is encoded without an item or service, then a description and one of the following is the minimum information required: additional_payer_notes, standard_charge | negotiated_dollar, standard_charge | negotiated_percentage, or standard_charge | negotiated_algorithm.";
-            self.error(Code::CsvModifierMissingInfo, Some(l.notes), message);
+            self.push(Code::CsvModifierMissingInfo, Some(l.notes), message);
         }
     }
 }
