@@ -157,6 +157,15 @@ write("findings/license-lower.csv", csv(tall("2.0.0", [{}],
 // ... and its two characters after the bar exclude line terminators (\uFB02 upper-cases to FL).
 write("findings/license-newline-ligature.csv", csv(tall("2.0.0", [{}],
   header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "license_number |\n\uFB02" }))));
+// A second license column: an invalid state before the matching one is reported, one after
+// it is neither reported nor a duplicate.
+for (const [name, first, second] of [
+  ["invalid-first", "license_number | ZZ", "license_number | CA"],
+  ["invalid-second", "license_number | CA", "license_number | ZZ"],
+]) {
+  const [h, v, ...rest] = tall("2.0.0", [{}], header("2.0.0", {}, { "license_number | CA": first }));
+  write(`findings/license-twice-${name}.csv`, csv([[...h, second], [...v, "50057"], ...rest]));
+}
 // Only `code | N` and `code | N | type` count as code columns, and a four-part column is a
 // charge column only with a known charge.
 {
