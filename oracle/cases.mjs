@@ -193,6 +193,8 @@ write("findings/mixed-line-endings.csv", csv(tall("2.0.0", [{}, {}])).split("\n"
 // Payer names whose lower-then-upper round trip changes.
 write("findings/sharp-s.csv", csv(wide("2.0.0", ["Groẞ Health | PPO"])));
 write("findings/dotted-i.csv", csv(wide("2.0.0", ["İstanbul Care | PPO"])));
+// A message with ', " and ` is shown in single quotes; control characters are escaped.
+write("findings/quotes-and-controls.csv", csv(tall("2.0.0", [{ setting: "a'b`c\u0001\u007f" }])));
 // Malformed quotes are ignored; a stray quote merges fields, an unclosed one eats the file.
 {
   const lines = csv(tall("2.0.0", [{}, {}, {}])).split("\n");
