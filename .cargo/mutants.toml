@@ -27,7 +27,6 @@ exclude_re = [
     # past-the-end filter only save work.
     'replace \| with \^ in parse_row',
     'replace \^ with \| in parse_row',
-    'replace \* with / in parse_row',
     'replace > with < in parse_row',
     'replace < with <= in scan',
     # Capping the code count at the error limit, not 2^16 past the columns, only saves work.

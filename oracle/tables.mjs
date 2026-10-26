@@ -97,6 +97,8 @@ const CORPUS = {
   "cr-only": b("a,b\rc,d\r"),
   "mixed-endings": b("a,b\r\nc,d\ne,f\rg\n"),
   "ragged": b("a,b,c\nd\ne,f,g,h\n,\n,,\n"),
+  // Empty cells are skipped eight bytes at a time; a cell may start with any byte (ס is D7 A1).
+  "cells-after-commas": b("a,,-5,סx\n"),
   "spaces": b(" a , b \n\t c ,　d\n"),
   "quoted": b('"a","b,c","d\ne","f""g"\n'),
   "quoted-crlf-inside": b('"a\r\nb",c\r\n'),
