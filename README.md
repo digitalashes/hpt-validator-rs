@@ -13,7 +13,7 @@ validator for CMS Hospital Price Transparency machine-readable files. It checks 
 > Centers for Medicare & Medicaid Services. It reproduces the behaviour of the upstream
 > validator and does not speak for CMS.
 
-- **Same result as upstream.** By default the report is what `@cmsgov/hpt-validator` 2.6.0
+- **Same result as upstream.** By default the report is what `@cmsgov/hpt-validator` 2.6.1
   returns through its CLI: the same findings in the same order with the same messages,
   upstream's quirks included. The test suite checks this against 2,184 results produced
   by upstream itself.
@@ -161,8 +161,8 @@ Renaming a code is a breaking change; rewording a message is not.
 
 ## Compatibility
 
-The port is checked against `@cmsgov/hpt-validator` 2.6.0 at commit
-[`5b7c249`](https://github.com/CMSgov/hpt-validator/commit/5b7c249df226c28da62a0d9fa0b0308207ae1aac),
+The port is checked against `@cmsgov/hpt-validator` 2.6.1 at commit
+[`06d5b06`](https://github.com/CMSgov/hpt-validator/commit/06d5b068050329a081d25f03e405389ca5deadc9),
 pinned in `UPSTREAM.lock`, run on Node 20.19.4. For every input in the test suite,
 `Mode::Default` returns the same errors and alerts as upstream, in the same order, with the
 same messages and properties. Upstream's quirks that show in a result are kept, and
@@ -175,11 +175,12 @@ Known differences:
   differ from Node 20's at about 46 code points. It matters only for wide-format payer and
   plan names that contain such text.
 - Upstream reports two missing columns for every code number up to the highest one in a
-  CSV's row 3, so `code | 99999999` asks for 200 million errors. It fails with no result
-  past 2^32 - 1 codes, and when more than about 121,000 of those errors get through
-  `max_errors` at once, which overflows its call stack. The port returns a result there;
-  with `max_errors` at `0`, it lists the missing columns of at most 65,536 code numbers
-  past the row's columns. Whenever upstream returns a result, the port's is the same.
+  CSV's row 3, so `code | 99999999` asks for 200 million errors, and with `max_errors` at
+  `0` it lists them all. Past 2^32 - 1 codes it fails with no result at any `max_errors`;
+  the port returns a result there. With `max_errors` at `0`, the port lists the missing
+  columns of at most 65,536 code numbers past the row's columns, so its report is shorter
+  than upstream's when row 3 names a code number beyond that. With any other `max_errors`,
+  whenever upstream returns a result, the port's is the same.
 - Upstream's `onValueCallback` and `onMetadataCallback` are not provided. They do not
   affect the result.
 

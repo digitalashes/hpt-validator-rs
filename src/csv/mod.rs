@@ -359,9 +359,11 @@ fn columns(v: Version, row: &[&str], max: usize) -> (FileType, Columns) {
     }
     // Only the code numbers named in this row can match a column; every other one up to the
     // count is a pair missing from it, two errors. So `row.len() + max` numbers fill the
-    // limit. Without one, upstream returns no result once a batch passes about 121,000
-    // errors (pushing them at once overflows its call stack) or the count passes 2^32 - 1
-    // (too long an array); 2^16 numbers past the row's columns are always beyond that.
+    // limit. Without one, upstream lists every pair up to the count (and returns no result
+    // past 2^32 - 1, too long an array).
+    // ponytail: 2^16 numbers past the row's columns keep a one-line header from asking for
+    // gigabytes of errors; the report is shorter than upstream's past that. Lift the cap
+    // only if someone needs the full list.
     let limit = if max > 0 { max } else { 1 << 16 };
     let codes = codes.min(row.len().saturating_add(limit) as u64);
     if tall != payers_plans.is_empty() {

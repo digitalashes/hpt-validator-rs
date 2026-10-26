@@ -34,7 +34,7 @@ body:
     id: expected
     attributes:
       label: Expected
-      description: In Default mode, what `@cmsgov/hpt-validator` 2.6.0 returns for the same input.
+      description: In Default mode, what `@cmsgov/hpt-validator` 2.6.1 returns for the same input.
     validations:
       required: true
   - type: textarea

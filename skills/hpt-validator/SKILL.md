@@ -7,7 +7,7 @@ description: Calling the hpt-validator crate from Rust to validate CMS Hospital 
 
 `hpt_validator::validate` checks a CMS Hospital Price Transparency machine-readable file
 against a data dictionary version and returns upstream's errors and alerts
-(`@cmsgov/hpt-validator` 2.6.0), byte for byte in Default mode.
+(`@cmsgov/hpt-validator` 2.6.1), byte for byte in Default mode.
 
 ```rust
 use hpt_validator::{Format, Mode, Options, validate};
