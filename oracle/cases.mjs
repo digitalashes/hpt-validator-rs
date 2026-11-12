@@ -149,11 +149,16 @@ for (const [name, column] of [
   rows[3].push("");
   write(`findings/placeholder-${name}.csv`, csv(rows));
 }
-// The license-number skip is case-sensitive.
-write("findings/license-upper.csv", csv(tall("2.0.0", [{}],
-  header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "LICENSE_NUMBER | MD" }))));
-write("findings/license-lower.csv", csv(tall("2.0.0", [{}],
-  header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "license_number | MD" }))));
+// The license-number skip lower-cases the name; a dotless i upper-cases to I, so the header
+// matches, but lower-cases to itself, so the blank value is still reported.
+for (const [name, column] of [
+  ["upper", "LICENSE_NUMBER | MD"],
+  ["lower", "license_number | MD"],
+  ["dotless-i", `L${String.fromCharCode(0x131)}CENSE_NUMBER | MD`],
+]) {
+  write(`findings/license-${name}.csv`, csv(tall("2.0.0", [{}],
+    header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": column }))));
+}
 // ... and its two characters after the bar exclude line terminators (\uFB02 upper-cases to FL).
 write("findings/license-newline-ligature.csv", csv(tall("2.0.0", [{}],
   header("2.0.0", { "license_number | CA": "" }, { "license_number | CA": "license_number |\n\uFB02" }))));

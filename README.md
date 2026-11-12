@@ -14,8 +14,8 @@ validator for CMS Hospital Price Transparency machine-readable files. It checks 
 > validator and does not speak for CMS.
 
 - **Same result as upstream.** By default the report is what `@cmsgov/hpt-validator` 2.6.1
-  returns through its CLI: the same findings in the same order with the same messages,
-  upstream's quirks included. The test suite checks this against 2,184 results produced
+  (with one later fix, see [Compatibility](#compatibility)) returns through its CLI: the same findings in the same order with the same messages,
+  upstream's quirks included. The test suite checks this against 2,216 results produced
   by upstream itself.
 - **Streaming.** Rows and charge items are checked as they are read, so memory does not
   grow with the file.
@@ -161,11 +161,13 @@ Renaming a code is a breaking change; rewording a message is not.
 
 ## Compatibility
 
-The port is checked against `@cmsgov/hpt-validator` 2.6.1 at commit
-[`8826db9`](https://github.com/CMSgov/hpt-validator/commit/8826db9eab49c75fccb537211720973c584ac1a5),
-pinned in `UPSTREAM.lock`, run on Node 20.19.4. For every input in the test suite,
-`Mode::Default` returns the same errors and alerts as upstream, in the same order, with the
-same messages and properties. Upstream's quirks that show in a result are kept, and
+The port is checked against `@cmsgov/hpt-validator` at commit
+[`4a7fede`](https://github.com/CMSgov/hpt-validator/commit/4a7fedef755d8eb45c281fdaf029a247f89c7325),
+pinned in `UPSTREAM.lock`, run on Node 20.19.4. That commit is 2.6.1 plus one later fix:
+a `license_number | [state]` value in a CSV's row 2 may be blank whatever the letter case
+of the name, where 2.6.1 allows that only for a lower-case name. For every input in the
+test suite, `Mode::Default` returns the same errors and alerts as upstream, in the same
+order, with the same messages and properties. Upstream's quirks that show in a result are kept, and
 Extended mode adds what some of them hide; those that cannot change a result, such as
 repeated work, are not kept.
 

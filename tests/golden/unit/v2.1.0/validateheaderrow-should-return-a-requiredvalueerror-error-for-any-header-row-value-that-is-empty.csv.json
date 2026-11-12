@@ -9,13 +9,13 @@
       },
       {
         "path": "B2",
-        "message": "A value is required for \"last_updated_on\". You must encode the missing information.",
-        "columnName": "last_updated_on"
+        "message": "A value is required for \"Last_Updated_On\". You must encode the missing information.",
+        "columnName": "Last_Updated_On"
       },
       {
         "path": "C2",
-        "message": "A value is required for \"version\". You must encode the missing information.",
-        "columnName": "version"
+        "message": "A value is required for \"Version\". You must encode the missing information.",
+        "columnName": "Version"
       },
       {
         "path": "D2",
@@ -24,8 +24,8 @@
       },
       {
         "path": "E2",
-        "message": "A value is required for \"hospital_address\". You must encode the missing information.",
-        "columnName": "hospital_address"
+        "message": "A value is required for \"HOSPITAL_ADDRESs\". You must encode the missing information.",
+        "columnName": "HOSPITAL_ADDRESs"
       },
       {
         "path": "G2",
@@ -45,8 +45,8 @@
       },
       {
         "path": "B2",
-        "message": "A value is required for \"last_updated_on\". You must encode the missing information.",
-        "columnName": "last_updated_on"
+        "message": "A value is required for \"Last_Updated_On\". You must encode the missing information.",
+        "columnName": "Last_Updated_On"
       }
     ],
     "alerts": []

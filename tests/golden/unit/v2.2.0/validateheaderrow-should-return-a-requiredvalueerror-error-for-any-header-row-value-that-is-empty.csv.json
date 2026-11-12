@@ -14,13 +14,13 @@
       },
       {
         "path": "C2",
-        "message": "A value is required for \"version\". You must encode the missing information.",
-        "columnName": "version"
+        "message": "A value is required for \"Version\". You must encode the missing information.",
+        "columnName": "Version"
       },
       {
         "path": "D2",
-        "message": "A value is required for \"hospital_location\". You must encode the missing information.",
-        "columnName": "hospital_location"
+        "message": "A value is required for \"HOSPITAL_LOCATION\". You must encode the missing information.",
+        "columnName": "HOSPITAL_LOCATION"
       },
       {
         "path": "E2",

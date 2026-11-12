@@ -4,8 +4,8 @@
     "errors": [
       {
         "path": "B2",
-        "message": "\"last_updated_on\" value \"2022-14-01\" is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY",
-        "columnName": "last_updated_on",
+        "message": "\"Last_Updated_On\" value \"2022-14-01\" is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY",
+        "columnName": "Last_Updated_On",
         "value": "2022-14-01"
       }
     ],
@@ -16,8 +16,8 @@
     "errors": [
       {
         "path": "B2",
-        "message": "\"last_updated_on\" value \"2022-14-01\" is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY",
-        "columnName": "last_updated_on",
+        "message": "\"Last_Updated_On\" value \"2022-14-01\" is not in a valid format. You must encode the date using the ISO 8601 format: YYYY-MM-DD or the month/day/year format: MM/DD/YYYY, M/D/YYYY",
+        "columnName": "Last_Updated_On",
         "value": "2022-14-01"
       }
     ],

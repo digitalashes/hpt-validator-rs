@@ -285,9 +285,11 @@ fn header<'a>(
     (found, errors)
 }
 
-/// Upstream skips the value check for `/^license_number\s*\|\s*.{2}$/`, case-sensitive
-/// unlike the header match; `.` is a UTF-16 unit other than a line terminator.
+/// Upstream skips the value check for `/^license_number\s*\|\s*.{2}$/` on the lower-cased
+/// name, while the header match upper-cases, so a dotless `ı` matches there but not here;
+/// `.` is a UTF-16 unit other than a line terminator.
 fn is_license_skipped(name: &str) -> bool {
+    let name = js::to_lower(name);
     let Some(rest) = name.strip_prefix("license_number") else {
         return false;
     };

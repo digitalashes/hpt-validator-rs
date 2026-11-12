@@ -4,8 +4,8 @@
     "errors": [
       {
         "path": "F1",
-        "message": "Column hospital_location duplicated in header. You must review and revise your column headers so that each header appears only once in the first row.",
-        "columnName": "hospital_location"
+        "message": "Column Hospital_Location duplicated in header. You must review and revise your column headers so that each header appears only once in the first row.",
+        "columnName": "Hospital_Location"
       }
     ],
     "alerts": []
@@ -15,8 +15,8 @@
     "errors": [
       {
         "path": "F1",
-        "message": "Column hospital_location duplicated in header. You must review and revise your column headers so that each header appears only once in the first row.",
-        "columnName": "hospital_location"
+        "message": "Column Hospital_Location duplicated in header. You must review and revise your column headers so that each header appears only once in the first row.",
+        "columnName": "Hospital_Location"
       }
     ],
     "alerts": []
