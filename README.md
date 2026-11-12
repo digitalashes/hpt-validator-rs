@@ -162,7 +162,7 @@ Renaming a code is a breaking change; rewording a message is not.
 ## Compatibility
 
 The port is checked against `@cmsgov/hpt-validator` 2.6.1 at commit
-[`06d5b06`](https://github.com/CMSgov/hpt-validator/commit/06d5b068050329a081d25f03e405389ca5deadc9),
+[`8826db9`](https://github.com/CMSgov/hpt-validator/commit/8826db9eab49c75fccb537211720973c584ac1a5),
 pinned in `UPSTREAM.lock`, run on Node 20.19.4. For every input in the test suite,
 `Mode::Default` returns the same errors and alerts as upstream, in the same order, with the
 same messages and properties. Upstream's quirks that show in a result are kept, and
